@@ -1,0 +1,4 @@
+
+I developed this system from scratch for the Ethiopian IT Park, designed for detailed planning, reporting, and staff communication, all based on the organization's structure. 
+The frontend is built using React, while the backend is powered by Node.js. For the database, I utilized MySQL. To ensure security, I implemented JWT for authentication, password hashing, 
+and additional technical code measures to safeguard against vulnerabilities.
