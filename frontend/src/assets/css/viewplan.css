@@ -1,0 +1,155 @@
+/* Overall Dashboard */
+.supervisor-dashboard {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #f7f7f7, #e1e1e1);
+    padding: 20px;
+    transition: all 0.3s ease;
+  }
+  
+  /* Plan List */
+  .plan-list {
+    margin-top: 20px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    padding: 15px;
+  }
+  
+  /* Table Styles */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  table:hover {
+    transform: scale(1.02);
+  }
+  
+  table, th, td {
+    border: 1px solid #ddd;
+    border-radius: 6px;
+  }
+  
+  th, td {
+    padding: 12px;
+    text-align: left;
+    font-size: 14px;
+    color: #333;
+  }
+  
+  th {
+    background-color: #4CAF50;
+    color: white;
+  }
+  
+  td {
+    background-color: #fafafa;
+  }
+  
+  /* Button Styling */
+  button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    cursor: pointer;
+    border-radius: 6px;
+    font-size: 16px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+  }
+  
+  button:hover {
+    background-color: #45a049;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3);
+  }
+  
+  button:active {
+    transform: translateY(2px);
+  }
+  
+  /* Modal Styles */
+  .modal {
+    display: block;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+    width: 400px;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    opacity: 0;
+    animation: fadeIn 0.4s forwards;
+  }
+  
+  /* Modal Fade-in Animation */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(0.9);
+    }
+    to {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+    }
+  }
+  
+  /* Textarea for comments */
+  textarea {
+    width: 100%;
+    height: 120px;
+    padding: 12px;
+    margin-top: 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    resize: none;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  textarea:focus {
+    outline: none;
+    border-color: #4CAF50;
+    box-shadow: 0 0 10px rgba(0, 132, 58, 0.3);
+  }
+  
+  /* Modal Close Button */
+  .modal button {
+    background-color: #f44336;
+    margin-top: 10px;
+  }
+  
+  .modal button:hover {
+    background-color: #e53935;
+    transform: scale(1.05);
+  }
+  
+  /* Body Background */
+  body {
+    background-color: #f4f7f6;
+    font-family: 'Arial', sans-serif;
+  }
+  
+  /* Ensure modal overlay is on top */
+  .modal:before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: -1;
+  }
+  

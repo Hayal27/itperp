@@ -1,0 +1,134 @@
+/* Sidebar Wrapper */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 250px;
+    background: #2a2a72;
+    color: #fff;
+    padding: 1rem;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease-in-out;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+  }
+  
+  .sidebar.open {
+    transform: translateX(0);
+  }
+  
+  /* Overlay for Sidebar */
+  .overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease;
+    z-index: 999;
+  }
+  
+  .overlay.show {
+    opacity: 1;
+    visibility: visible;
+  }
+  
+  /* Sidebar Navigation */
+  .sidebar-nav {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .nav-item {
+    margin-bottom: 1rem;
+  }
+  
+  .nav-link {
+    color: #dcdde1;
+    text-decoration: none;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    padding: 0.5rem;
+    border-radius: 4px;
+    transition: background 0.3s;
+  }
+  
+  .nav-link:hover {
+    background: rgba(255, 255, 255, 0.1);
+  }
+  
+  .nav-link i {
+    margin-right: 10px;
+    font-size: 1.25rem;
+  }
+  
+  /* Sidebar Toggle Button */
+  .toggle-sidebar-btn {
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    background: #2a2a72;
+    color: #fff;
+    border: none;
+    padding: 10px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    z-index: 1050;
+    transition: background 0.3s ease;
+  }
+  
+  .toggle-sidebar-btn:hover {
+    background: #1a1a62;
+  }
+  
+  /* Dropdown Menu Styling */
+  .nav-link.collapsed {
+    display: flex;
+    align-items: center;
+  }
+  
+  .nav-link.collapsed .bi-chevron-down {
+    margin-left: auto;
+  }
+  
+  .nav-content {
+    margin-left: 1.5rem;
+  }
+  
+  .nav-sublink {
+    color: #b0b3b8;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 0;
+    font-size: 0.95rem;
+    transition: color 0.3s;
+  }
+  
+  .nav-sublink:hover {
+    color: #ffffff;
+  }
+  
+  .nav-sublink i {
+    margin-right: 8px;
+    font-size: 1rem;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .sidebar {
+      width: 80vw;
+    }
+  }
+  
+  /* Main Content Shift */
+  .main-content {
+    transition: margin-left 0.3s ease;
+    padding: 1rem;
+  }
+  

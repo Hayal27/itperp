@@ -1,0 +1,94 @@
+
+  /* Custom Container-11 */
+.custom-container-11 {
+  /* margin-top: 300px; */
+    max-width: 1200px;
+    width: 100%;
+    margin-top: 300px;
+    padding: 20px;
+    background-color: #fff; /* White background */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Light shadow for better focus */
+  }
+  
+  /* Style for form elements inside .custom-container-11 */
+  .custom-container-11 .form-group {
+    margin-bottom: 1.5rem;
+  }
+  
+  /* Label Styling */
+  .custom-container-11 .form-group label {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #333; /* Darker color for the label text */
+    margin-bottom: 0.5rem;
+    display: inline-block;
+    text-align: left;
+  }
+  
+  /* Input Fields */
+  .custom-container-11 .form-group input,
+  .custom-container-11 .form-group textarea,
+  .custom-container-11 .form-group select {
+    width: 100%;
+    padding: 12px;
+    font-size: 1rem;
+    border-radius: 4px;
+    border: 1px solid #ccc; /* Border color */
+    box-sizing: border-box; /* Ensure padding doesn't affect width */
+    background-color: #f9f9f9; /* Light grey background */
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  /* Focused Input Fields */
+  .custom-container-11 .form-group input:focus,
+  .custom-container-11 .form-group textarea:focus,
+  .custom-container-11 .form-group select:focus {
+    border-color: #4CAF50; /* Green border on focus */
+    box-shadow: 0 0 8px rgba(76, 175, 80, 0.3); /* Soft green shadow */
+    outline: none;
+  }
+  
+  /* Textarea specific styling */
+  .custom-container-11 .form-group textarea {
+    resize: vertical; /* Allow vertical resizing only */
+    min-height: 100px; /* Minimum height for better visibility */
+  }
+  
+  /* Submit Button Styling */
+  .custom-container-11 .btn {
+    padding: 10px 20px;
+    font-size: 1.1rem;
+    border-radius: 5px;
+    border: none;
+    background-color: #007bff; /* Blue background */
+    color: white;
+    width: 100%;
+    transition: background-color 0.3s ease;
+  }
+  
+  /* Hover Effect for Submit Button */
+  .custom-container-11 .btn:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+  }
+  
+  /* Error Message Styling */
+  .custom-container-11 .alert {
+    margin-top: 15px;
+    font-size: 1rem;
+    padding: 10px;
+    border-radius: 5px;
+  }
+  
+  /* Success Message */
+  .custom-container-11 .alert-success {
+    background-color: #d4edda;
+    color: #155724;
+  }
+  
+  /* Error Message */
+  .custom-container-11 .alert-danger {
+    background-color: #f8d7da;
+    color: #721c24;
+  }
+  
