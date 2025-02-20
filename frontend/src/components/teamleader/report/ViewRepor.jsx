@@ -70,7 +70,7 @@ const ViewPlan = () => {
 
   return (
     <div className="supervisor-dashboard">
-      <h2>PLANS FROM TEAM</h2>
+      <h2>በ ዲፓርትመንቱ  የታቀዱ እቅዶች</h2>
 
       {/* Table to display plans */}
       <div className="plan-list">

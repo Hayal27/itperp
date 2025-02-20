@@ -38,7 +38,7 @@ const TeamleaderDashboard = () => {
                 </div>
               </div>
 
-              {/* Project Reports Card */}
+              {/* Plan Reports Card */}
               <div className="col-md-6">
                 <div className="card info-card">
                   <div className="filter">
@@ -52,8 +52,8 @@ const TeamleaderDashboard = () => {
                     </ul>
                   </div>
                   <div className="card-body">
-                    <h5 className="card-title">Project Reports</h5>
-                    <h6>Completed Projects: 8</h6>
+                    <h5 className="card-title">Plan Reports</h5>
+                    <h6>Completed plans: 8</h6>
                     <span className="text-info">Ongoing: 5</span>
                   </div>
                 </div>

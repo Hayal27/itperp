@@ -993,7 +993,7 @@ h6 {
   font-size: 12px;
   text-overflow: ellipsis;
   white-space: nowrap;
-  color: #666;
+  color: #663;
 }
 
 /*--------------------------------------------------------------
@@ -1220,6 +1220,10 @@ h6 {
   font-size: 14px;
   transition: all 0.3s;
   border-top: 1px solid #cddfff;
+    position: fixed;
+
+    top: 93%;
+    left: 10%;
 }
 
 .footer .copyright {

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import '../../assets/css/sidebar.css';
 
 function StaffSidebar() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -11,231 +12,116 @@ function StaffSidebar() {
 
   return (
     <>
-      <style>
-        {`
-          /* Sidebar Styling */
-          .sidebar {
-            transition: transform 0.3s ease;
-            transform: ${isSidebarOpen ? 'translateX(0)' : 'translateX(-250px)'};
-            width: 250px;
-            position: fixed;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            background-image: linear-gradient(180deg, #2a3753 0%, #0C7C92 100%);
-            color: #ffffff;
-            z-index: 1000;
-            box-shadow: ${isSidebarOpen ? '2px 0 5px rgba(0,0,0,0.1)' : 'none'};
-            padding-top: 20px;
-          }
-
-          /* Sidebar Nav Items */
-          .sidebar-nav {
-            padding-left: 0;
-            list-style-type: none;
-          }
-
-          .sidebar-nav .nav-item {
-            margin-top: 30px;
-            border-bottom: 1px solid #495057;
-            background-image: linear-gradient(180deg, #2a3753 0%, #0C7C92 100%);
-          }
-
-          /* Magical Hover Effect for Sidebar Items */
-          .sidebar-nav .nav-item:hover {
-            transform: scale(1.05) rotate(2deg);
-            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.3);
-            background-color: #007bff; /* Change background color on hover */
-          }
-
-          /* Sidebar Links */
-          .sidebar-nav .nav-link {
-            color: #adb5bd;
-            display: flex;
-            align-items: center;
-            padding: 10px 20px;
-            transition: color 0.3s ease, transform 0.3s ease;
-          }
-
-          .sidebar-nav .nav-link i {
-            margin-right: 10px;
-            font-size: 1.2rem;
-            transition: transform 0.3s ease;
-          }
-
-          /* Add magical hover effect to the nav link */
-          .sidebar-nav .nav-link:hover {
-            color: #ffffff;
-            transform: translateX(10px);
-          }
-
-          /* Sidebar Toggle Button */
-          .toggle-sidebar-btn {
-            cursor: pointer;
-            font-size: 1.5rem;
-            position: fixed;
-            top: 15px;
-            left: 15px;
-            z-index: 1050;
-            color: #007bff;
-            transition: color 0.3s ease;
-          }
-
-          .toggle-sidebar-btn:hover {
-            color: #0056b3;
-          }
-
-          /* Main content shift when sidebar is open */
-          .main-content {
-            margin-left: ${isSidebarOpen ? '250px' : '0'};
-            transition: margin-left 0.3s ease;
-            padding: 20px;
-            transition: padding-left 0.3s ease;
-          }
-
-          /* Mobile Responsiveness */
-          @media (max-width: 768px) {
-            .sidebar {
-              transform: ${isSidebarOpen ? 'translateX(0)' : 'translateX(-100%)'};
-            }
-
-            .main-content {
-              margin-left: 0;
-            }
-
-            .toggle-sidebar-btn {
-              left: 15px;
-            }
-          }
-        `}
-      </style>
-
       {/* Sidebar Toggle Button */}
+      
       <i className="bi bi-list toggle-sidebar-btn" onClick={toggleSidebar} title="Toggle Sidebar" />
 
       {/* Sidebar */}
-      <aside id="sidebar" className="sidebar">
+      <aside id="sidebar" className={`sidebar ${isSidebarOpen ? 'open' : ''}`}>
         <ul className="sidebar-nav" id="sidebar-nav">
           <li className="nav-item">
             <Link to="/" className="nav-link">
-              <i className="bi bi-grid" />
+              <i className="bi bi-house-door" />
+              <span>Dashboard</span>
             </Link>
           </li>
-          
+
           {/* Plan Management Nav */}
           <li className="nav-item">
             <a className="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
-              <i className="bi bi-menu-button-wide" />
+              <i className="bi bi-clipboard-data" />
               <span>Plan Management</span>
               <i className="bi bi-chevron-down ms-auto" />
             </a>
             <ul id="components-nav" className="nav-content collapse" data-bs-parent="#sidebar-nav">
               <li>
                 <Link to='/plan/view' className="nav-link">
-                  <i className="bi bi-circle" />
+                  <i className="bi bi-eye" />
                   <span>View Plan</span>
                 </Link>
               </li>
               <li>
-                <Link to='/plan/add' className="nav-link">
-                  <i className="bi bi-circle" />
+                <Link to='/plan/PlanSteps/Add' className="nav-link">
+                  <i className="bi bi-plus-circle" />
                   <span>Add Plan</span>
                 </Link>
               </li>
+
               <li>
-                <Link to='/plan/edit' className="nav-link">
-                  <i className="bi bi-circle" />
-                  <span>Edit Plan</span>
+                <Link to='/plan/StaffViewDeclinedPlan' className="nav-link">
+                  <i className="bi bi-eye" />
+                  <span>Declined Plan</span>
+                </Link>
+              </li>
+
+
+              <li>
+                <Link to='/plan/ViewOrgPlan' className="nav-link">
+                  <i className="bi bi-eye" />
+                  <span>Orginazation Plan</span>
                 </Link>
               </li>
             </ul>
           </li>
-        </ul>
 
-
-
-        <ul className="sidebar-nav" id="sidebar-nav">
-          <li className="nav-item">
-            {/* <Link to="/" className="nav-link">
-             
-            </Link> */}
-          </li>
-          
-          {/* report Management Nav */}
+          {/* Report Management Nav */}
           <li className="nav-item">
             <a className="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
-              <i className="bi bi-menu-button-wide" />
-              <span>report Management</span>
+              <i className="bi bi-file-earmark-bar-graph" />
+              <span>Report Management</span>
               <i className="bi bi-chevron-down ms-auto" />
             </a>
             <ul id="components-nav" className="nav-content collapse" data-bs-parent="#sidebar-nav">
               <li>
                 <Link to='/report/view' className="nav-link">
-                  <i className="bi bi-circle" />
-                  <span>View reports</span>
+                  <i className="bi bi-file-earmark-text" />
+                  <span>View Reports</span>
                 </Link>
               </li>
+             
               <li>
-                <Link to='/report/add' className="nav-link">
-                  <i className="bi bi-circle" />
-                  <span>Add report</span>
-                </Link>
-              </li>
-              <li>
-                <Link to='/report/edit' className="nav-link">
-                  <i className="bi bi-circle" />
-                  <span>Edit report</span>
+                <Link to='/report/ViewOrgReport' className="nav-link">
+                  <i className="bi bi-file-earmark-pencil" />
+                  <span>Orginazation Report</span>
                 </Link>
               </li>
             </ul>
           </li>
 
-        </ul>
-
-
-        <ul className="sidebar-nav" id="sidebar-nav">
-          <li className="nav-item">
-            {/* <Link to="/" className="nav-link">
-             
-            </Link> */}
-          </li>
-          
-          {/* Chat */}
+          {/* Chat Nav */}
           <li className="nav-item">
             <a className="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
-              <i className="bi bi-menu-button-wide" />
+              <i className="bi bi-chat-dots" />
               <span>Chat</span>
               <i className="bi bi-chevron-down ms-auto" />
             </a>
             <ul id="components-nav" className="nav-content collapse" data-bs-parent="#sidebar-nav">
               <li>
                 <Link to='/UserForm' className="nav-link">
-                  <i className="bi bi-circle" />
-                  <span>inbox</span>
+                  <i className="bi bi-inbox" />
+                  <span>Inbox</span>
                 </Link>
               </li>
               <li>
                 <Link to='/UserTable' className="nav-link">
-                  <i className="bi bi-circle" />
-                  <span>Staf groups</span>
+                  <i className="bi bi-person-circle" />
+                  <span>Staff Groups</span>
                 </Link>
               </li>
               <li>
                 <Link to='/UserForm' className="nav-link">
-                  <i className="bi bi-circle" />
-                  <span>Department groups</span>
+                  <i className="bi bi-building" />
+                  <span>Department Groups</span>
                 </Link>
               </li>
             </ul>
           </li>
 
         </ul>
-
-        
       </aside>
 
       {/* Main content */}
-      <div className="main-content">
+      <div className={`main-content ${isSidebarOpen ? 'shifted' : ''}`}>
         {/* Content for main app goes here */}
       </div>
     </>

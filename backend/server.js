@@ -7,6 +7,8 @@ const userRoutes = require('./routes/userRoutes.js'); // Import user routes
 const employeeRoutes = require('./routes/employeeRoutes.js')
 const planRoutes = require('./routes/planRoutes.js')
 const reportRoutes = require('./routes/reportRoutes.js')
+const dashboardRoutes = require('./routes/dashboardRoutes.js')
+const analyticsRoutes = require('./routes/analyticRoutes.js');
 // const approvalRoutes = require('./routes/approvalRoutes');
 // const approvalWorkflowRoutes = require('./routes/approvalWorkflowRoutes.js')
 const session = require('express-session');
@@ -25,7 +27,7 @@ app.use(session({
   resave: false,
   saveUninitialized: true,
   cookie: {
-    maxAge: 300// Session expiration time (1 hour in milliseconds)
+    maxAge: 30000// Session expiration time (1 hour in milliseconds)
   }
 }));
 
@@ -37,7 +39,10 @@ app.use(loggingMiddleware); // Logs every request
 app.use('/api', userRoutes); // Use user routes
 app.use('/api',employeeRoutes)
 app.use('/api',planRoutes)
+app.use('/api',dashboardRoutes)
 app.use('/api',reportRoutes)
+app.use('/api',analyticsRoutes);
+
 // app.use('/api/approvals', approvalRoutes);
 // app.use('/api',approvalWorkflowRoutes)
 app.post("/login", authMiddleware.login);

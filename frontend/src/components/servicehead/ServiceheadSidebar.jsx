@@ -133,11 +133,11 @@ function ServiceheadSidebar() {
               <li>
                 <Link to='/plan/view' className="nav-link">
                   <i className="bi bi-circle" />
-                  <span>View Plan</span>
+                  <span>View Submited Plan</span>
                 </Link>
               </li>
               <li>
-                <Link to='/UserTable' className="nav-link">
+                <Link to='/plan/add' className="nav-link">
                   <i className="bi bi-circle" />
                   <span>Add Plan</span>
                 </Link>
@@ -170,13 +170,13 @@ function ServiceheadSidebar() {
             </a>
             <ul id="components-nav" className="nav-content collapse" data-bs-parent="#sidebar-nav">
               <li>
-                <Link to='/UserForm' className="nav-link">
+                <Link to='/report/view' className="nav-link">
                   <i className="bi bi-circle" />
                   <span>View reports</span>
                 </Link>
               </li>
               <li>
-                <Link to='/UserTable' className="nav-link">
+                <Link to='/report/add' className="nav-link">
                   <i className="bi bi-circle" />
                   <span>Add report</span>
                 </Link>

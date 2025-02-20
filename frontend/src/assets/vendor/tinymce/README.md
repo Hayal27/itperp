@@ -60,7 +60,7 @@ The TinyMCE [API](https://www.tiny.cloud/docs/tinymce/6/apis/tinymce.root/) is e
 
 For the professional software teams that require more in-depth efficiency, compliance or collaborative features built to enterprise-grade standards, please [get in touch with our team](https://www.tiny.cloud/contact/).
 
-Tiny also offers dedicated SLAs and support for professional development teams.
+Tiny also offers dedicated SLAs and support for professional Developers.
 
 ## Compiling and contributing
 

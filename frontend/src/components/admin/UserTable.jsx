@@ -54,7 +54,7 @@ const UserTable = () => {
     <>
     <main id="main" className="main">
       <div className="pagetitle">
-        <h1>Tabs</h1>
+        {/* <h1>Tabs</h1> */}
         <nav>
           <ol className="breadcrumb">
             <li className="breadcrumb-item"><a href="index.html">Admin</a></li>
@@ -69,8 +69,8 @@ const UserTable = () => {
           <div className="col-lg-12">
             <div className="card">
               <div className="card-body">
-                <h5 className="card-title">User Table</h5>
-                <p>All user information table here and you can manage all accounts on the table.</p>
+                <h5 className="card-title">Users Table</h5>
+                {/* <p>All user information table here and you can manage all accounts on the table.</p> */}
                 
                 {/* Table with stripped rows */}
                 <table className="table datatable">

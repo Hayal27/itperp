@@ -68,7 +68,7 @@ const CeoViewPlan = () => {
 
   return (
     <div className="supervisor-dashboard">
-      <h2>PLANS FROM TEAM</h2>
+      <h2>በ ዲፓርትመንቱ  የታቀዱ እቅዶች</h2>
 
       <div className="plan-list">
         {plans.length > 0 ? (

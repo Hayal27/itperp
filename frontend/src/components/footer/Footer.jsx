@@ -4,11 +4,11 @@ const Footer = () => {
   return (
     <>
 <footer id="footer" className="footer">
-  <div className="copyright">
+  <div className="copyright-1">
     © Copyright <strong><span>ETHIOPIAN IT PARK CORPORATE   </span></strong>. All Rights Reserved
   </div>
   <div className="credits">
-    Designed by <a href="https://bootstrapmade.com/"> ITPC Development Team.</a>
+    Developed by <a href="https://bootstrapmade.com/"> ITPC Developer.</a>
   </div>
 </footer>{/* End Footer */}
 

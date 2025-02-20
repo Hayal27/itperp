@@ -94,7 +94,7 @@ const EmployeeRegistration = () => {
   return (
     <main id="main" className="main" style={{ width: "100%" }}>
       <div className="pagetitle">
-        <h1>Employee Registration</h1>
+        {/* <h1>Employee Registration</h1> */}
       </div>
       <section className="section">
         <div className="row">

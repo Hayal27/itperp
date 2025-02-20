@@ -1,11 +1,11 @@
 const mysql = require("mysql");
-require("dotenv").config(); // Load environment variables
+// require("dotenv").config(); // Load environment variables
 
 const con = mysql.createConnection({
-    user: process.env.USER,
+    user: "root",
     host: "localhost",
-    password: process.env.PASSWORD || "", // Use an empty string if PASSWORD is undefined
-    database: process.env.DATABASE
+    password: "", // Use an empty string if PASSWORD is undefined
+    database: "itperp"
 });
 
 con.connect((err) => {

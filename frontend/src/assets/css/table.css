@@ -1,0 +1,66 @@
+.table-container {
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    max-width: 100%;
+    overflow-x: auto;
+  }
+  
+  .plans-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  
+  .plans-table th,
+  .plans-table td {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    text-align: left;
+  }
+  
+  .plans-table th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+  }
+  
+  .plans-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  
+  .plans-table tr:hover {
+    background-color: #f1f1f1;
+  }
+  
+  .update-button {
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    margin-right: 5px;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+  
+  .update-button:hover {
+    background-color: #45a049;
+  }
+  
+  .delete-button {
+    background-color: #f44336;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+  
+  .delete-button:hover {
+    background-color: #e53935;
+  }
+  
+  .error-message {
+    color: red;
+    font-weight: bold;
+  }
+  

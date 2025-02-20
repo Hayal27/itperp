@@ -1,29 +1,58 @@
+body {
+  background-image: url(../img/android-chrome-512x512-1.png);
+  background-repeat: no-repeat;
+  background-position: right; /* Positions the image to the right side */
+  background-size: 45%; /* Reduces the image size to 30% of the container width */
+  background-attachment: fixed; /* Keeps the image fixed during scrolling */
+  height: 100vh;
+  margin: 0;
+  position: relative;
+  /* left: -10%; */
+  
+}
 
 
+#login .card
+{
+  /* background: linear-gradient(180deg, #45bdad 0%, #0C7C92 100%); */
+  background-color: transparent;
+  max-width: 1200px;
+  position: relative;
+  left: -30%;
+
+  
+  overflow: hidden;
+  border-radius: 12px;
+  padding: 3rem 2rem
+  
+}
 /* Container Styles */
-.container-l{
-   
-    max-width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-    background-image: linear-gradient(180deg,#2a3753 0%,#0C7C92 100% );
-    overflow: hidden;
+.container-l.card {
+  max-width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+
+  /* background: none;
+  background-color: transparent; */
+
+  overflow: hidden;
+  position: absolute;
+  top: 100%;
+  right: 30%;
+  /* animation: fadeInBackground 1.5s ease-in-out; */
+}
+
   
-  
-    animation: fadeInBackground 1.5s ease-in-out;
-  }
-  
-  @keyframes fadeInBackground {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
   
   /* Logo Animation */
-  .logo img {
+  .login-logo img {
     width: 120px;
     animation: logoPulse 2s infinite;
+    position: relative;
+    left: -110%;
+    top: 55%;
   }
   
   @keyframes logoPulse {
@@ -38,12 +67,13 @@
     opacity: 0;
     transform: translateY(50px);
     animation: fadeInCard 1s forwards;
+    background: red;
   }
   
   @keyframes fadeInCard {
     to {
         opacity: 1;
-        transform: translateY(0);
+        transform: translateY(1);
     }
   }
   
@@ -112,6 +142,9 @@
     left: 0;
     transform: scaleX(0);
     transition: transform 0.3s ease;
+  
+
+
   }
   
   .credits a:hover::after {
@@ -127,5 +160,12 @@
     background-attachment: fixed; /* Keeps the image fixed during scrolling */
     height: 100vh;
     margin: 0;
+    
  }
  
+
+ .credits
+ {
+  position: relative;
+  left: -35%;
+ }

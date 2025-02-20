@@ -10,7 +10,7 @@
 //     row_no: '',
 //     details: '',
 //     measurement: '',
-//     baseline: '',
+//     Baseline: '',
 //     plan: '',
 //     outcome: '',
 //     execution_percentage: '',
@@ -65,7 +65,7 @@
 
 //   return (
 //     <div className="form-container-10">
-//       <h2>Submit a New Plan</h2>
+//       <h2>እቅዶን ይመዝግቡ</h2>
 //       <form onSubmit={handleSubmit}>
 //         <label>Objective:</label>
 //         <input

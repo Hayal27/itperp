@@ -1,62 +1,31 @@
 import Axios from "axios";
-import React, { useState, useEffect } from "react";
-import "../../../assets/css/reportform.css";
-// const jwt = require('jsonwebtoken');
-const ReportSubmissionForm = () => {
-  // State to hold form data for report
+import React, { useState } from 'react';
+import '../../../assets/css/planform.css';
+
+const StaffAddReport = () => {
+  // State to hold form data
   const [formData, setFormData] = useState({
-    objective: "",
-    goal: "",
-    row_no: "",
-    details: "",
-    measurement: "",
-    baseline: "",
-    plan: "",
-    outcome: "",
-    execution_percentage: "",
-    description: "",
-    year: "",
-    quarter: "Q1",
-    plan_id: "", // This will be selected from the fetched plans
+    objective: '',
+    goal: '',
+        details: '',
+    measurement: '',
+    baseline: '',
+    plan: '',
+    outcome: '',
+    execution_percentage: '',
+    description: '',
+    year: '',
+    quarter: 'Q1',
   });
 
-  // State to store approved plans
-  const [approvedPlans, setApprovedPlans] = useState([]);
-
   // State to handle form submission status
-  const [responseMessage, setResponseMessage] = useState("");
+  const [responseMessage, setResponseMessage] = useState('');
 
-  // Fetch approved plans for the current user on component mount
-  useEffect(() => {
-    const fetchApprovedPlans = async () => {
-      const token = localStorage.getItem("token"); // Get the JWT token from localStorage
-
-      if (!token) {
-        alert("You must be logged in to view approved plans.");
-        return;
-      }
-
-      try {
-        // Fetch approved plans for the logged-in user
-        const response = await Axios.get("http://localhost:5000/api/reports/approved", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        if (response.data && Array.isArray(response.data.plans)) {
-          setApprovedPlans(response.data.plans);
-        } else {
-          setResponseMessage("No approved plans found.");
-        }
-      } catch (error) {
-        console.error("Error fetching approved plans:", error);
-        setResponseMessage("An error occurred while fetching approved plans.");
-      }
-    };
-
-    fetchApprovedPlans();
-  }, []);
+    // States to handle form submission status and preview toggle
+   
+    const [showPopup, setShowPopup] = useState(false); // State to control popup visibility
+    const [popupType, setPopupType] = useState(''); // Type of the popup (success or error)
+    const [showPreview, setShowPreview] = useState(false);
 
   // Update state when form fields change
   const handleChange = (e) => {
@@ -67,58 +36,61 @@ const ReportSubmissionForm = () => {
     }));
   };
 
+ 
+
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const token = localStorage.getItem("token"); // Get the JWT token from localStorage
+    const token = localStorage.getItem('token'); // Get the JWT token from localStorage
 
     if (!token) {
-      alert("You must be logged in to submit a report.");
+      alert('You must be logged in to submit a plan.');
       return;
     }
 
     try {
-      // Send the request to submit the report using Axios
-      const response = await Axios.post("http://localhost:5000/api/reports", formData, {
+      // Send the request to submit the plan using Axios
+      const response = await Axios.post("http://localhost:5000/api/plans", formData, {
         headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`, // Ensure that your token is valid and sent correctly
         },
       });
 
-      if (response.data && response.data.report_id) {
-        setResponseMessage(`Report submitted successfully with ID: ${response.data.report_id}`);
+      if (response.data && response.data.plan_id) {
+        setResponseMessage(`Plan submitted successfully with ID: ${response.data.plan_id}`);
+        setPopupType('success');
       } else {
         setResponseMessage(`Error: ${response.data.message}`);
+        setPopupType('error');
       }
     } catch (error) {
-      console.error("Error submitting report:", error);
-      setResponseMessage("An error occurred while submitting the report.");
+      console.error('Error submitting plan:', error);
+      setResponseMessage('An error occurred while submitting the plan.');
+      setPopupType('error');
+    } finally {
+      setShowPopup(true); // Show the popup after submission attempt
     }
   };
 
-  return (
-    <div className="form-container">
-      <h2>Submit a New Report</h2>
-      <form onSubmit={handleSubmit}>
-        <label>Approved Plan:</label>
-        <select
-          name="plan_id"
-          value={formData.plan_id}
-          onChange={handleChange}
-          required
-        >
-          <option value="">Select an approved plan</option>
-          {approvedPlans.map((plan) => (
-            <option key={plan.plan_id} value={plan.plan_id}>
-              {plan.objective} ({plan.year}, {plan.quarter})
-            </option>
-          ))}
-        </select>
-        <br />
+  // Toggle preview visibility
+  
+  const togglePreview = () => {
+    setShowPreview(!showPreview);
+  };
 
-        <label>Objective:</label>
+  // Close popup
+  const closePopup = () => {
+    setShowPopup(false);
+  };
+
+
+  return (
+    <div className="form-container-10">
+      <h2>የእቅዶን ሪፖርት ይመዝግቡ</h2>
+      <form onSubmit={handleSubmit}>
+        <label>ግብ:</label>
         <input
           type="text"
           name="objective"
@@ -128,7 +100,7 @@ const ReportSubmissionForm = () => {
         />
         <br />
 
-        <label>Goal:</label>
+        <label>ዓላማ:</label>
         <input
           type="text"
           name="goal"
@@ -138,16 +110,9 @@ const ReportSubmissionForm = () => {
         />
         <br />
 
-        <label>Row Number:</label>
-        <input
-          type="number"
-          name="row_no"
-          value={formData.row_no}
-          onChange={handleChange}
-        />
-        <br />
+    
 
-        <label>Details:</label>
+        <label>የተከናወኑ ዝርዝር ሥራዎች:</label>
         <textarea
           name="details"
           value={formData.details}
@@ -155,7 +120,7 @@ const ReportSubmissionForm = () => {
         />
         <br />
 
-        <label>Measurement:</label>
+        <label>የውጤት ማሳኪያ ተግባራት ዝርዝር:</label>
         <input
           type="text"
           name="measurement"
@@ -164,7 +129,7 @@ const ReportSubmissionForm = () => {
         />
         <br />
 
-        <label>Baseline:</label>
+        <label>መነሻ የነበረው:</label>
         <input
           type="text"
           name="baseline"
@@ -173,7 +138,7 @@ const ReportSubmissionForm = () => {
         />
         <br />
 
-        <label>Plan:</label>
+        <label>እቅድ የነበረው:</label>
         <textarea
           name="plan"
           value={formData.plan}
@@ -181,7 +146,7 @@ const ReportSubmissionForm = () => {
         />
         <br />
 
-        <label>Outcome:</label>
+        <label>የተገኝው ውጤት:</label>
         <textarea
           name="outcome"
           value={formData.outcome}
@@ -189,7 +154,7 @@ const ReportSubmissionForm = () => {
         />
         <br />
 
-        <label>Execution Percentage:</label>
+        <label>ውጤቱ በ ፐርሰንት:</label>
         <input
           type="number"
           name="execution_percentage"
@@ -200,7 +165,7 @@ const ReportSubmissionForm = () => {
         />
         <br />
 
-        <label>Description:</label>
+        <label>መግለጫ:</label>
         <textarea
           name="description"
           value={formData.description}
@@ -208,7 +173,7 @@ const ReportSubmissionForm = () => {
         />
         <br />
 
-        <label>Year:</label>
+        <label>አመት:</label>
         <input
           type="number"
           name="year"
@@ -218,25 +183,52 @@ const ReportSubmissionForm = () => {
         />
         <br />
 
-        <label>Quarter:</label>
+        <label>ሩብ አመት:</label>
         <select
           name="quarter"
           value={formData.quarter}
           onChange={handleChange}
         >
-          <option value="Q1">Q1</option>
-          <option value="Q2">Q2</option>
-          <option value="Q3">Q3</option>
-          <option value="Q4">Q4</option>
+          <option value="Q1">የጀመሪያ ሩብ አመት</option>
+          <option value="Q2">ሁለተኛ ሩብ አመት</option>
+          <option value="Q3">ሶስተኛ ሩብ አመት</option>
+          <option value="Q4">አራተኛ ሩብ አመት</option>
         </select>
         <br />
 
-        <button type="submit">Submit Report</button>
+        <button type="button" onClick={togglePreview}>Preview</button>
+        <button type="submit">ይመዝግቡ</button>
       </form>
 
-      {responseMessage && <div className="response-message">{responseMessage}</div>}
+      {showPreview && (
+        <div className="preview-container">
+          <h3>ክለሳ</h3>
+          <p><strong>ግብ:</strong> {formData.objective}</p>
+          <p><strong>ዓላማ:</strong> {formData.goal}</p>
+          <p><strong>ዝርዝር:</strong> {formData.details}</p>
+          <p><strong>ማሳኪያ:</strong> {formData.measurement}</p>
+          <p><strong>መነሻ የነበረው:</strong> {formData.baseline}</p>
+          <p><strong>እቅድ የነበረው:</strong> {formData.plan}</p>
+          <p><strong>የተገኝው ውጤት:</strong> {formData.outcome}</p>
+          <p><strong>ፐርሰንት:</strong> {formData.execution_percentage}%</p>
+          <p><strong>መግለጫ:</strong> {formData.description}</p>
+          <p><strong>አመት:</strong> {formData.year}</p>
+          <p><strong>ሩብ አመት:</strong> {formData.quarter}</p>
+          <button onClick={togglePreview}>ክለሳውን ይዝጉት</button>
+        </div>
+      )}
+
+    {/* Popup for success/error message */}
+    {showPopup && (
+        <div className={`popup ${popupType}`}>
+          <div className="popup-content">
+            <p>{responseMessage}</p>
+            <button onClick={closePopup}>Close</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
 
-export default ReportSubmissionForm;
+export default StaffAddReport;

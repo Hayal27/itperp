@@ -11251,7 +11251,7 @@
         x: 0,
         y: 0,
         textAlign: 'left',
-        textBaseline: 'top',
+        textመነሻ 'top',
         miterLimit: 2
     }, DEFAULT_PATH_STYLE);
     var TSpan = (function (_super) {

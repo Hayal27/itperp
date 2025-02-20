@@ -1,0 +1,66 @@
+.plan-detail-box {
+ 
+  background: linear-gradient(135deg, #0C7C92, #6EC9C4);
+    border: 1px solid #ddd; /* Light border for subtle separation */
+    border-radius: 8px; /* Smooth corners */
+    padding: 80px 80px 80px 80px; /* Adequate internal spacing */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+    max-width: 800px; /* Restrict width for better readability */
+    /* margin: 20px auto; Center the box on the page */
+    font-family: 'Arial', sans-serif; /* Professional font */
+    position: absolute;
+    top: 1%;
+    left: 20%;
+    
+  }
+  
+  .plan-detail-box h3 {
+    font-size: 1.5rem; /* Larger, bold heading */
+    color: #333; /* Dark gray for modern aesthetics */
+    margin-bottom: 20px; /* Space below the heading */
+    text-align: center; /* Center the title */
+  }
+  
+  .plan-detail-box p {
+    font-size: 1rem; /* Standard font size for text */
+    line-height: 1.5; /* Better readability with line height */
+    color: #555; /* Slightly lighter gray for the text */
+    margin-bottom: 10px; /* Space between each attribute */
+  }
+  
+  .plan-detail-box p strong {
+    color: #222; /* Slightly darker for labels */
+    font-weight: bold; /* Highlight the label */
+  }
+  
+  .plan-detail-box button {
+    background-color: #010101; /* Primary blue color */
+    /* background-color: transparent; */
+    color: #ffffff; /* White text for contrast */
+    border: none; /* Remove button border */
+    border-radius: 5px; /* Smooth button corners */
+    padding: 10px 20px; /* Adequate button padding */
+    font-size: 1rem; /* Match text size */
+    cursor: pointer; /* Pointer cursor for interactivity */
+    transition: background-color 0.3s ease; /* Smooth hover effect */
+  }
+  
+  .plan-detail-box button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+  }
+  
+  @media (max-width: 768px) {
+    .plan-detail-box {
+      padding: 15px; /* Reduce padding on smaller screens */
+    }
+  
+    .plan-detail-box p {
+      font-size: 0.9rem; /* Slightly smaller text for mobile */
+    }
+  
+    .plan-detail-box button {
+      font-size: 0.9rem; /* Match button size */
+      padding: 8px 16px; /* Adjust button padding */
+    }
+  }
+  

@@ -1,5 +1,7 @@
 import Axios from "axios";
 import React, { useEffect, useState } from "react";
+import '../../assets/css/adduser.css';
+
 
 const UserRegistration = () => {
   // State for roles, departments, success message, error message, and form data

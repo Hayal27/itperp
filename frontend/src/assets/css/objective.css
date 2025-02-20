@@ -1,0 +1,51 @@
+
+
+.mt-46 {
+    position: absolute;
+    top: 10%;    
+/* top: 80%; */
+   left: 18%;
+   width: 70%;
+   
+   
+  }
+.creat{
+  /* background: #000; */
+  margin-right: 100px ;
+}
+
+
+
+/* Smooth Transition for Filter and Create Sections */
+.filter-section, .create-section {
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  
+  .filter-section.show, .create-section.show {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  
+  /* Transparent background for the container */
+  .container {
+    background-color: rgba(255, 255, 255, 0.1); /* Slight transparency */
+    backdrop-filter: blur(10px); /* Optional: Adds blur effect behind */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Button style with smooth transition */
+  .btn-info {
+    transition: background-color 0.3s ease;
+  }
+  
+  .btn-info:hover {
+    background-color:rgb(26, 103, 115);
+  }
+   .done{
+   position: relative;
+   top: 90%;
+   }

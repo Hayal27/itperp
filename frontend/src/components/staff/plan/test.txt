@@ -1,0 +1,2300 @@
+RL: https://ethiopianitpark.et/ [213.55.96.154]
+[+] Started: Thu Jan 30 06:38:29 2025
+
+Interesting Finding(s):
+
+[+] Headers
+ | Interesting Entries:
+ |  - server: nginx
+ |  - x-powered-by: PHP/8.1.31, PleskLin
+ | Found By: Headers (Passive Detection)
+ | Confidence: 100%
+
+[+] robots.txt found: https://ethiopianitpark.et/robots.txt
+ | Found By: Robots Txt (Aggressive Detection)
+ | Confidence: 100%
+
+[+] XML-RPC seems to be enabled: https://ethiopianitpark.et/xmlrpc.php
+ | Found By: Direct Access (Aggressive Detection)
+ | Confidence: 100%
+ | References:
+ |  - http://codex.wordpress.org/XML-RPC_Pingback_API
+ |  - https://www.rapid7.com/db/modules/auxiliary/scanner/http/wordpress_ghost_scanner/
+ |  - https://www.rapid7.com/db/modules/auxiliary/dos/http/wordpress_xmlrpc_dos/
+ |  - https://www.rapid7.com/db/modules/auxiliary/scanner/http/wordpress_xmlrpc_login/
+ |  - https://www.rapid7.com/db/modules/auxiliary/scanner/http/wordpress_pingback_access/
+
+[+] This site has 'Must Use Plugins': https://ethiopianitpark.et/wp-content/mu-plugins/
+ | Found By: Direct Access (Aggressive Detection)
+ | Confidence: 80%
+ | Reference: http://codex.wordpress.org/Must_Use_Plugins
+
+[+] The external WP-Cron seems to be enabled: https://ethiopianitpark.et/wp-cron.php
+ | Found By: Direct Access (Aggressive Detection)
+ | Confidence: 60%
+ | References:
+ |  - https://www.iplocation.net/defend-wordpress-from-ddos
+ |  - https://github.com/wpscanteam/wpscan/issues/1299
+
+Fingerprinting the version - Time: 00:10:20 <> (443 / 702) 63.Fingerprinting the version - Time: 00:10:20 <> (447 / 702) 63.Fingerprinting the version - Time: 00:10:50 <> (448 / 702) 63.Fingerprinting the version - Time: 00:11:20 <> (453 / 702) 64.Fingerprinting the version - Time: 00:11:50 <> (458 / 702) 65.Fingerprinting the version - Time: 00:12:20 <> (463 / 702) 65.Fingerprinting the version - Time: 00:12:50 <> (468 / 702) 66.Fingerprinting the version - Time: 00:12:50 <> (470 / 702) 66.Fingerprinting the version - Time: 00:13:20 <> (473 / 702) 67.Fingerprinting the version - Time: 00:13:50 <> (478 / 702) 68.Fingerprinting the version - Time: 00:13:50 <> (481 / 702) 68.Fingerprinting the version - Time: 00:14:20 <> (483 / 702) 68.Fingerprinting the version - Time: 00:14:50 <> (488 / 702) 69.Fingerprinting the version - Time: 00:15:20 <> (493 / 702) 70.Fingerprinting the version - Time: 00:15:50 <> (498 / 702) 70.                      Fingerprinting the version - Time: 00:20:10 <=============================================================================================================================================================> (702 / 702) 100.00% Time: 00:20:10
+[i] The WordPress version could not be detected.
+
+[+] WordPress theme in use: astra
+ | Location: https://ethiopianitpark.et/wp-content/themes/astra/
+ | Last Updated: 2025-01-28T00:00:00.000Z
+ | [!] The version is out of date, the latest version is 4.8.11
+ | Style URL: https://ethiopianitpark.et/wp-content/themes/astra/style.css
+ | Style Name: Astra
+ | Style URI: https://wpastra.com/
+ | Description: Astra is fast, fully customizable & beautiful WordPress theme suitable for blog, personal portfolio,...
+ | Author: Brainstorm Force
+ | Author URI: https://wpastra.com/about/?utm_source=theme_preview&utm_medium=author_link&utm_campaign=astra_theme
+ |
+ | Found By: Urls In Homepage (Passive Detection)
+ | Confirmed By: Urls In 404 Page (Passive Detection)
+ |
+ | Version: 4.7.3 (80% confidence)
+ | Found By: Style (Passive Detection)
+ |  - https://ethiopianitpark.et/wp-content/themes/astra/style.css, Match: 'Version: 4.7.3'
+
+[+] Enumerating All Plugins (via Passive Methods)
+[+] Checking Plugin Versions (via Passive and Aggressive Methods)
+
+[i] Plugin(s) Identified:
+
+[+] astra-sites
+ | Location: https://ethiopianitpark.et/wp-content/plugins/astra-sites/
+ | Latest Version: 4.4.11
+ | Last Updated: 2025-01-07T10:36:00.000Z
+ |
+ | Found By: Urls In Homepage (Passive Detection)
+ | Confirmed By: Urls In 404 Page (Passive Detection)
+ |
+ | [!] 7 vulnerabilities identified:
+ |
+ | [!] Title: Starter Templates < 2.7.1 - Contributor+ Block Import to Stored XSS
+ |     Fixed in: 2.7.1
+ |     References:
+ |      - https://wpscan.com/vulnerability/f7f2e9f9-685d-42ba-bde1-01372c9c7c73
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2021-42360
+ |      - https://www.wordfence.com/blog/2021/11/over-1-million-sites-impacted-by-vulnerability-in-starter-templates-plugin/
+ |
+ | [!] Title: Starter Templates <= 3.1.20 - Settings Update via CSRF
+ |     Fixed in: 3.1.21
+ |     References:
+ |      - https://wpscan.com/vulnerability/9e06baec-abf5-4032-a1fe-f7a0f9b19187
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-46851
+ |
+ | [!] Title: Starter Templates <= 3.2.5 - Incorrect Authorization
+ |     Fixed in: 3.2.6
+ |     References:
+ |      - https://wpscan.com/vulnerability/3399b6cd-9d5d-4e36-a527-f0a73897ee0c
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2023-41805
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/ebd78e52-f20d-42be-8f68-3d09d5abf837
+ |
+ | [!] Title: Starter Templates <= 3.2.4 - Authenticated (Contributor+) Server-Side Request Forgery
+ |     Fixed in: 3.2.5
+ |     References:
+ |      - https://wpscan.com/vulnerability/fbedd0b1-a622-4114-ab94-9575797b0c9e
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2023-41804
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/6e0bdbba-2b67-42b9-8c26-115d472aed0e
+ |
+ | [!] Title: Starter Templates — Elementor, WordPress & Beaver Builder Templates < 4.1.7 - Contributor+ Server-Side Request Forgery
+ |     Fixed in: 4.1.7
+ |     References:
+ |      - https://wpscan.com/vulnerability/2abb23e5-9e4a-4108-a1da-6d0442194e86
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-1467
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/cf5075f9-9658-4a09-bd38-34a72f6560f4
+ |
+ | [!] Title: Starter Templates — Elementor, WordPress & Beaver Builder Templates < 4.2.2 - Contributor+ Stored Cross-Site Scripting
+ |     Fixed in: 4.2.2
+ |     References:
+ |      - https://wpscan.com/vulnerability/530ec495-fbb4-4c47-8700-da72cfa6416b
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-4630
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/25edb9e8-65ea-41d1-a95f-09be110ec1d2
+ |
+ | [!] Title: Starter Templates < 4.4.1 - Author+ Stored XSS
+ |     Fixed in: 4.4.1
+ |     References:
+ |      - https://wpscan.com/vulnerability/3a0761fd-f853-4842-b306-73bfdc94da1a
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-47345
+ |      - https://patchstack.com/database/vulnerability/astra-sites/wordpress-starter-templates-elementor-wordpress-beaver-builder-templates-plugin-4-4-0-cross-site-scripting-xss-vulnerability
+ |
+ | The version could not be determined.
+
+[+] elementor
+ | Location: https://ethiopianitpark.et/wp-content/plugins/elementor/
+ | Last Updated: 2025-01-27T15:59:00.000Z
+ | [!] The version is out of date, the latest version is 3.27.2
+ |
+ | Found By: Urls In Homepage (Passive Detection)
+ | Confirmed By: Urls In 404 Page (Passive Detection)
+ |
+ | [!] 4 vulnerabilities identified:
+ |
+ | [!] Title: Elementor Website Builder – More than Just a Page Builder < 3.24.0 - Authenticated (Contributor+) Stored Cross-Site Scripting in the URL Parameter in Multiple Widgets
+ |     Fixed in: 3.24.0
+ |     References:
+ |      - https://wpscan.com/vulnerability/5200943b-5e07-4342-a090-f78435e30d30
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-5416
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/a99a64f7-1ea8-4de6-b24f-1f69bf25c1f5
+ |
+ | [!] Title: Elementor < 3.24.6 - Contributor+ Information Exposure via get_image_alt
+ |     Fixed in: 3.24.6
+ |     References:
+ |      - https://wpscan.com/vulnerability/dce5ad0c-3ce9-498f-b0f7-8dfd6ee82e40
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-6757
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/96fa9ed7-6c13-4356-8a25-8a309be2b0e9
+ |
+ | [!] Title: Elementor Website Builder < 3.25.8 - Contributor+ Stored XSS
+ |     Fixed in: 3.25.8
+ |     References:
+ |      - https://wpscan.com/vulnerability/78f0847b-3f59-43cf-87db-2cadda862aa3
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-8236
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/b1305be5-8267-475f-b962-62e3930116e1
+ |
+ | [!] Title: Elementor Website Builder < 3.25.10 - Contributor+ Stored XSS via Typography Settings
+ |     Fixed in: 3.25.10
+ |     References:
+ |      - https://wpscan.com/vulnerability/2e05843d-1797-4da9-99ec-06376484fb32
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-10453
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/f23604b7-5a7f-4be7-bc73-cb4facdd1e73
+ |
+ | Version: 3.23.0 (100% confidence)
+ | Found By: Javascript Comment (Aggressive Detection)
+ |  - https://ethiopianitpark.et/wp-content/plugins/elementor/assets/js/admin-feedback.js, Match: 'elementor - v3.23.0'
+ | Confirmed By: Style Comment (Aggressive Detection)
+ |  - https://ethiopianitpark.et/wp-content/plugins/elementor/assets/css/admin.min.css, Match: 'elementor - v3.23.0'
+
+[+] elementor-pro
+ | Location: https://ethiopianitpark.et/wp-content/plugins/elementor-pro/
+ |
+ | Found By: Urls In Homepage (Passive Detection)
+ | Confirmed By: Urls In 404 Page (Passive Detection)
+ |
+ | [!] 9 vulnerabilities identified:
+ |
+ | [!] Title: Elementor Pro < 3.19.3 - Authenticated (Contributor+) Information Exposure
+ |     Fixed in: 3.19.3
+ |     References:
+ |      - https://wpscan.com/vulnerability/52195b1a-31b9-46da-bed8-7fdd2c6c8c14
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-23523
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/ecc8996a-d95c-4711-ac7d-523f5100c7fc
+ |
+ | [!] Title: Elementor Website Builder Pro < 3.20.2 - Authententicated (Contributor+) Stored Cross-Site Scripting
+ |     Fixed in: 3.20.2
+ |     References:
+ |      - https://wpscan.com/vulnerability/d332bb66-e69c-4d11-8ff2-2c35d7ce2808
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-1364
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/531954dd-ed3f-4626-adab-c1bba8407c89
+ |
+ | [!] Title: Elementor Website Builder Pro < 3.20.2 - Authenticated (Contributor+) DOM-Based Stored Cross-Site Scripting via video_html_tag
+ |     Fixed in: 3.20.2
+ |     References:
+ |      - https://wpscan.com/vulnerability/964c149d-fb08-4f86-a9a8-34a4412b5fdd
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-2781
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/54970085-5206-45b6-adcf-11e6dd4cd633
+ |
+ | [!] Title: Elementor Website Builder Pro < 3.20.2 - Authenticated (Contributor+) Stored Cross-Site Scripting
+ |     Fixed in: 3.20.2
+ |     References:
+ |      - https://wpscan.com/vulnerability/a48b0031-02f6-4871-beb3-0f61e1cd3d28
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-2121
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/8698d6dd-7376-4d29-8a5c-21c239a7aa03
+ |
+ | [!] Title: Elementor Website Builder – More than Just a Page Builder < 3.20.2 - Authenticated (Contributor+) Stored Cross-Site Scripting via Post Navigation
+ |     Fixed in: 3.20.2
+ |     References:
+ |      - https://wpscan.com/vulnerability/ed24ea21-967a-43e3-8219-daed594c6e11
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-2120
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/de1742d4-f498-4ad4-b6a1-88cb60e83afc
+ |
+ | [!] Title: Elementor Website Builder Pro < 3.20.2 - Authenticated (Contributor+) Stored Cross-Site Scripting via Form Widget SVGZ File Upload
+ |     Fixed in: 3.20.2
+ |     References:
+ |      - https://wpscan.com/vulnerability/249f4270-610c-4422-b34f-e714358fb398
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-1521
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/ecd01ea6-9476-47e1-9959-3f8d9ce1c1f3
+ |
+ | [!] Title: Elementor Website Builder Pro < 3.21.2 - Authenticated (Contributor+) DOM-Based Stored Cross-Site Scripting
+ |     Fixed in: 3.21.2
+ |     References:
+ |      - https://wpscan.com/vulnerability/f54baf17-050d-4972-9631-3026dfb04496
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-4107
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/0d5d47bd-4f05-4dc7-84c1-f7bc1196ee16
+ |
+ | [!] Title: Elementor Pro < 3.21.3 - Reflected Cross-Site Scripting
+ |     Fixed in: 3.21.3
+ |     References:
+ |      - https://wpscan.com/vulnerability/b69f5b22-654f-459f-875d-ea6ba984b699
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-35656
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/2001d14c-2738-4d34-b465-0a76c2f772e6
+ |
+ | [!] Title: Elementor Website Builder Pro – More than Just a Page Builder < 3.25.11 - Authenticated (Contributor+) Sensitive Information Exposure via Shortcode
+ |     Fixed in: 3.25.11
+ |     References:
+ |      - https://wpscan.com/vulnerability/771699f9-aa9b-4352-8382-5fbc17f364c2
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-8494
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/94ada60f-1e20-454e-a9d7-7849be764d81
+ |
+ | Version: 3.16.2 (30% confidence)
+ | Found By: Query Parameter (Passive Detection)
+ |  - https://ethiopianitpark.et/wp-content/plugins/elementor-pro/assets/js/webpack-pro.runtime.min.js?ver=3.16.2
+ |  - https://ethiopianitpark.et/wp-content/plugins/elementor-pro/assets/js/frontend.min.js?ver=3.16.2
+ |  - https://ethiopianitpark.et/wp-content/plugins/elementor-pro/assets/js/preloaded-elements-handlers.min.js?ver=3.16.2
+
+[+] events-manager
+ | Location: https://ethiopianitpark.et/wp-content/plugins/events-manager/
+ | Latest Version: 6.6.3
+ | Last Updated: 2024-11-13T11:27:00.000Z
+ |
+ | Found By: Urls In Homepage (Passive Detection)
+ | Confirmed By: Urls In 404 Page (Passive Detection)
+ |
+ | [!] 23 vulnerabilities identified:
+ |
+ | [!] Title: Events Manager 5.5.1 - Multiple Unspecified XSS Vulnerabilities
+ |     Fixed in: 5.5.2
+ |     References:
+ |      - https://wpscan.com/vulnerability/515a5f4a-4f8f-4d6a-917f-eb33b6c370d4
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2013-7477
+ |
+ | [!] Title: Events Manager 5.3.8 - Multiple Cross-Site Scripting (XSS)
+ |     Fixed in: 5.3.9
+ |     References:
+ |      - https://wpscan.com/vulnerability/eca29ca5-a6a7-4f9e-bc4f-ae7351957c7b
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2013-7479
+ |      - https://www.securityfocus.com/bid/60078/
+ |
+ | [!] Title: Events Manager < 5.3.6.1 - Multiple Cross-Site Scripting (XSS)
+ |     Fixed in: 5.3.6.1
+ |     References:
+ |      - https://wpscan.com/vulnerability/0016d3a4-f851-428f-92c5-cc3678e27641
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2013-7480
+ |
+ | [!] Title: Events Manager 5.3.3 - Multiple Cross-Site Scripting (XSS)
+ |     Fixed in: 5.3.4
+ |     References:
+ |      - https://wpscan.com/vulnerability/a3cbd961-48c2-4c0c-ab1a-fdda2071de7b
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2013-1407
+ |      - https://packetstormsecurity.com/files/120688/
+ |      - https://www.securityfocus.com/bid/57477/
+ |
+ | [!] Title: Events Manager <= 5.8.1.1 - Unauthenticated Stored XSS
+ |     Fixed in: 5.8.1.2
+ |     References:
+ |      - https://wpscan.com/vulnerability/e7c38907-2d2f-41b4-a58b-f1225aa4c4eb
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2018-9020
+ |      - https://www.gubello.me/blog/events-manager-authenticated-stored-xss/
+ |
+ | [!] Title: Events Manager < 5.9 - Authenticated Stored Cross-Site Scripting (XSS)
+ |     Fixed in: 5.9
+ |     References:
+ |      - https://wpscan.com/vulnerability/5a20f202-f075-4508-8a9b-861b420af5b8
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2018-0576
+ |      - https://jvn.jp/en/jp/JVN85531148/
+ |
+ | [!] Title: Events Manager < 5.6 - Cross-Site Scripting (XSS) & Code Injection
+ |     Fixed in: 5.6
+ |     References:
+ |      - https://wpscan.com/vulnerability/dc0e020c-d412-4289-abad-e4d6210131b4
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2015-9297
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2015-9298
+ |
+ | [!] Title: Events Manager < 5.5.7.1 - DOM Cross-Site Scripting (XSS)
+ |     Fixed in: 5.5.7.1
+ |     References:
+ |      - https://wpscan.com/vulnerability/4224dc4c-8411-4ae2-bd69-5a953834c508
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2015-9299
+ |
+ | [!] Title: Events Manager < 5.5.7 - Multiple Cross-Site Scripting (XSS)
+ |     Fixed in: 5.5.7
+ |     References:
+ |      - https://wpscan.com/vulnerability/54998c79-4f5c-4313-9448-a74583de3826
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2015-9300
+ |
+ | [!] Title: Events Manager < 5.1.7 - Cross-Site Scripting (XSS)
+ |     Fixed in: 5.1.7
+ |     References:
+ |      - https://wpscan.com/vulnerability/3327e64b-8662-4a92-a5df-08111cdf6f0c
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2012-6716
+ |
+ | [!] Title: Events Manager < 5.5 - Cross-Site Scripting (XSS)
+ |     Fixed in: 5.5
+ |     References:
+ |      - https://wpscan.com/vulnerability/1b44169b-3686-4625-863d-249a4f8dbc84
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2013-7478
+ |
+ | [!] Title: Events Manager < 5.9.6 - Authenticated Stored Cross-Site Scripting (XSS)
+ |     Fixed in: 5.9.6
+ |     References:
+ |      - https://wpscan.com/vulnerability/c994ce7f-b772-492d-a4c8-c037b1a08290
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2019-16523
+ |      - https://github.com/sbaresearch/advisories/tree/public/2019/SBA-ADV-20190913-03_WordPress_Plugin_Events_Manager
+ |
+ | [!] Title: Events Manager < 5.9.7.2 - CSV Injection
+ |     Fixed in: 5.9.7.2
+ |     References:
+ |      - https://wpscan.com/vulnerability/f201225d-2342-4cc5-aa45-b22177f7f3c3
+ |      - https://wp-events-plugin.com/blog/2020/02/05/events-manager-5-9-7-2-pro-2-6-7-2/
+ |      - https://fortiguard.com/zeroday/FG-VD-20-034
+ |
+ | [!] Title: Events Manager < 5.9.8 - Admin+ SQL Injection
+ |     Fixed in: 5.9.8
+ |     References:
+ |      - https://wpscan.com/vulnerability/323140b1-66c4-4e7d-85a4-1c922e40866f
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2020-35012
+ |      - https://plugins.trac.wordpress.org/changeset/2336019/events-manager
+ |
+ | [!] Title: Events Manager < 5.9.8 - Cross-Site Scripting (XSS)
+ |     Fixed in: 5.9.8
+ |     References:
+ |      - https://wpscan.com/vulnerability/937b9bdb-7e8e-4ea8-82ec-aa5f6bd70619
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2020-35037
+ |      - https://plugins.trac.wordpress.org/changeset/2336019/events-manager
+ |
+ | [!] Title: Events Manager < 6.4.6 - Reflected Cross-Site Scripting
+ |     Fixed in: 6.4.6
+ |     References:
+ |      - https://wpscan.com/vulnerability/48e5be1f-b736-437f-87fe-af5920282181
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2023-48326
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/9053cf91-0af1-44f8-9fdf-7ecbd457545b
+ |
+ | [!] Title: Events Manager < 6.4.7 - Authenticated(Administator+) Stored Cross-Site Scripting via settings
+ |     Fixed in: 6.4.7
+ |     References:
+ |      - https://wpscan.com/vulnerability/caecb4e2-4ba9-4674-8117-02b6492e0526
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-0614
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/6288fddf-926f-4506-94de-696e0a23766d
+ |
+ | [!] Title: Events Manager < 6.4.7.2 - Authenticated (Contributor+) Stored Cross-Site Scripting
+ |     Fixed in: 6.4.7.2
+ |     References:
+ |      - https://wpscan.com/vulnerability/9b14e0af-9444-4e09-aa32-03d19b44642a
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-2111
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/95ded4bf-9964-4bb3-b6e5-5ad37360f87d
+ |
+ | [!] Title: Events Manager < 6.4.7.2 - Cross-Site Request Forgery
+ |     Fixed in: 6.4.7.2
+ |     References:
+ |      - https://wpscan.com/vulnerability/7faf09a9-84af-4799-9d89-fadf058df960
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-2110
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/c0538999-0a09-4d24-a530-a32fb5b4e5e6
+ |
+ | [!] Title: Events Manager < 6.4.7 - Missing Authorization
+ |     Fixed in: 6.4.7
+ |     References:
+ |      - https://wpscan.com/vulnerability/9d660280-630f-42eb-a863-ed14a0c60721
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-30515
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/6eb0aa16-a269-4297-861f-6bad88066c68
+ |
+ | [!] Title: Events Manager < 6.4.7.2 - Cross-Site Request Forgery
+ |     Fixed in: 6.4.7.2
+ |     References:
+ |      - https://wpscan.com/vulnerability/092881d5-b380-4969-a529-7df07013d96e
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-30421
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/86351e2c-8c5a-4d71-bd73-d5ae1f03038f
+ |
+ | [!] Title: Events Manager – Calendar, Bookings, Tickets, and more! < 6.4.8 - Authenticated (Contributor+) Stored Cross-Site Scripting via event, location, and event_category Shortcodes
+ |     Fixed in: 6.4.8
+ |     References:
+ |      - https://wpscan.com/vulnerability/1eb8c7e5-6de1-4faa-8b4b-235c33570050
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-3492
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/a767f65e-bc7d-4576-af78-b77bd23dc089
+ |
+ | [!] Title: Events Manager < 6.4.9 - Reflected Cross-Site Scripting
+ |     Fixed in: 6.4.9
+ |     References:
+ |      - https://wpscan.com/vulnerability/417e9d5a-2bce-41dc-8291-d0cd19dba4f3
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-5889
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/73cbb65e-b4e3-4374-9916-9a3d1be5a014
+ |
+ | The version could not be determined.
+
+[+] google-site-kit
+ | Location: https://ethiopianitpark.et/wp-content/plugins/google-site-kit/
+ | Last Updated: 2025-01-27T18:36:00.000Z
+ | [!] The version is out of date, the latest version is 1.145.0
+ |
+ | Found By: Urls In Homepage (Passive Detection)
+ | Confirmed By:
+ |  Urls In 404 Page (Passive Detection)
+ |  Meta Tag (Passive Detection)
+ |
+ | Version: 1.144.0 (60% confidence)
+ | Found By: Meta Tag (Passive Detection)
+ |  - https://ethiopianitpark.et/, Match: 'Site Kit by Google 1.144.0'
+
+[+] header-footer-elementor
+ | Location: https://ethiopianitpark.et/wp-content/plugins/header-footer-elementor/
+ | Latest Version: 2.1.0
+ | Last Updated: 2025-01-22T09:48:00.000Z
+ |
+ | Found By: Urls In Homepage (Passive Detection)
+ | Confirmed By: Urls In 404 Page (Passive Detection)
+ |
+ | [!] 10 vulnerabilities identified:
+ |
+ | [!] Title: Elementor - Header, Footer & Blocks Template < 1.5.8 - Contributor+ Stored XSS
+ |     Fixed in: 1.5.8
+ |     References:
+ |      - https://wpscan.com/vulnerability/a9412fed-aed3-4931-a504-1a86f876892e
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2021-24256
+ |      - https://www.wordfence.com/blog/2021/04/recent-patches-rock-the-elementor-ecosystem/
+ |
+ | [!] Title: Elementor Header & Footer Builder < 1.6.25 - Contributor+ Stored Cross-Site Scripting
+ |     Fixed in: 1.6.25
+ |     References:
+ |      - https://wpscan.com/vulnerability/684e290a-1ebe-41eb-8ff7-254162391ecd
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-1237
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/82644c46-205b-4005-bba8-6b3e45769639
+ |
+ | [!] Title: Elementor Header & Footer Builder < 1.6.29 - Authenticated (Contributor+) Stored Cross-Site Scripting
+ |     Fixed in: 1.6.29
+ |     References:
+ |      - https://wpscan.com/vulnerability/2a0d3d1f-62f4-44e2-90a4-d3fa41f01650
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-4634
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/f44bb823-bbf3-413b-82b5-a351609270bf
+ |
+ | [!] Title: Elementor Header & Footer Builder < 1.6.27 - Authenticated (Author+) HTML Injection
+ |     Fixed in: 1.6.27
+ |     References:
+ |      - https://wpscan.com/vulnerability/a262227b-6c2b-4093-9af1-14fcb7569f24
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-2619
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/689eb95b-2f72-4aa4-9f21-6ae186346061
+ |
+ | [!] Title: Elementor Header & Footer Builder < 1.6.26.1 - Contributor+ Stored XSS
+ |     Fixed in: 1.6.26.1
+ |     References:
+ |      - https://wpscan.com/vulnerability/aa28669a-3c64-4e05-beb7-da41701050a5
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-2618
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/a780ce1b-0758-42ef-88e7-ff8d921eca6e
+ |
+ | [!] Title: Elementor Header & Footer Builder < 1.6.36 - Authenticated (Contributor+) Stored Cross-Site Scripting via Site Title Widget
+ |     Fixed in: 1.6.36
+ |     References:
+ |      - https://wpscan.com/vulnerability/a89bb975-5731-4a69-98fe-5888e6ffb4a5
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-5757
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/b5ab022c-c16c-488b-b004-a7351f8fa3d3
+ |
+ | [!] Title: Elementor – Header, Footer & Blocks Template < 1.6.36 - Authenticated (Contributor+) Stored Cross-Site Scripting
+ |     Fixed in: 1.6.36
+ |     References:
+ |      - https://wpscan.com/vulnerability/c5a24410-a737-49bc-be58-a0403f5e8add
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-33933
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/8c27fc2c-b515-4314-908d-435a4167ee99
+ |
+ | [!] Title: Elementor Header & Footer Builder < 1.6.44 - Authenticated (Contributor+) Information Disclosure via Shortcode
+ |     Fixed in: 1.6.44
+ |     References:
+ |      - https://wpscan.com/vulnerability/85f19e03-9939-4f9a-8064-36103ed6dd62
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-10050
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/662f6ae2-2047-4bbf-b4a6-2d536051e389
+ |
+ | [!] Title: Elementor Header & Footer Builder < 1.6.46 - Author+ Stored XSS via SVG File Upload
+ |     Fixed in: 1.6.46
+ |     References:
+ |      - https://wpscan.com/vulnerability/7241192a-765e-40da-9e91-ca3bafaeba12
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-10325
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/7773fd3a-2417-415e-97b0-735e99e62097
+ |
+ | [!] Title: Elementor Header & Footer Builder < 1.6.47 - Contributor+ Stored XSS via Page Title Widget
+ |     Fixed in: 1.6.47
+ |     References:
+ |      - https://wpscan.com/vulnerability/00d77ab0-981c-4f30-85e1-1db21b070f91
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-11230
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/0d82c866-5b35-414e-bd72-30530930d5d8
+ |
+ | The version could not be determined.
+
+[+] mousewheel-smooth-scroll
+ | Location: https://ethiopianitpark.et/wp-content/plugins/mousewheel-smooth-scroll/
+ | Latest Version: 6.7.1
+ | Last Updated: 2025-01-12T14:03:00.000Z
+ |
+ | Found By: Urls In Homepage (Passive Detection)
+ | Confirmed By: Urls In 404 Page (Passive Detection)
+ |
+ | [!] 1 vulnerability identified:
+ |
+ | [!] Title: MouseWheel Smooth Scroll < 5.7 - Plugin's Setting Update via CSRF
+ |     Fixed in: 5.7
+ |     References:
+ |      - https://wpscan.com/vulnerability/1069fb40-44f0-468e-9fd4-7a0fb8cde5a5
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2021-24852
+ |
+ | The version could not be determined.
+
+[+] royal-elementor-addons
+ | Location: https://ethiopianitpark.et/wp-content/plugins/royal-elementor-addons/
+ | Latest Version: 1.7.1007
+ | Last Updated: 2025-01-12T08:22:00.000Z
+ |
+ | Found By: Urls In Homepage (Passive Detection)
+ | Confirmed By: Urls In 404 Page (Passive Detection)
+ |
+ | [!] 48 vulnerabilities identified:
+ |
+ | [!] Title: Unauthorised AJAX Calls via Freemius
+ |     Fixed in: 1.3.33
+ |     Reference: https://wpscan.com/vulnerability/6dae6dca-7474-4008-9fe5-4c62b9f12d0a
+ |
+ | [!] Title: Royal Elementor Addons < 1.3.56 - Subscriber+ Arbitrary Post Deletion
+ |     Fixed in: 1.3.56
+ |     References:
+ |      - https://wpscan.com/vulnerability/c177f763-0bb5-4734-ba2e-7ba816578937
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-4102
+ |
+ | [!] Title: Royal Elementor Addons < 1.3.56 - Subscriber+ Arbitrary Post Creation
+ |     Fixed in: 1.3.56
+ |     References:
+ |      - https://wpscan.com/vulnerability/5e1244f7-39b5-4f37-8fef-e3f35fc388f1
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-4103
+ |
+ | [!] Title: Royal Elementor Addons < 1.3.60 - Reflected XSS
+ |     Fixed in: 1.3.60
+ |     References:
+ |      - https://wpscan.com/vulnerability/335778e7-9e85-47c1-8b60-e5e43666bda0
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-4710
+ |      - https://www.wordfence.com/blog/2023/01/eleven-vulnerabilities-patched-in-royal-elementor-addons/
+ |
+ | [!] Title: Royal Elementor Addons < 1.3.60 - Menu Template Creation via CSRF
+ |     Fixed in: 1.3.60
+ |     References:
+ |      - https://wpscan.com/vulnerability/06dfcb6a-813d-4146-8a80-e899ddaf949b
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-4707
+ |      - https://www.wordfence.com/blog/2023/01/eleven-vulnerabilities-patched-in-royal-elementor-addons/
+ |
+ | [!] Title: Royal Elementor Addons < 1.3.60 - Subscriber+ Template Condition Update
+ |     Fixed in: 1.3.60
+ |     References:
+ |      - https://wpscan.com/vulnerability/a411fbae-bc5c-4953-94a1-121cd785ed21
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-4708
+ |      - https://www.wordfence.com/blog/2023/01/eleven-vulnerabilities-patched-in-royal-elementor-addons/
+ |
+ | [!] Title: Royal Elementor Addons < 1.3.60 - Subscriber+ Mega Menu Settings Update
+ |     Fixed in: 1.3.60
+ |     References:
+ |      - https://wpscan.com/vulnerability/4bc0edb5-7946-4f7e-b567-b0aa901121b1
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-4711
+ |      - https://www.wordfence.com/blog/2023/01/eleven-vulnerabilities-patched-in-royal-elementor-addons/
+ |
+ | [!] Title: Royal Elementor Addons < 1.3.60 - Subscriber+ Arbitrary Template Activation
+ |     Fixed in: 1.3.60
+ |     References:
+ |      - https://wpscan.com/vulnerability/ae1a50ec-d8ff-481a-9b23-592477ef1044
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-4705
+ |      - https://www.wordfence.com/blog/2023/01/eleven-vulnerabilities-patched-in-royal-elementor-addons/
+ |
+ | [!] Title: Royal Elementor Addons < 1.3.60 - Subscriber+ Arbitrary Import Deletion
+ |     Fixed in: 1.3.60
+ |     References:
+ |      - https://wpscan.com/vulnerability/4cf099f2-415b-46f3-b67c-62bcdd85db95
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-4703
+ |      - https://www.wordfence.com/blog/2023/01/eleven-vulnerabilities-patched-in-royal-elementor-addons/
+ |
+ | [!] Title: Royal Elementor Addons < 1.3.60 - Subscriber+ Arbitrary Plugin Activation
+ |     Fixed in: 1.3.60
+ |     References:
+ |      - https://wpscan.com/vulnerability/5d10c42f-459f-4bf1-bfa6-351cfb689da8
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-4701
+ |      - https://www.wordfence.com/blog/2023/01/eleven-vulnerabilities-patched-in-royal-elementor-addons/
+ |
+ | [!] Title: Royal Elementor Addons < 1.3.60 - Subscriber+ Arbitrary Plugin Deactivation
+ |     Fixed in: 1.3.60
+ |     References:
+ |      - https://wpscan.com/vulnerability/3667a8a6-d914-4275-932f-467ba5c8bdf1
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-4702
+ |      - https://www.wordfence.com/blog/2023/01/eleven-vulnerabilities-patched-in-royal-elementor-addons/
+ |
+ | [!] Title: Royal Elementor Addons < 1.3.60 - Subscriber+ Arbitrary Theme Activation
+ |     Fixed in: 1.3.60
+ |     References:
+ |      - https://wpscan.com/vulnerability/c8ecb8f5-e595-4208-bda9-17ac2a832ca1
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-4700
+ |      - https://www.wordfence.com/blog/2023/01/eleven-vulnerabilities-patched-in-royal-elementor-addons/
+ |
+ | [!] Title: Royal Elementor Addons < 1.3.60 - Subscriber+ Template Kit Import
+ |     Fixed in: 1.3.60
+ |     References:
+ |      - https://wpscan.com/vulnerability/103b2f28-2311-46f1-9a28-1f35fa07e8c4
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-4709
+ |      - https://www.wordfence.com/blog/2023/01/eleven-vulnerabilities-patched-in-royal-elementor-addons/
+ |
+ | [!] Title: Royal Elementor Addons < 1.3.60 - Subscriber+ Arbitrary Template Import
+ |     Fixed in: 1.3.60
+ |     References:
+ |      - https://wpscan.com/vulnerability/0932e661-fd6c-480b-a709-c84ec7ef1dd5
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-4704
+ |      - https://www.wordfence.com/blog/2023/01/eleven-vulnerabilities-patched-in-royal-elementor-addons/
+ |
+ | [!] Title: Royal Elementor Addons < 1.3.71 - Unauthenticated API Key Disclosure
+ |     Fixed in: 1.3.71
+ |     References:
+ |      - https://wpscan.com/vulnerability/07ae6892-4ddb-4885-96d8-17d2a1a8ed9c
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2023-3709
+ |
+ | [!] Title: Freemius SDK < 2.5.10 - Reflected Cross-Site Scripting
+ |     Fixed in: 1.3.71
+ |     References:
+ |      - https://wpscan.com/vulnerability/39d1f22f-ea34-4d94-9dc2-12661cf69d36
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2023-33999
+ |
+ | [!] Title: Royal Elementor Addons and Templates < 1.3.79 - Unauthenticated Arbitrary File Upload
+ |     Fixed in: 1.3.79
+ |     References:
+ |      - https://wpscan.com/vulnerability/281518ff-7816-4007-b712-63aed7828b34
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2023-5360
+ |
+ | [!] Title: Royal Elementor Addons and Templates 1.4.78 - Unauthenticated Arbitrary File Upload
+ |     Fixed in: 1.7.1
+ |     References:
+ |      - https://wpscan.com/vulnerability/c2cf5fd1-663d-4bc1-adcd-e6064eb32ece
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2023-5360
+ |
+ | [!] Title: Royal Elementor Addons and Templates < 1.3.81 - Unauthenticated Arbitrary Post Read
+ |     Fixed in: 1.3.81
+ |     References:
+ |      - https://wpscan.com/vulnerability/debd8498-5770-4270-9ee1-1503e675ef34
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2023-5922
+ |
+ | [!] Title: Royal Elementor Addons and Templates < 1.3.88 - Multiple Cross-Site Request Forgery
+ |     Fixed in: 1.3.88
+ |     References:
+ |      - https://wpscan.com/vulnerability/71910e75-2ac7-4da0-b224-675236b36733
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-0514
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-0515
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-0513
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-0512
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-0511
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/wordpress-plugins/royal-elementor-addons/royal-elementor-addons-and-templates-1387-cross-site-request-forgery-via-add-to-compare
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/wordpress-plugins/royal-elementor-addons/royal-elementor-addons-and-templates-1387-cross-site-request-forgery-via-remove-from-compare
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/wordpress-plugins/royal-elementor-addons/royal-elementor-addons-and-templates-1387-cross-site-request-forgery-via-remove-from-wishlist
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/wordpress-plugins/royal-elementor-addons/royal-elementor-addons-and-templates-1387-cross-site-request-forgery-via-add-to-wishlist
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/wordpress-plugins/royal-elementor-addons/royal-elementor-addons-and-templates-1387-cross-site-request-forgery-via-wpr-update-form-action-meta
+ |
+ | [!] Title: Royal Elementor Addons and Templates < 1.3.88 - Authenticated (Contributor+) Stored Cross-Site Scripting
+ |     Fixed in: 1.3.88
+ |     References:
+ |      - https://wpscan.com/vulnerability/2276d353-673c-4bd9-ad6b-31304c19cf90
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-0442
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/256b4818-290b-4660-8e83-c18b068a8959
+ |
+ | [!] Title: Royal Elementor Addons and Templates < 1.3.88 - Missing Authorization via wpr_update_form_action_meta
+ |     Fixed in: 1.3.88
+ |     References:
+ |      - https://wpscan.com/vulnerability/c503b500-fb8b-4ca3-9a2a-de0bc9562b2c
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-0516
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/d3457b87-c860-4cf2-ac3d-2c6521b629ea
+ |
+ | [!] Title: Royal Elementor Addons and Templates < 1.3.92 - Authenticated (Contributor+) Stored Cross-Site Scripting via Logo Widget
+ |     Fixed in: 1.3.92
+ |     References:
+ |      - https://wpscan.com/vulnerability/243b47d3-4ef2-44b4-8c29-a67525639cd4
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-1500
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/8619c999-5cf7-4888-bdb2-815238411303
+ |
+ | [!] Title: Royal Elementor Addons < 1.3.95 - Contributor+ Stored Cross-Site Scriting
+ |     Fixed in: 1.3.95
+ |     References:
+ |      - https://wpscan.com/vulnerability/d61fe616-028f-4a09-87cb-2eb1edb49c28
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-31236
+ |      - https://patchstack.com/database/vulnerability/royal-elementor-addons/wordpress-royal-elementor-addons-plugin-1-3-93-cross-site-scripting-xss-vulnerability
+ |
+ | [!] Title: Royal Elementor Addons and Templates < 1.3.95 - Unauthenticated Limited File Upload
+ |     Fixed in: 1.3.95
+ |     References:
+ |      - https://wpscan.com/vulnerability/17356d5b-9667-486e-930f-24a8a6981b59
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-1567
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/7a04705d-cd17-4b4b-b04d-de55d6479dab
+ |
+ | [!] Title: Royal Elementor Addons and Templates < 1.3.972 - Contributor+ Stored Cross-Site Scripting via Advanced Accordion Title Tags
+ |     Fixed in: 1.3.972
+ |     References:
+ |      - https://wpscan.com/vulnerability/befa65fb-cb6b-47c1-956f-0018ad18571a
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-3889
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/83ea2ec3-5d5b-44ea-83e6-41c4fa6e2e5f
+ |
+ | [!] Title: Royal Elementor Addons and Templates < 1.3.972 - Contributor+ DOM-Based Stored Cross-Site Scripting
+ |     Fixed in: 1.3.972
+ |     References:
+ |      - https://wpscan.com/vulnerability/98298383-ae46-4893-8874-59b8ea906971
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-2798
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/70582781-9de5-4124-bde4-d3d26724e9b3
+ |
+ | [!] Title: Royal Elementor Addons and Templates < 1.3.972 - Contributor+ Stored Cross-Site Scripting via HTML Tags
+ |     Fixed in: 1.3.972
+ |     References:
+ |      - https://wpscan.com/vulnerability/44284dac-9434-498c-bbca-1c4725d78497
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-2799
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/40ca3778-95ff-4b2c-ac47-4ae8c86e245a
+ |
+ | [!] Title: Royal Elementor Addons and Templates < 1.3.972 - Contributor+ Stored Cross-Site Scripting via Flip Carousel, Flip Box, Post Grid, and Taxonomy List Widget Attributes
+ |     Fixed in: 1.3.972
+ |     References:
+ |      - https://wpscan.com/vulnerability/817b109c-7e46-46f6-b656-3002b6567d2a
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-3675
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/337cbec1-c8a8-41b5-8c32-779be671120f
+ |
+ | [!] Title: Royal Elementor Addons < 1.3.95 - Unauthenticated IP Spoofing
+ |     Fixed in: 1.3.95
+ |     References:
+ |      - https://wpscan.com/vulnerability/61aab095-66b8-4ce7-83a3-0b8770dda453
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-32786
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/2626db42-0047-4801-bbcb-e236440c1677
+ |
+ | [!] Title: Royal Elementor Addons and Templates < 1.3.975 - Authenticated (Contributor+) Stored Cross-Site Scripting via Form Builder Widget
+ |     Fixed in: 1.3.975
+ |     References:
+ |      - https://wpscan.com/vulnerability/a47f0029-6f21-446c-b38d-17674caf230a
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-3887
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/5122800d-f274-4129-84d4-02380269502c
+ |
+ | [!] Title: Royal Elementor Addons and Templates < 1.3.976 - Authenticated (Contributor+) Stored Cross-Site Scripting
+ |     Fixed in: 1.3.976
+ |     References:
+ |      - https://wpscan.com/vulnerability/209cbd21-6ed9-490d-a1f2-41ba4d02ed03
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-4342
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/4d565196-592d-415c-b37c-e54456aa9ed8
+ |
+ | [!] Title: Royal Elementor Addons and Templates < 1.3.976 - Authenticated (Contributor+) Stored Cross-Site Scripting via Back to Top Widget
+ |     Fixed in: 1.3.976
+ |     References:
+ |      - https://wpscan.com/vulnerability/cfc02492-1d73-4adb-b440-a11f9ae91947
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-4087
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/cca7bb88-4a2c-4406-8610-15ce6e77c31f
+ |
+ | [!] Title: Royal Elementor Addons and Templates < 1.3.977 - Authenticated (Author+) Stored Cross-Site Scripting via SVG Uploads
+ |     Fixed in: 1.3.977
+ |     References:
+ |      - https://wpscan.com/vulnerability/6d00d2c8-cffa-43b2-9e7c-ec65988e5e19
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-4489
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/57bf222b-5f49-46e2-be84-3e6444807096
+ |
+ | [!] Title: Royal Elementor Addons and Templates < 1.3.977 - Authenticated (Contributor+) Stored Cross-Site Scripting
+ |     Fixed in: 1.3.977
+ |     References:
+ |      - https://wpscan.com/vulnerability/aaee560f-e286-4dc8-be70-f456cf1f67c8
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-4488
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/cb0ac434-7e85-44d4-b21e-df462f63cd9c
+ |
+ | [!] Title: Royal Elementor Addons and Templates < 1.3.981 - Authenticated (Contributor+) DOM-Based Stored Cross-Site Scripting via Magazine Grid/Slider Widget
+ |     Fixed in: 1.3.981
+ |     References:
+ |      - https://wpscan.com/vulnerability/53a706e5-fcf2-4fd6-9a9c-450a547eed4d
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-5818
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/83a0150d-a9fa-4cc2-8fe8-a429747a9964
+ |
+ | [!] Title: Royal Elementor Addons < 1.3.985 - Authenticated (Contributor+) Stored Cross-Site Scripting
+ |     Fixed in: 1.3.985
+ |     References:
+ |      - https://wpscan.com/vulnerability/7a70ea04-877f-4cfc-aca8-45908edf471f
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-44001
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/4529464e-6830-4c2a-8146-79cf5fc1bc7c
+ |
+ | [!] Title: Royal Elementor Addons and Templates < 1.3.987 - Authenticated (Contributor+) Stored Cross-Site Scripting via Team Member Widget
+ |     Fixed in: 1.3.987
+ |     References:
+ |      - https://wpscan.com/vulnerability/c5290c49-65b7-40ff-8c4d-2b5e968d1716
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-8482
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/5ccece54-18fa-42e4-ba1a-d0879b73d66d
+ |
+ | [!] Title: Royal Elementor Addons and Templates < 1.3.987 - Authenticated (Subscriber+) Private Post Disclosure
+ |     Fixed in: 1.3.987
+ |     References:
+ |      - https://wpscan.com/vulnerability/72d94228-6157-4fcb-ac92-e356d3c4f19c
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-7417
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/c3dfb0b7-5d9f-492b-9a1a-d4445d39c00c
+ |
+ | [!] Title: Royal Elementor Addons < 1.3.981 - Authenticated (Author+) External Entity Injection
+ |     Fixed in: 1.3.981
+ |     References:
+ |      - https://wpscan.com/vulnerability/eecf12c6-9b69-4bd0-9d9e-d90d8081cf12
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-50442
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/30a89e75-2ab1-4e65-8646-b100efed5dbd
+ |
+ | [!] Title: Royal Elementor Addons and Template < 1.7.1002 - Authenticated (Contributor+) DOM-Based Stored Cross-Site Scripting via Google Maps Widget
+ |     Fixed in: 1.7.1002
+ |     References:
+ |      - https://wpscan.com/vulnerability/4215d354-afc8-4d47-9f57-d749c98ab658
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-9059
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/37223d1f-82c8-414f-bf39-63e728541aa3
+ |
+ | [!] Title: Royal Elementor Addons and Templates < 1.7.1002 - Authenticated (Contributor+) Stored Cross-Site Scripting via Countdown Widget
+ |     Fixed in: 1.7.1002
+ |     References:
+ |      - https://wpscan.com/vulnerability/aba70c33-6169-410f-a8e8-377e5e6c80ca
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-9668
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/a8e39f0b-eb4c-4568-9f5a-60a0dc3eb6ba
+ |
+ | [!] Title: Royal Elementor Addons and Templates < 1.7.1002 - Authenticated (Contributor+) DOM-Based Stored Cross-Site Scripting via Form Builder Widget
+ |     Fixed in: 1.7.1002
+ |     References:
+ |      - https://wpscan.com/vulnerability/772800ad-9c58-4008-825e-7188b48eed5e
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-9682
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/bd90b85e-22a9-4c08-b2cf-4f75406e7ca3
+ |
+ | [!] Title: Royal Elementor Addons and Templates < 1.7.1004 - Authenticated (Contributor+) Post Disclosure
+ |     Fixed in: 1.7.1004
+ |     References:
+ |      - https://wpscan.com/vulnerability/77012210-bd79-4b73-885f-a7f4524f326b
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-10798
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/4a7ef5a0-f6c8-41e1-bb3b-119a682be69f
+ |
+ | [!] Title: Royal Elementor Addons < 1.7.1002 - Missing Authorization
+ |     Fixed in: 1.7.1002
+ |     References:
+ |      - https://wpscan.com/vulnerability/5860390b-5ae8-4cb9-9b17-45ad050e94ac
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-56227
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/f7f9b1ef-2efc-4d88-bff8-e0dd711b85ab
+ |
+ | [!] Title: Royal Elementor Addons < 1.7.1002 - Reflected Cross-Site Scripting
+ |     Fixed in: 1.7.1002
+ |     References:
+ |      - https://wpscan.com/vulnerability/02750974-48dd-4597-8211-44f8adeca480
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-56226
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/9e860c60-b330-4a6c-8d15-947451af62fc
+ |
+ | [!] Title: Royal Elementor Addons < 1.7.1 - Contributor+ Stored XSS
+ |     Fixed in: 1.7.1
+ |     References:
+ |      - https://wpscan.com/vulnerability/8210ac7a-3f9f-4557-ae3e-9f7cf801659e
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-56062
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/a4b353bf-f9be-465a-8723-9ea721b5baab
+ |
+ | [!] Title: Royal Elementor Addons and Templates < 1.7.1007 - Stored XSS via CSRF
+ |     Fixed in: 1.7.1007
+ |     References:
+ |      - https://wpscan.com/vulnerability/1fc323e4-31f7-4dfc-ac56-a9c2149788e5
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2025-0393
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/a8e34c05-7431-4acd-91f3-aab5e66f61ad
+ |
+ | The version could not be determined.
+
+[+] sticky-header-effects-for-elementor
+ | Location: https://ethiopianitpark.et/wp-content/plugins/sticky-header-effects-for-elementor/
+ | Latest Version: 1.7.4
+ | Last Updated: 2025-01-23T11:01:00.000Z
+ |
+ | Found By: Urls In Homepage (Passive Detection)
+ | Confirmed By: Urls In 404 Page (Passive Detection)
+ |
+ | The version could not be determined.
+
+[+] tablepress
+ | Location: https://ethiopianitpark.et/wp-content/plugins/tablepress/
+ | Latest Version: 3.0.3
+ | Last Updated: 2025-01-27T06:28:00.000Z
+ |
+ | Found By: Urls In Homepage (Passive Detection)
+ | Confirmed By: Urls In 404 Page (Passive Detection)
+ |
+ | [!] 6 vulnerabilities identified:
+ |
+ | [!] Title: TablePress <= 1.8 - Authenticated XML External Entity (XXE)
+ |     Fixed in: 1.8.1
+ |     References:
+ |      - https://wpscan.com/vulnerability/2eb820c0-1d68-411d-a30b-505d658db8d7
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2017-10889
+ |      - https://jvn.jp/en/jp/JVN05398317/index.html
+ |      - https://github.com/TobiasBg/TablePress/
+ |
+ | [!] Title: Freemius SDK < 2.5.10 - Reflected Cross-Site Scripting
+ |     Fixed in: 2.1.5
+ |     References:
+ |      - https://wpscan.com/vulnerability/7fd1ad0e-9db9-47b7-9966-d3f5a8771571
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2023-33999
+ |
+ | [!] Title: TablePress < 2.2.5 - Authenticated(Author+) Server Side Request Forgery(SSRF) via _get_import_files
+ |     Fixed in: 2.2.5
+ |     References:
+ |      - https://wpscan.com/vulnerability/d444a693-7f2b-451e-8004-b40b8c1c64b0
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-23825
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/8de52b68-c273-4561-98b0-e51afd6cd47b
+ |
+ | [!] Title: TablePress – Tables in WordPress made easy < 2.3.2 - Authenticated (Author+) Server-Side Request Forgery via DNS Rebind
+ |     Fixed in: 2.3.2
+ |     References:
+ |      - https://wpscan.com/vulnerability/952a6a13-0bcc-4f11-a58a-07d11d1a2ed9
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-4354
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/879384eb-bfea-4667-a7de-9f723dbea74b
+ |
+ | [!] Title: TablePress < 2.4.3 - Author+ Stored XSS
+ |     Fixed in: 2.4.3
+ |     References:
+ |      - https://wpscan.com/vulnerability/fdba1d77-a469-4ad5-bab2-8acfac83cf2c
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-9595
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/ffa3b85c-7d08-4f6a-889e-b75620f72a1a
+ |
+ | [!] Title: TablePress < 2.4.3 - XXE Injection
+ |     Fixed in: 2.4.3
+ |     References:
+ |      - https://wpscan.com/vulnerability/c9c13e5b-22ac-44c1-aca7-e2b34238e045
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-45293
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/38f950b7-e3a0-4e05-a8b0-9cc6b6c66b0c
+ |
+ | The version could not be determined.
+
+[+] wordpress-seo
+ | Location: https://ethiopianitpark.et/wp-content/plugins/wordpress-seo/
+ | Last Updated: 2025-01-21T09:01:00.000Z
+ | [!] The version is out of date, the latest version is 24.3
+ |
+ | Found By: Comment (Passive Detection)
+ |
+ | [!] 1 vulnerability identified:
+ |
+ | [!] Title: Yoast SEO < 22.7 - Authenticated (Contributor+) Stored Cross-Site Scripting
+ |     Fixed in: 22.7
+ |     References:
+ |      - https://wpscan.com/vulnerability/467936e2-fe82-4cdc-afec-6782afee3e4e
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-4984
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/59bcd246-ca2f-4336-9a6e-89afe873ed25
+ |
+ | Version: 22.6 (60% confidence)
+ | Found By: Comment (Passive Detection)
+ |  - https://ethiopianitpark.et/, Match: 'optimized with the Yoast SEO plugin v22.6 -'
+
+[+] wp-job-openings
+ | Location: https://ethiopianitpark.et/wp-content/plugins/wp-job-openings/
+ | Last Updated: 2024-11-13T18:48:00.000Z
+ | [!] The version is out of date, the latest version is 3.5.0
+ |
+ | Found By: Urls In Homepage (Passive Detection)
+ | Confirmed By: Urls In 404 Page (Passive Detection)
+ |
+ | Version: 3.4.6 (30% confidence)
+ | Found By: Query Parameter (Passive Detection)
+ |  - https://ethiopianitpark.et/wp-content/plugins/wp-job-openings/assets/css/general.min.css?ver=3.4.6
+ |  - https://ethiopianitpark.et/wp-content/plugins/wp-job-openings/assets/css/style.min.css?ver=3.4.6
+ |  - https://ethiopianitpark.et/wp-content/plugins/wp-job-openings/assets/js/script.min.js?ver=3.4.6
+
+[+] wpforms-lite
+ | Location: https://ethiopianitpark.et/wp-content/plugins/wpforms-lite/
+ | Latest Version: 1.9.3.2
+ | Last Updated: 2025-01-28T12:46:00.000Z
+ |
+ | Found By: Urls In Homepage (Passive Detection)
+ | Confirmed By: Urls In 404 Page (Passive Detection)
+ |
+ | The version could not be determined.
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+ ┌──(hayal㉿kali)-[~]
+└─$ wpscan --url https://ethiopianitpark.et
+_______________________________________________________________
+         __          _______   _____
+         \ \        / /  __ \ / ____|
+          \ \  /\  / /| |__) | (___   ___  __ _ _ __ ®
+           \ \/  \/ / |  ___/ \___ \ / __|/ _` | '_ \
+            \  /\  /  | |     ____) | (__| (_| | | | |
+             \/  \/   |_|    |_____/ \___|\__,_|_| |_|
+
+         WordPress Security Scanner by the WPScan Team
+                         Version 3.8.22
+       Sponsored by Automattic - https://automattic.com/
+       @_WPScan_, @ethicalhack3r, @erwan_lr, @firefart
+_______________________________________________________________
+
+[+] URL: https://ethiopianitpark.et/ [213.55.96.154]
+[+] Started: Thu Jan 30 04:17:22 2025
+
+Interesting Finding(s):
+
+[+] Headers
+ | Interesting Entries:
+ |  - server: nginx
+ |  - x-powered-by: PHP/8.1.31, PleskLin
+ | Found By: Headers (Passive Detection)
+ | Confidence: 100%
+
+[+] robots.txt found: https://ethiopianitpark.et/robots.txt
+ | Found By: Robots Txt (Aggressive Detection)
+ | Confidence: 100%
+
+[+] XML-RPC seems to be enabled: https://ethiopianitpark.et/xmlrpc.php
+ | Found By: Direct Access (Aggressive Detection)
+ | Confidence: 100%
+ | References:
+ |  - http://codex.wordpress.org/XML-RPC_Pingback_API
+ |  - https://www.rapid7.com/db/modules/auxiliary/scanner/http/wordpress_ghost_scanner/
+ |  - https://www.rapid7.com/db/modules/auxiliary/dos/http/wordpress_xmlrpc_dos/
+ |  - https://www.rapid7.com/db/modules/auxiliary/scanner/http/wordpress_xmlrpc_login/
+ |  - https://www.rapid7.com/db/modules/auxiliary/scanner/http/wordpress_pingback_access/
+
+[+] This site has 'Must Use Plugins': https://ethiopianitpark.et/wp-content/mu-plugins/
+ | Found By: Direct Access (Aggressive Detection)
+ | Confidence: 80%
+ | Reference: http://codex.wordpress.org/Must_Use_Plugins
+
+[+] The external WP-Cron seems to be enabled: https://ethiopianitpark.et/wp-cron.php
+ | Found By: Direct Access (Aggressive Detection)
+ | Confidence: 60%
+ | References:
+ |  - https://www.iplocation.net/defend-wordpress-from-ddos
+ |  - https://github.com/wpscanteam/wpscan/issues/1299
+
+Fingerprinting the version - Time: 01:55:56 <=============================================================================================================================================================> (702 / 702) 100.00% Time: 01:55:56
+[i] The WordPress version could not be detected.
+
+[+] WordPress theme in use: astra
+ | Location: https://ethiopianitpark.et/wp-content/themes/astra/
+ | Last Updated: 2025-01-28T00:00:00.000Z
+ | [!] The version is out of date, the latest version is 4.8.11
+ | Style URL: https://ethiopianitpark.et/wp-content/themes/astra/style.css
+ | Style Name: Astra
+ | Style URI: https://wpastra.com/
+ | Description: Astra is fast, fully customizable & beautiful WordPress theme suitable for blog, personal portfolio,...
+ | Author: Brainstorm Force
+ | Author URI: https://wpastra.com/about/?utm_source=theme_preview&utm_medium=author_link&utm_campaign=astra_theme
+ |
+ | Found By: Urls In Homepage (Passive Detection)
+ | Confirmed By: Urls In 404 Page (Passive Detection)
+ |
+ | Version: 4.7.3 (80% confidence)
+ | Found By: Style (Passive Detection)
+ |  - https://ethiopianitpark.et/wp-content/themes/astra/style.css, Match: 'Version: 4.7.3'
+
+[+] Enumerating All Plugins (via Passive Methods)
+[+] Checking Plugin Versions (via Passive and Aggressive Methods)
+
+[i] Plugin(s) Identified:
+
+[+] astra-sites
+ | Location: https://ethiopianitpark.et/wp-content/plugins/astra-sites/
+ | Latest Version: 4.4.11
+ | Last Updated: 2025-01-07T10:36:00.000Z
+ |
+ | Found By: Urls In Homepage (Passive Detection)
+ | Confirmed By: Urls In 404 Page (Passive Detection)
+ |
+ | The version could not be determined.
+
+[+] elementor
+ | Location: https://ethiopianitpark.et/wp-content/plugins/elementor/
+ | Last Updated: 2025-01-27T15:59:00.000Z
+ | [!] The version is out of date, the latest version is 3.27.2
+ |
+ | Found By: Urls In Homepage (Passive Detection)
+ | Confirmed By: Urls In 404 Page (Passive Detection)
+ |
+ | Version: 3.23.0 (100% confidence)
+ | Found By: Javascript Comment (Aggressive Detection)
+ |  - https://ethiopianitpark.et/wp-content/plugins/elementor/assets/js/admin-feedback.js, Match: 'elementor - v3.23.0'
+ | Confirmed By: Style Comment (Aggressive Detection)
+ |  - https://ethiopianitpark.et/wp-content/plugins/elementor/assets/css/admin.min.css, Match: 'elementor - v3.23.0'
+
+[+] elementor-pro
+ | Location: https://ethiopianitpark.et/wp-content/plugins/elementor-pro/
+ |
+ | Found By: Urls In Homepage (Passive Detection)
+ | Confirmed By: Urls In 404 Page (Passive Detection)
+ |
+ | Version: 3.16.2 (30% confidence)
+ | Found By: Query Parameter (Passive Detection)
+ |  - https://ethiopianitpark.et/wp-content/plugins/elementor-pro/assets/js/webpack-pro.runtime.min.js?ver=3.16.2
+ |  - https://ethiopianitpark.et/wp-content/plugins/elementor-pro/assets/js/frontend.min.js?ver=3.16.2
+ |  - https://ethiopianitpark.et/wp-content/plugins/elementor-pro/assets/js/preloaded-elements-handlers.min.js?ver=3.16.2
+
+[+] events-manager
+ | Location: https://ethiopianitpark.et/wp-content/plugins/events-manager/
+ | Latest Version: 6.6.3
+ | Last Updated: 2024-11-13T11:27:00.000Z
+ |
+ | Found By: Urls In Homepage (Passive Detection)
+ | Confirmed By: Urls In 404 Page (Passive Detection)
+ |
+ | The version could not be determined.
+
+[+] google-site-kit
+ | Location: https://ethiopianitpark.et/wp-content/plugins/google-site-kit/
+ | Last Updated: 2025-01-27T18:36:00.000Z
+ | [!] The version is out of date, the latest version is 1.145.0
+ |
+ | Found By: Urls In Homepage (Passive Detection)
+ | Confirmed By:
+ |  Urls In 404 Page (Passive Detection)
+ |  Meta Tag (Passive Detection)
+ |
+ | Version: 1.144.0 (60% confidence)
+ | Found By: Meta Tag (Passive Detection)
+ |  - https://ethiopianitpark.et/, Match: 'Site Kit by Google 1.144.0'
+
+[+] header-footer-elementor
+ | Location: https://ethiopianitpark.et/wp-content/plugins/header-footer-elementor/
+ | Latest Version: 2.1.0
+ | Last Updated: 2025-01-22T09:48:00.000Z
+ |
+ | Found By: Urls In Homepage (Passive Detection)
+ | Confirmed By: Urls In 404 Page (Passive Detection)
+ |
+ | The version could not be determined.
+
+[+] mousewheel-smooth-scroll
+ | Location: https://ethiopianitpark.et/wp-content/plugins/mousewheel-smooth-scroll/
+ | Latest Version: 6.7.1
+ | Last Updated: 2025-01-12T14:03:00.000Z
+ |
+ | Found By: Urls In Homepage (Passive Detection)
+ | Confirmed By: Urls In 404 Page (Passive Detection)
+ |
+ | The version could not be determined.
+
+[+] royal-elementor-addons
+ | Location: https://ethiopianitpark.et/wp-content/plugins/royal-elementor-addons/
+ | Latest Version: 1.7.1007
+ | Last Updated: 2025-01-12T08:22:00.000Z
+ |
+ | Found By: Urls In Homepage (Passive Detection)
+ | Confirmed By: Urls In 404 Page (Passive Detection)
+ |
+ | The version could not be determined.
+
+[+] sticky-header-effects-for-elementor
+ | Location: https://ethiopianitpark.et/wp-content/plugins/sticky-header-effects-for-elementor/
+ | Latest Version: 1.7.4
+ | Last Updated: 2025-01-23T11:01:00.000Z
+ |
+ | Found By: Urls In Homepage (Passive Detection)
+ | Confirmed By: Urls In 404 Page (Passive Detection)
+ |
+ | The version could not be determined.
+
+[+] tablepress
+ | Location: https://ethiopianitpark.et/wp-content/plugins/tablepress/
+ | Latest Version: 3.0.3
+ | Last Updated: 2025-01-27T06:28:00.000Z
+ |
+ | Found By: Urls In Homepage (Passive Detection)
+ | Confirmed By: Urls In 404 Page (Passive Detection)
+ |
+ | The version could not be determined.
+
+[+] wordpress-seo
+ | Location: https://ethiopianitpark.et/wp-content/plugins/wordpress-seo/
+ | Last Updated: 2025-01-21T09:01:00.000Z
+ | [!] The version is out of date, the latest version is 24.3
+ |
+ | Found By: Comment (Passive Detection)
+ |
+ | Version: 22.6 (60% confidence)
+ | Found By: Comment (Passive Detection)
+ |  - https://ethiopianitpark.et/, Match: 'optimized with the Yoast SEO plugin v22.6 -'
+
+[+] wp-job-openings
+ | Location: https://ethiopianitpark.et/wp-content/plugins/wp-job-openings/
+ | Last Updated: 2024-11-13T18:48:00.000Z
+ | [!] The version is out of date, the latest version is 3.5.0
+ |
+ | Found By: Urls In Homepage (Passive Detection)
+ | Confirmed By: Urls In 404 Page (Passive Detection)
+ |
+ | Version: 3.4.6 (30% confidence)
+ | Found By: Query Parameter (Passive Detection)
+ |  - https://ethiopianitpark.et/wp-content/plugins/wp-job-openings/assets/css/general.min.css?ver=3.4.6
+ |  - https://ethiopianitpark.et/wp-content/plugins/wp-job-openings/assets/css/style.min.css?ver=3.4.6
+ |  - https://ethiopianitpark.et/wp-content/plugins/wp-job-openings/assets/js/script.min.js?ver=3.4.6
+
+[+] wpforms-lite
+ | Location: https://ethiopianitpark.et/wp-content/plugins/wpforms-lite/
+ | Latest Version: 1.9.3.2
+ | Last Updated: 2025-01-28T12:46:00.000Z
+ |
+ | Found By: Urls In Homepage (Passive Detection)
+ | Confirmed By: Urls In 404 Page (Passive Detection)
+ |
+ | The version could not be determined.
+
+[+] Enumerating Config Backups (via Passive and Aggressive Methods)
+ Checking Config Backups - Time: 00:10:22 <===============================================================================================================================================================> (137 / 137) 100.00% Time: 00:10:22
+
+[i] No Config Backups Found.
+
+[!] No WPScan API Token given, as a result vulnerability data has not been output.
+[!] You can get a free API token with 25 daily requests by registering at https://wpscan.com/register
+
+[+] Finished: Thu Jan 30 06:24:42 2025
+[+] Requests Done: 1107
+[+] Cached Requests: 201
+[+] Data Sent: 292.621 KB
+[+] Data Received: 17.718 MB
+[+] Memory used: 272.887 MB
+[+] Elapsed time: 02:07:20
+                                                                                                                                                                                                                                              
+┌──(hayal㉿kali)-[~]
+└─$ wpscan --url https://ethiopianitpark.et --api-token cFI7jt2Za25ouSZiv5y8A9RLTC9Imc51YjQ1Hhz13tw          
+_______________________________________________________________
+         __          _______   _____
+         \ \        / /  __ \ / ____|
+          \ \  /\  / /| |__) | (___   ___  __ _ _ __ ®
+           \ \/  \/ / |  ___/ \___ \ / __|/ _` | '_ \
+            \  /\  /  | |     ____) | (__| (_| | | | |
+             \/  \/   |_|    |_____/ \___|\__,_|_| |_|
+
+         WordPress Security Scanner by the WPScan Team
+                         Version 3.8.22
+       Sponsored by Automattic - https://automattic.com/
+       @_WPScan_, @ethicalhack3r, @erwan_lr, @firefart
+_______________________________________________________________
+
+
+Scan Aborted: The url supplied 'https://ethiopianitpark.et/' seems to be down (Timeout was reached)
+                                                                                                                                                                                                                                              
+┌──(hayal㉿kali)-[~]
+└─$ wpscan --url https://ethiopianitpark.et --api-token cFI7jt2Za25ouSZiv5y8A9RLTC9Imc51YjQ1Hhz13tw
+_______________________________________________________________
+         __          _______   _____
+         \ \        / /  __ \ / ____|
+          \ \  /\  / /| |__) | (___   ___  __ _ _ __ ®
+           \ \/  \/ / |  ___/ \___ \ / __|/ _` | '_ \
+            \  /\  /  | |     ____) | (__| (_| | | | |
+             \/  \/   |_|    |_____/ \___|\__,_|_| |_|
+
+         WordPress Security Scanner by the WPScan Team
+                         Version 3.8.22
+       Sponsored by Automattic - https://automattic.com/
+       @_WPScan_, @ethicalhack3r, @erwan_lr, @firefart
+_______________________________________________________________
+
+
+Scan Aborted: The url supplied 'https://ethiopianitpark.et/' seems to be down (Timeout was reached)
+                                                                                                                                                                                                                                              
+┌──(hayal㉿kali)-[~]
+└─$ wpscan --url https://ethiopianitpark.et --api-token cFI7jt2Za25ouSZiv5y8A9RLTC9Imc51YjQ1Hhz13tw
+_______________________________________________________________
+         __          _______   _____
+         \ \        / /  __ \ / ____|
+          \ \  /\  / /| |__) | (___   ___  __ _ _ __ ®
+           \ \/  \/ / |  ___/ \___ \ / __|/ _` | '_ \
+            \  /\  /  | |     ____) | (__| (_| | | | |
+             \/  \/   |_|    |_____/ \___|\__,_|_| |_|
+
+         WordPress Security Scanner by the WPScan Team
+                         Version 3.8.22
+       Sponsored by Automattic - https://automattic.com/
+       @_WPScan_, @ethicalhack3r, @erwan_lr, @firefart
+_______________________________________________________________
+
+
+Scan Aborted: The url supplied 'https://ethiopianitpark.et/' seems to be down (Timeout was reached)
+                                                                                                                                                                                                                                              
+┌──(hayal㉿kali)-[~]
+└─$ wpscan --url https://ethiopianitpark.et --api-token gsTASg8NxmACTtuBpVN7trgbGmrpXOkR1J59udGG05g                                           
+_______________________________________________________________
+         __          _______   _____
+         \ \        / /  __ \ / ____|
+          \ \  /\  / /| |__) | (___   ___  __ _ _ __ ®
+           \ \/  \/ / |  ___/ \___ \ / __|/ _` | '_ \
+            \  /\  /  | |     ____) | (__| (_| | | | |
+             \/  \/   |_|    |_____/ \___|\__,_|_| |_|
+
+         WordPress Security Scanner by the WPScan Team
+                         Version 3.8.22
+       Sponsored by Automattic - https://automattic.com/
+       @_WPScan_, @ethicalhack3r, @erwan_lr, @firefart
+_______________________________________________________________
+
+
+Scan Aborted: The url supplied 'https://ethiopianitpark.et/' seems to be down (Timeout was reached)
+                                                                                                                                                                                                                                              
+┌──(hayal㉿kali)-[~]
+└─$ wpscan --url https://ethiopianitpark.et --api-token gsTASg8NxmACTtuBpVN7trgbGmrpXOkR1J59udGG05g
+_______________________________________________________________
+         __          _______   _____
+         \ \        / /  __ \ / ____|
+          \ \  /\  / /| |__) | (___   ___  __ _ _ __ ®
+           \ \/  \/ / |  ___/ \___ \ / __|/ _` | '_ \
+            \  /\  /  | |     ____) | (__| (_| | | | |
+             \/  \/   |_|    |_____/ \___|\__,_|_| |_|
+
+         WordPress Security Scanner by the WPScan Team
+                         Version 3.8.22
+       Sponsored by Automattic - https://automattic.com/
+       @_WPScan_, @ethicalhack3r, @erwan_lr, @firefart
+_______________________________________________________________
+
+[+] URL: https://ethiopianitpark.et/ [213.55.96.154]
+[+] Started: Thu Jan 30 06:37:58 2025
+
+Interesting Finding(s):
+
+[+] Headers
+ | Interesting Entries:
+ |  - server: nginx
+ |  - x-powered-by: PHP/8.1.31, PleskLin
+ | Found By: Headers (Passive Detection)
+ | Confidence: 100%
+
+[+] robots.txt found: https://ethiopianitpark.et/robots.txt
+ | Found By: Robots Txt (Aggressive Detection)
+ | Confidence: 100%
+
+[+] XML-RPC seems to be enabled: https://ethiopianitpark.et/xmlrpc.php
+ | Found By: Direct Access (Aggressive Detection)
+ | Confidence: 100%
+ | References:
+ |  - http://codex.wordpress.org/XML-RPC_Pingback_API
+ |  - https://www.rapid7.com/db/modules/auxiliary/scanner/http/wordpress_ghost_scanner/
+ |  - https://www.rapid7.com/db/modules/auxiliary/dos/http/wordpress_xmlrpc_dos/
+ |  - https://www.rapid7.com/db/modules/auxiliary/scanner/http/wordpress_xmlrpc_login/
+ |  - https://www.rapid7.com/db/modules/auxiliary/scanner/http/wordpress_pingback_access/
+
+[+] This site has 'Must Use Plugins': https://ethiopianitpark.et/wp-content/mu-plugins/
+ | Found By: Direct Access (Aggressive Detection)
+ | Confidence: 80%
+ | Reference: http://codex.wordpress.org/Must_Use_Plugins
+
+[+] The external WP-Cron seems to be enabled: https://ethiopianitpark.et/wp-cron.php
+ | Found By: Direct Access (Aggressive Detection)
+ | Confidence: 60%
+ | References:
+ |  - https://www.iplocation.net/defend-wordpress-from-ddos
+ |  - https://github.com/wpscanteam/wpscan/issues/1299
+
+Fingerprinting the version - Time: 00:09:13 <=================================================================================================                                                             > (440 / 702) 62.67%  ETA: 00:05:30
+
+ Fingerprinting the version - Time: 00:16:20 <=================================================================================================================                                             > (506 / 702) 72.07%  ETA: 00:06:2Fingerprinting the version - Time: 00:20:10 <=============================================================================================================================================================> (702 / 702) 100.00% Time: 00:20:10
+[i] The WordPress version could not be detected.
+
+[+] WordPress theme in use: astra
+ | Location: https://ethiopianitpark.et/wp-content/themes/astra/
+ | Last Updated: 2025-01-28T00:00:00.000Z
+ | [!] The version is out of date, the latest version is 4.8.11
+ | Style URL: https://ethiopianitpark.et/wp-content/themes/astra/style.css
+ | Style Name: Astra
+ | Style URI: https://wpastra.com/
+ | Description: Astra is fast, fully customizable & beautiful WordPress theme suitable for blog, personal portfolio,...
+ | Author: Brainstorm Force
+ | Author URI: https://wpastra.com/about/?utm_source=theme_preview&utm_medium=author_link&utm_campaign=astra_theme
+ |
+ | Found By: Urls In Homepage (Passive Detection)
+ | Confirmed By: Urls In 404 Page (Passive Detection)
+ |
+ | Version: 4.7.3 (80% confidence)
+ | Found By: Style (Passive Detection)
+ |  - https://ethiopianitpark.et/wp-content/themes/astra/style.css, Match: 'Version: 4.7.3'
+
+[+] Enumerating All Plugins (via Passive Methods)
+[+] Checking Plugin Versions (via Passive and Aggressive Methods)
+
+[i] Plugin(s) Identified:
+
+[+] astra-sites
+ | Location: https://ethiopianitpark.et/wp-content/plugins/astra-sites/
+ | Latest Version: 4.4.11
+ | Last Updated: 2025-01-07T10:36:00.000Z
+ |
+ | Found By: Urls In Homepage (Passive Detection)
+ | Confirmed By: Urls In 404 Page (Passive Detection)
+ |
+ | [!] 7 vulnerabilities identified:
+ |
+ | [!] Title: Starter Templates < 2.7.1 - Contributor+ Block Import to Stored XSS
+ |     Fixed in: 2.7.1
+ |     References:
+ |      - https://wpscan.com/vulnerability/f7f2e9f9-685d-42ba-bde1-01372c9c7c73
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2021-42360
+ |      - https://www.wordfence.com/blog/2021/11/over-1-million-sites-impacted-by-vulnerability-in-starter-templates-plugin/
+ |
+ | [!] Title: Starter Templates <= 3.1.20 - Settings Update via CSRF
+ |     Fixed in: 3.1.21
+ |     References:
+ |      - https://wpscan.com/vulnerability/9e06baec-abf5-4032-a1fe-f7a0f9b19187
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-46851
+ |
+ | [!] Title: Starter Templates <= 3.2.5 - Incorrect Authorization
+ |     Fixed in: 3.2.6
+ |     References:
+ |      - https://wpscan.com/vulnerability/3399b6cd-9d5d-4e36-a527-f0a73897ee0c
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2023-41805
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/ebd78e52-f20d-42be-8f68-3d09d5abf837
+ |
+ | [!] Title: Starter Templates <= 3.2.4 - Authenticated (Contributor+) Server-Side Request Forgery
+ |     Fixed in: 3.2.5
+ |     References:
+ |      - https://wpscan.com/vulnerability/fbedd0b1-a622-4114-ab94-9575797b0c9e
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2023-41804
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/6e0bdbba-2b67-42b9-8c26-115d472aed0e
+ |
+ | [!] Title: Starter Templates — Elementor, WordPress & Beaver Builder Templates < 4.1.7 - Contributor+ Server-Side Request Forgery
+ |     Fixed in: 4.1.7
+ |     References:
+ |      - https://wpscan.com/vulnerability/2abb23e5-9e4a-4108-a1da-6d0442194e86
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-1467
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/cf5075f9-9658-4a09-bd38-34a72f6560f4
+ |
+ | [!] Title: Starter Templates — Elementor, WordPress & Beaver Builder Templates < 4.2.2 - Contributor+ Stored Cross-Site Scripting
+ |     Fixed in: 4.2.2
+ |     References:
+ |      - https://wpscan.com/vulnerability/530ec495-fbb4-4c47-8700-da72cfa6416b
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-4630
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/25edb9e8-65ea-41d1-a95f-09be110ec1d2
+ |
+ | [!] Title: Starter Templates < 4.4.1 - Author+ Stored XSS
+ |     Fixed in: 4.4.1
+ |     References:
+ |      - https://wpscan.com/vulnerability/3a0761fd-f853-4842-b306-73bfdc94da1a
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-47345
+ |      - https://patchstack.com/database/vulnerability/astra-sites/wordpress-starter-templates-elementor-wordpress-beaver-builder-templates-plugin-4-4-0-cross-site-scripting-xss-vulnerability
+ |
+ | The version could not be determined.
+
+[+] elementor
+ | Location: https://ethiopianitpark.et/wp-content/plugins/elementor/
+ | Last Updated: 2025-01-27T15:59:00.000Z
+ | [!] The version is out of date, the latest version is 3.27.2
+ |
+ | Found By: Urls In Homepage (Passive Detection)
+ | Confirmed By: Urls In 404 Page (Passive Detection)
+ |
+ | [!] 4 vulnerabilities identified:
+ |
+ | [!] Title: Elementor Website Builder – More than Just a Page Builder < 3.24.0 - Authenticated (Contributor+) Stored Cross-Site Scripting in the URL Parameter in Multiple Widgets
+ |     Fixed in: 3.24.0
+ |     References:
+ |      - https://wpscan.com/vulnerability/5200943b-5e07-4342-a090-f78435e30d30
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-5416
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/a99a64f7-1ea8-4de6-b24f-1f69bf25c1f5
+ |
+ | [!] Title: Elementor < 3.24.6 - Contributor+ Information Exposure via get_image_alt
+ |     Fixed in: 3.24.6
+ |     References:
+ |      - https://wpscan.com/vulnerability/dce5ad0c-3ce9-498f-b0f7-8dfd6ee82e40
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-6757
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/96fa9ed7-6c13-4356-8a25-8a309be2b0e9
+ |
+ | [!] Title: Elementor Website Builder < 3.25.8 - Contributor+ Stored XSS
+ |     Fixed in: 3.25.8
+ |     References:
+ |      - https://wpscan.com/vulnerability/78f0847b-3f59-43cf-87db-2cadda862aa3
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-8236
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/b1305be5-8267-475f-b962-62e3930116e1
+ |
+ | [!] Title: Elementor Website Builder < 3.25.10 - Contributor+ Stored XSS via Typography Settings
+ |     Fixed in: 3.25.10
+ |     References:
+ |      - https://wpscan.com/vulnerability/2e05843d-1797-4da9-99ec-06376484fb32
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-10453
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/f23604b7-5a7f-4be7-bc73-cb4facdd1e73
+ |
+ | Version: 3.23.0 (100% confidence)
+ | Found By: Javascript Comment (Aggressive Detection)
+ |  - https://ethiopianitpark.et/wp-content/plugins/elementor/assets/js/admin-feedback.js, Match: 'elementor - v3.23.0'
+ | Confirmed By: Style Comment (Aggressive Detection)
+ |  - https://ethiopianitpark.et/wp-content/plugins/elementor/assets/css/admin.min.css, Match: 'elementor - v3.23.0'
+
+[+] elementor-pro
+ | Location: https://ethiopianitpark.et/wp-content/plugins/elementor-pro/
+ |
+ | Found By: Urls In Homepage (Passive Detection)
+ | Confirmed By: Urls In 404 Page (Passive Detection)
+ |
+ | [!] 9 vulnerabilities identified:
+ |
+ | [!] Title: Elementor Pro < 3.19.3 - Authenticated (Contributor+) Information Exposure
+ |     Fixed in: 3.19.3
+ |     References:
+ |      - https://wpscan.com/vulnerability/52195b1a-31b9-46da-bed8-7fdd2c6c8c14
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-23523
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/ecc8996a-d95c-4711-ac7d-523f5100c7fc
+ |
+ | [!] Title: Elementor Website Builder Pro < 3.20.2 - Authententicated (Contributor+) Stored Cross-Site Scripting
+ |     Fixed in: 3.20.2
+ |     References:
+ |      - https://wpscan.com/vulnerability/d332bb66-e69c-4d11-8ff2-2c35d7ce2808
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-1364
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/531954dd-ed3f-4626-adab-c1bba8407c89
+ |
+ | [!] Title: Elementor Website Builder Pro < 3.20.2 - Authenticated (Contributor+) DOM-Based Stored Cross-Site Scripting via video_html_tag
+ |     Fixed in: 3.20.2
+ |     References:
+ |      - https://wpscan.com/vulnerability/964c149d-fb08-4f86-a9a8-34a4412b5fdd
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-2781
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/54970085-5206-45b6-adcf-11e6dd4cd633
+ |
+ | [!] Title: Elementor Website Builder Pro < 3.20.2 - Authenticated (Contributor+) Stored Cross-Site Scripting
+ |     Fixed in: 3.20.2
+ |     References:
+ |      - https://wpscan.com/vulnerability/a48b0031-02f6-4871-beb3-0f61e1cd3d28
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-2121
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/8698d6dd-7376-4d29-8a5c-21c239a7aa03
+ |
+ | [!] Title: Elementor Website Builder – More than Just a Page Builder < 3.20.2 - Authenticated (Contributor+) Stored Cross-Site Scripting via Post Navigation
+ |     Fixed in: 3.20.2
+ |     References:
+ |      - https://wpscan.com/vulnerability/ed24ea21-967a-43e3-8219-daed594c6e11
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-2120
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/de1742d4-f498-4ad4-b6a1-88cb60e83afc
+ |
+ | [!] Title: Elementor Website Builder Pro < 3.20.2 - Authenticated (Contributor+) Stored Cross-Site Scripting via Form Widget SVGZ File Upload
+ |     Fixed in: 3.20.2
+ |     References:
+ |      - https://wpscan.com/vulnerability/249f4270-610c-4422-b34f-e714358fb398
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-1521
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/ecd01ea6-9476-47e1-9959-3f8d9ce1c1f3
+ |
+ | [!] Title: Elementor Website Builder Pro < 3.21.2 - Authenticated (Contributor+) DOM-Based Stored Cross-Site Scripting
+ |     Fixed in: 3.21.2
+ |     References:
+ |      - https://wpscan.com/vulnerability/f54baf17-050d-4972-9631-3026dfb04496
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-4107
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/0d5d47bd-4f05-4dc7-84c1-f7bc1196ee16
+ |
+ | [!] Title: Elementor Pro < 3.21.3 - Reflected Cross-Site Scripting
+ |     Fixed in: 3.21.3
+ |     References:
+ |      - https://wpscan.com/vulnerability/b69f5b22-654f-459f-875d-ea6ba984b699
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-35656
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/2001d14c-2738-4d34-b465-0a76c2f772e6
+ |
+ | [!] Title: Elementor Website Builder Pro – More than Just a Page Builder < 3.25.11 - Authenticated (Contributor+) Sensitive Information Exposure via Shortcode
+ |     Fixed in: 3.25.11
+ |     References:
+ |      - https://wpscan.com/vulnerability/771699f9-aa9b-4352-8382-5fbc17f364c2
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-8494
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/94ada60f-1e20-454e-a9d7-7849be764d81
+ |
+ | Version: 3.16.2 (30% confidence)
+ | Found By: Query Parameter (Passive Detection)
+ |  - https://ethiopianitpark.et/wp-content/plugins/elementor-pro/assets/js/webpack-pro.runtime.min.js?ver=3.16.2
+ |  - https://ethiopianitpark.et/wp-content/plugins/elementor-pro/assets/js/frontend.min.js?ver=3.16.2
+ |  - https://ethiopianitpark.et/wp-content/plugins/elementor-pro/assets/js/preloaded-elements-handlers.min.js?ver=3.16.2
+
+[+] events-manager
+ | Location: https://ethiopianitpark.et/wp-content/plugins/events-manager/
+ | Latest Version: 6.6.3
+ | Last Updated: 2024-11-13T11:27:00.000Z
+ |
+ | Found By: Urls In Homepage (Passive Detection)
+ | Confirmed By: Urls In 404 Page (Passive Detection)
+ |
+ | [!] 23 vulnerabilities identified:
+ |
+ | [!] Title: Events Manager 5.5.1 - Multiple Unspecified XSS Vulnerabilities
+ |     Fixed in: 5.5.2
+ |     References:
+ |      - https://wpscan.com/vulnerability/515a5f4a-4f8f-4d6a-917f-eb33b6c370d4
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2013-7477
+ |
+ | [!] Title: Events Manager 5.3.8 - Multiple Cross-Site Scripting (XSS)
+ |     Fixed in: 5.3.9
+ |     References:
+ |      - https://wpscan.com/vulnerability/eca29ca5-a6a7-4f9e-bc4f-ae7351957c7b
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2013-7479
+ |      - https://www.securityfocus.com/bid/60078/
+ |
+ | [!] Title: Events Manager < 5.3.6.1 - Multiple Cross-Site Scripting (XSS)
+ |     Fixed in: 5.3.6.1
+ |     References:
+ |      - https://wpscan.com/vulnerability/0016d3a4-f851-428f-92c5-cc3678e27641
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2013-7480
+ |
+ | [!] Title: Events Manager 5.3.3 - Multiple Cross-Site Scripting (XSS)
+ |     Fixed in: 5.3.4
+ |     References:
+ |      - https://wpscan.com/vulnerability/a3cbd961-48c2-4c0c-ab1a-fdda2071de7b
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2013-1407
+ |      - https://packetstormsecurity.com/files/120688/
+ |      - https://www.securityfocus.com/bid/57477/
+ |
+ | [!] Title: Events Manager <= 5.8.1.1 - Unauthenticated Stored XSS
+ |     Fixed in: 5.8.1.2
+ |     References:
+ |      - https://wpscan.com/vulnerability/e7c38907-2d2f-41b4-a58b-f1225aa4c4eb
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2018-9020
+ |      - https://www.gubello.me/blog/events-manager-authenticated-stored-xss/
+ |
+ | [!] Title: Events Manager < 5.9 - Authenticated Stored Cross-Site Scripting (XSS)
+ |     Fixed in: 5.9
+ |     References:
+ |      - https://wpscan.com/vulnerability/5a20f202-f075-4508-8a9b-861b420af5b8
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2018-0576
+ |      - https://jvn.jp/en/jp/JVN85531148/
+ |
+ | [!] Title: Events Manager < 5.6 - Cross-Site Scripting (XSS) & Code Injection
+ |     Fixed in: 5.6
+ |     References:
+ |      - https://wpscan.com/vulnerability/dc0e020c-d412-4289-abad-e4d6210131b4
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2015-9297
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2015-9298
+ |
+ | [!] Title: Events Manager < 5.5.7.1 - DOM Cross-Site Scripting (XSS)
+ |     Fixed in: 5.5.7.1
+ |     References:
+ |      - https://wpscan.com/vulnerability/4224dc4c-8411-4ae2-bd69-5a953834c508
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2015-9299
+ |
+ | [!] Title: Events Manager < 5.5.7 - Multiple Cross-Site Scripting (XSS)
+ |     Fixed in: 5.5.7
+ |     References:
+ |      - https://wpscan.com/vulnerability/54998c79-4f5c-4313-9448-a74583de3826
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2015-9300
+ |
+ | [!] Title: Events Manager < 5.1.7 - Cross-Site Scripting (XSS)
+ |     Fixed in: 5.1.7
+ |     References:
+ |      - https://wpscan.com/vulnerability/3327e64b-8662-4a92-a5df-08111cdf6f0c
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2012-6716
+ |
+ | [!] Title: Events Manager < 5.5 - Cross-Site Scripting (XSS)
+ |     Fixed in: 5.5
+ |     References:
+ |      - https://wpscan.com/vulnerability/1b44169b-3686-4625-863d-249a4f8dbc84
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2013-7478
+ |
+ | [!] Title: Events Manager < 5.9.6 - Authenticated Stored Cross-Site Scripting (XSS)
+ |     Fixed in: 5.9.6
+ |     References:
+ |      - https://wpscan.com/vulnerability/c994ce7f-b772-492d-a4c8-c037b1a08290
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2019-16523
+ |      - https://github.com/sbaresearch/advisories/tree/public/2019/SBA-ADV-20190913-03_WordPress_Plugin_Events_Manager
+ |
+ | [!] Title: Events Manager < 5.9.7.2 - CSV Injection
+ |     Fixed in: 5.9.7.2
+ |     References:
+ |      - https://wpscan.com/vulnerability/f201225d-2342-4cc5-aa45-b22177f7f3c3
+ |      - https://wp-events-plugin.com/blog/2020/02/05/events-manager-5-9-7-2-pro-2-6-7-2/
+ |      - https://fortiguard.com/zeroday/FG-VD-20-034
+ |
+ | [!] Title: Events Manager < 5.9.8 - Admin+ SQL Injection
+ |     Fixed in: 5.9.8
+ |     References:
+ |      - https://wpscan.com/vulnerability/323140b1-66c4-4e7d-85a4-1c922e40866f
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2020-35012
+ |      - https://plugins.trac.wordpress.org/changeset/2336019/events-manager
+ |
+ | [!] Title: Events Manager < 5.9.8 - Cross-Site Scripting (XSS)
+ |     Fixed in: 5.9.8
+ |     References:
+ |      - https://wpscan.com/vulnerability/937b9bdb-7e8e-4ea8-82ec-aa5f6bd70619
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2020-35037
+ |      - https://plugins.trac.wordpress.org/changeset/2336019/events-manager
+ |
+ | [!] Title: Events Manager < 6.4.6 - Reflected Cross-Site Scripting
+ |     Fixed in: 6.4.6
+ |     References:
+ |      - https://wpscan.com/vulnerability/48e5be1f-b736-437f-87fe-af5920282181
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2023-48326
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/9053cf91-0af1-44f8-9fdf-7ecbd457545b
+ |
+ | [!] Title: Events Manager < 6.4.7 - Authenticated(Administator+) Stored Cross-Site Scripting via settings
+ |     Fixed in: 6.4.7
+ |     References:
+ |      - https://wpscan.com/vulnerability/caecb4e2-4ba9-4674-8117-02b6492e0526
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-0614
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/6288fddf-926f-4506-94de-696e0a23766d
+ |
+ | [!] Title: Events Manager < 6.4.7.2 - Authenticated (Contributor+) Stored Cross-Site Scripting
+ |     Fixed in: 6.4.7.2
+ |     References:
+ |      - https://wpscan.com/vulnerability/9b14e0af-9444-4e09-aa32-03d19b44642a
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-2111
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/95ded4bf-9964-4bb3-b6e5-5ad37360f87d
+ |
+ | [!] Title: Events Manager < 6.4.7.2 - Cross-Site Request Forgery
+ |     Fixed in: 6.4.7.2
+ |     References:
+ |      - https://wpscan.com/vulnerability/7faf09a9-84af-4799-9d89-fadf058df960
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-2110
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/c0538999-0a09-4d24-a530-a32fb5b4e5e6
+ |
+ | [!] Title: Events Manager < 6.4.7 - Missing Authorization
+ |     Fixed in: 6.4.7
+ |     References:
+ |      - https://wpscan.com/vulnerability/9d660280-630f-42eb-a863-ed14a0c60721
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-30515
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/6eb0aa16-a269-4297-861f-6bad88066c68
+ |
+ | [!] Title: Events Manager < 6.4.7.2 - Cross-Site Request Forgery
+ |     Fixed in: 6.4.7.2
+ |     References:
+ |      - https://wpscan.com/vulnerability/092881d5-b380-4969-a529-7df07013d96e
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-30421
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/86351e2c-8c5a-4d71-bd73-d5ae1f03038f
+ |
+ | [!] Title: Events Manager – Calendar, Bookings, Tickets, and more! < 6.4.8 - Authenticated (Contributor+) Stored Cross-Site Scripting via event, location, and event_category Shortcodes
+ |     Fixed in: 6.4.8
+ |     References:
+ |      - https://wpscan.com/vulnerability/1eb8c7e5-6de1-4faa-8b4b-235c33570050
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-3492
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/a767f65e-bc7d-4576-af78-b77bd23dc089
+ |
+ | [!] Title: Events Manager < 6.4.9 - Reflected Cross-Site Scripting
+ |     Fixed in: 6.4.9
+ |     References:
+ |      - https://wpscan.com/vulnerability/417e9d5a-2bce-41dc-8291-d0cd19dba4f3
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-5889
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/73cbb65e-b4e3-4374-9916-9a3d1be5a014
+ |
+ | The version could not be determined.
+
+[+] google-site-kit
+ | Location: https://ethiopianitpark.et/wp-content/plugins/google-site-kit/
+ | Last Updated: 2025-01-27T18:36:00.000Z
+ | [!] The version is out of date, the latest version is 1.145.0
+ |
+ | Found By: Urls In Homepage (Passive Detection)
+ | Confirmed By:
+ |  Urls In 404 Page (Passive Detection)
+ |  Meta Tag (Passive Detection)
+ |
+ | Version: 1.144.0 (60% confidence)
+ | Found By: Meta Tag (Passive Detection)
+ |  - https://ethiopianitpark.et/, Match: 'Site Kit by Google 1.144.0'
+
+[+] header-footer-elementor
+ | Location: https://ethiopianitpark.et/wp-content/plugins/header-footer-elementor/
+ | Latest Version: 2.1.0
+ | Last Updated: 2025-01-22T09:48:00.000Z
+ |
+ | Found By: Urls In Homepage (Passive Detection)
+ | Confirmed By: Urls In 404 Page (Passive Detection)
+ |
+ | [!] 10 vulnerabilities identified:
+ |
+ | [!] Title: Elementor - Header, Footer & Blocks Template < 1.5.8 - Contributor+ Stored XSS
+ |     Fixed in: 1.5.8
+ |     References:
+ |      - https://wpscan.com/vulnerability/a9412fed-aed3-4931-a504-1a86f876892e
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2021-24256
+ |      - https://www.wordfence.com/blog/2021/04/recent-patches-rock-the-elementor-ecosystem/
+ |
+ | [!] Title: Elementor Header & Footer Builder < 1.6.25 - Contributor+ Stored Cross-Site Scripting
+ |     Fixed in: 1.6.25
+ |     References:
+ |      - https://wpscan.com/vulnerability/684e290a-1ebe-41eb-8ff7-254162391ecd
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-1237
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/82644c46-205b-4005-bba8-6b3e45769639
+ |
+ | [!] Title: Elementor Header & Footer Builder < 1.6.29 - Authenticated (Contributor+) Stored Cross-Site Scripting
+ |     Fixed in: 1.6.29
+ |     References:
+ |      - https://wpscan.com/vulnerability/2a0d3d1f-62f4-44e2-90a4-d3fa41f01650
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-4634
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/f44bb823-bbf3-413b-82b5-a351609270bf
+ |
+ | [!] Title: Elementor Header & Footer Builder < 1.6.27 - Authenticated (Author+) HTML Injection
+ |     Fixed in: 1.6.27
+ |     References:
+ |      - https://wpscan.com/vulnerability/a262227b-6c2b-4093-9af1-14fcb7569f24
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-2619
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/689eb95b-2f72-4aa4-9f21-6ae186346061
+ |
+ | [!] Title: Elementor Header & Footer Builder < 1.6.26.1 - Contributor+ Stored XSS
+ |     Fixed in: 1.6.26.1
+ |     References:
+ |      - https://wpscan.com/vulnerability/aa28669a-3c64-4e05-beb7-da41701050a5
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-2618
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/a780ce1b-0758-42ef-88e7-ff8d921eca6e
+ |
+ | [!] Title: Elementor Header & Footer Builder < 1.6.36 - Authenticated (Contributor+) Stored Cross-Site Scripting via Site Title Widget
+ |     Fixed in: 1.6.36
+ |     References:
+ |      - https://wpscan.com/vulnerability/a89bb975-5731-4a69-98fe-5888e6ffb4a5
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-5757
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/b5ab022c-c16c-488b-b004-a7351f8fa3d3
+ |
+ | [!] Title: Elementor – Header, Footer & Blocks Template < 1.6.36 - Authenticated (Contributor+) Stored Cross-Site Scripting
+ |     Fixed in: 1.6.36
+ |     References:
+ |      - https://wpscan.com/vulnerability/c5a24410-a737-49bc-be58-a0403f5e8add
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-33933
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/8c27fc2c-b515-4314-908d-435a4167ee99
+ |
+ | [!] Title: Elementor Header & Footer Builder < 1.6.44 - Authenticated (Contributor+) Information Disclosure via Shortcode
+ |     Fixed in: 1.6.44
+ |     References:
+ |      - https://wpscan.com/vulnerability/85f19e03-9939-4f9a-8064-36103ed6dd62
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-10050
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/662f6ae2-2047-4bbf-b4a6-2d536051e389
+ |
+ | [!] Title: Elementor Header & Footer Builder < 1.6.46 - Author+ Stored XSS via SVG File Upload
+ |     Fixed in: 1.6.46
+ |     References:
+ |      - https://wpscan.com/vulnerability/7241192a-765e-40da-9e91-ca3bafaeba12
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-10325
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/7773fd3a-2417-415e-97b0-735e99e62097
+ |
+ | [!] Title: Elementor Header & Footer Builder < 1.6.47 - Contributor+ Stored XSS via Page Title Widget
+ |     Fixed in: 1.6.47
+ |     References:
+ |      - https://wpscan.com/vulnerability/00d77ab0-981c-4f30-85e1-1db21b070f91
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-11230
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/0d82c866-5b35-414e-bd72-30530930d5d8
+ |
+ | The version could not be determined.
+
+[+] mousewheel-smooth-scroll
+ | Location: https://ethiopianitpark.et/wp-content/plugins/mousewheel-smooth-scroll/
+ | Latest Version: 6.7.1
+ | Last Updated: 2025-01-12T14:03:00.000Z
+ |
+ | Found By: Urls In Homepage (Passive Detection)
+ | Confirmed By: Urls In 404 Page (Passive Detection)
+ |
+ | [!] 1 vulnerability identified:
+ |
+ | [!] Title: MouseWheel Smooth Scroll < 5.7 - Plugin's Setting Update via CSRF
+ |     Fixed in: 5.7
+ |     References:
+ |      - https://wpscan.com/vulnerability/1069fb40-44f0-468e-9fd4-7a0fb8cde5a5
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2021-24852
+ |
+ | The version could not be determined.
+
+[+] royal-elementor-addons
+ | Location: https://ethiopianitpark.et/wp-content/plugins/royal-elementor-addons/
+ | Latest Version: 1.7.1007
+ | Last Updated: 2025-01-12T08:22:00.000Z
+ |
+ | Found By: Urls In Homepage (Passive Detection)
+ | Confirmed By: Urls In 404 Page (Passive Detection)
+ |
+ | [!] 48 vulnerabilities identified:
+ |
+ | [!] Title: Unauthorised AJAX Calls via Freemius
+ |     Fixed in: 1.3.33
+ |     Reference: https://wpscan.com/vulnerability/6dae6dca-7474-4008-9fe5-4c62b9f12d0a
+ |
+ | [!] Title: Royal Elementor Addons < 1.3.56 - Subscriber+ Arbitrary Post Deletion
+ |     Fixed in: 1.3.56
+ |     References:
+ |      - https://wpscan.com/vulnerability/c177f763-0bb5-4734-ba2e-7ba816578937
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-4102
+ |
+ | [!] Title: Royal Elementor Addons < 1.3.56 - Subscriber+ Arbitrary Post Creation
+ |     Fixed in: 1.3.56
+ |     References:
+ |      - https://wpscan.com/vulnerability/5e1244f7-39b5-4f37-8fef-e3f35fc388f1
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-4103
+ |
+ | [!] Title: Royal Elementor Addons < 1.3.60 - Reflected XSS
+ |     Fixed in: 1.3.60
+ |     References:
+ |      - https://wpscan.com/vulnerability/335778e7-9e85-47c1-8b60-e5e43666bda0
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-4710
+ |      - https://www.wordfence.com/blog/2023/01/eleven-vulnerabilities-patched-in-royal-elementor-addons/
+ |
+ | [!] Title: Royal Elementor Addons < 1.3.60 - Menu Template Creation via CSRF
+ |     Fixed in: 1.3.60
+ |     References:
+ |      - https://wpscan.com/vulnerability/06dfcb6a-813d-4146-8a80-e899ddaf949b
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-4707
+ |      - https://www.wordfence.com/blog/2023/01/eleven-vulnerabilities-patched-in-royal-elementor-addons/
+ |
+ | [!] Title: Royal Elementor Addons < 1.3.60 - Subscriber+ Template Condition Update
+ |     Fixed in: 1.3.60
+ |     References:
+ |      - https://wpscan.com/vulnerability/a411fbae-bc5c-4953-94a1-121cd785ed21
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-4708
+ |      - https://www.wordfence.com/blog/2023/01/eleven-vulnerabilities-patched-in-royal-elementor-addons/
+ |
+ | [!] Title: Royal Elementor Addons < 1.3.60 - Subscriber+ Mega Menu Settings Update
+ |     Fixed in: 1.3.60
+ |     References:
+ |      - https://wpscan.com/vulnerability/4bc0edb5-7946-4f7e-b567-b0aa901121b1
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-4711
+ |      - https://www.wordfence.com/blog/2023/01/eleven-vulnerabilities-patched-in-royal-elementor-addons/
+ |
+ | [!] Title: Royal Elementor Addons < 1.3.60 - Subscriber+ Arbitrary Template Activation
+ |     Fixed in: 1.3.60
+ |     References:
+ |      - https://wpscan.com/vulnerability/ae1a50ec-d8ff-481a-9b23-592477ef1044
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-4705
+ |      - https://www.wordfence.com/blog/2023/01/eleven-vulnerabilities-patched-in-royal-elementor-addons/
+ |
+ | [!] Title: Royal Elementor Addons < 1.3.60 - Subscriber+ Arbitrary Import Deletion
+ |     Fixed in: 1.3.60
+ |     References:
+ |      - https://wpscan.com/vulnerability/4cf099f2-415b-46f3-b67c-62bcdd85db95
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-4703
+ |      - https://www.wordfence.com/blog/2023/01/eleven-vulnerabilities-patched-in-royal-elementor-addons/
+ |
+ | [!] Title: Royal Elementor Addons < 1.3.60 - Subscriber+ Arbitrary Plugin Activation
+ |     Fixed in: 1.3.60
+ |     References:
+ |      - https://wpscan.com/vulnerability/5d10c42f-459f-4bf1-bfa6-351cfb689da8
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-4701
+ |      - https://www.wordfence.com/blog/2023/01/eleven-vulnerabilities-patched-in-royal-elementor-addons/
+ |
+ | [!] Title: Royal Elementor Addons < 1.3.60 - Subscriber+ Arbitrary Plugin Deactivation
+ |     Fixed in: 1.3.60
+ |     References:
+ |      - https://wpscan.com/vulnerability/3667a8a6-d914-4275-932f-467ba5c8bdf1
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-4702
+ |      - https://www.wordfence.com/blog/2023/01/eleven-vulnerabilities-patched-in-royal-elementor-addons/
+ |
+ | [!] Title: Royal Elementor Addons < 1.3.60 - Subscriber+ Arbitrary Theme Activation
+ |     Fixed in: 1.3.60
+ |     References:
+ |      - https://wpscan.com/vulnerability/c8ecb8f5-e595-4208-bda9-17ac2a832ca1
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-4700
+ |      - https://www.wordfence.com/blog/2023/01/eleven-vulnerabilities-patched-in-royal-elementor-addons/
+ |
+ | [!] Title: Royal Elementor Addons < 1.3.60 - Subscriber+ Template Kit Import
+ |     Fixed in: 1.3.60
+ |     References:
+ |      - https://wpscan.com/vulnerability/103b2f28-2311-46f1-9a28-1f35fa07e8c4
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-4709
+ |      - https://www.wordfence.com/blog/2023/01/eleven-vulnerabilities-patched-in-royal-elementor-addons/
+ |
+ | [!] Title: Royal Elementor Addons < 1.3.60 - Subscriber+ Arbitrary Template Import
+ |     Fixed in: 1.3.60
+ |     References:
+ |      - https://wpscan.com/vulnerability/0932e661-fd6c-480b-a709-c84ec7ef1dd5
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-4704
+ |      - https://www.wordfence.com/blog/2023/01/eleven-vulnerabilities-patched-in-royal-elementor-addons/
+ |
+ | [!] Title: Royal Elementor Addons < 1.3.71 - Unauthenticated API Key Disclosure
+ |     Fixed in: 1.3.71
+ |     References:
+ |      - https://wpscan.com/vulnerability/07ae6892-4ddb-4885-96d8-17d2a1a8ed9c
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2023-3709
+ |
+ | [!] Title: Freemius SDK < 2.5.10 - Reflected Cross-Site Scripting
+ |     Fixed in: 1.3.71
+ |     References:
+ |      - https://wpscan.com/vulnerability/39d1f22f-ea34-4d94-9dc2-12661cf69d36
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2023-33999
+ |
+ | [!] Title: Royal Elementor Addons and Templates < 1.3.79 - Unauthenticated Arbitrary File Upload
+ |     Fixed in: 1.3.79
+ |     References:
+ |      - https://wpscan.com/vulnerability/281518ff-7816-4007-b712-63aed7828b34
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2023-5360
+ |
+ | [!] Title: Royal Elementor Addons and Templates 1.4.78 - Unauthenticated Arbitrary File Upload
+ |     Fixed in: 1.7.1
+ |     References:
+ |      - https://wpscan.com/vulnerability/c2cf5fd1-663d-4bc1-adcd-e6064eb32ece
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2023-5360
+ |
+ | [!] Title: Royal Elementor Addons and Templates < 1.3.81 - Unauthenticated Arbitrary Post Read
+ |     Fixed in: 1.3.81
+ |     References:
+ |      - https://wpscan.com/vulnerability/debd8498-5770-4270-9ee1-1503e675ef34
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2023-5922
+ |
+ | [!] Title: Royal Elementor Addons and Templates < 1.3.88 - Multiple Cross-Site Request Forgery
+ |     Fixed in: 1.3.88
+ |     References:
+ |      - https://wpscan.com/vulnerability/71910e75-2ac7-4da0-b224-675236b36733
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-0514
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-0515
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-0513
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-0512
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-0511
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/wordpress-plugins/royal-elementor-addons/royal-elementor-addons-and-templates-1387-cross-site-request-forgery-via-add-to-compare
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/wordpress-plugins/royal-elementor-addons/royal-elementor-addons-and-templates-1387-cross-site-request-forgery-via-remove-from-compare
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/wordpress-plugins/royal-elementor-addons/royal-elementor-addons-and-templates-1387-cross-site-request-forgery-via-remove-from-wishlist
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/wordpress-plugins/royal-elementor-addons/royal-elementor-addons-and-templates-1387-cross-site-request-forgery-via-add-to-wishlist
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/wordpress-plugins/royal-elementor-addons/royal-elementor-addons-and-templates-1387-cross-site-request-forgery-via-wpr-update-form-action-meta
+ |
+ | [!] Title: Royal Elementor Addons and Templates < 1.3.88 - Authenticated (Contributor+) Stored Cross-Site Scripting
+ |     Fixed in: 1.3.88
+ |     References:
+ |      - https://wpscan.com/vulnerability/2276d353-673c-4bd9-ad6b-31304c19cf90
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-0442
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/256b4818-290b-4660-8e83-c18b068a8959
+ |
+ | [!] Title: Royal Elementor Addons and Templates < 1.3.88 - Missing Authorization via wpr_update_form_action_meta
+ |     Fixed in: 1.3.88
+ |     References:
+ |      - https://wpscan.com/vulnerability/c503b500-fb8b-4ca3-9a2a-de0bc9562b2c
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-0516
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/d3457b87-c860-4cf2-ac3d-2c6521b629ea
+ |
+ | [!] Title: Royal Elementor Addons and Templates < 1.3.92 - Authenticated (Contributor+) Stored Cross-Site Scripting via Logo Widget
+ |     Fixed in: 1.3.92
+ |     References:
+ |      - https://wpscan.com/vulnerability/243b47d3-4ef2-44b4-8c29-a67525639cd4
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-1500
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/8619c999-5cf7-4888-bdb2-815238411303
+ |
+ | [!] Title: Royal Elementor Addons < 1.3.95 - Contributor+ Stored Cross-Site Scriting
+ |     Fixed in: 1.3.95
+ |     References:
+ |      - https://wpscan.com/vulnerability/d61fe616-028f-4a09-87cb-2eb1edb49c28
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-31236
+ |      - https://patchstack.com/database/vulnerability/royal-elementor-addons/wordpress-royal-elementor-addons-plugin-1-3-93-cross-site-scripting-xss-vulnerability
+ |
+ | [!] Title: Royal Elementor Addons and Templates < 1.3.95 - Unauthenticated Limited File Upload
+ |     Fixed in: 1.3.95
+ |     References:
+ |      - https://wpscan.com/vulnerability/17356d5b-9667-486e-930f-24a8a6981b59
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-1567
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/7a04705d-cd17-4b4b-b04d-de55d6479dab
+ |
+ | [!] Title: Royal Elementor Addons and Templates < 1.3.972 - Contributor+ Stored Cross-Site Scripting via Advanced Accordion Title Tags
+ |     Fixed in: 1.3.972
+ |     References:
+ |      - https://wpscan.com/vulnerability/befa65fb-cb6b-47c1-956f-0018ad18571a
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-3889
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/83ea2ec3-5d5b-44ea-83e6-41c4fa6e2e5f
+ |
+ | [!] Title: Royal Elementor Addons and Templates < 1.3.972 - Contributor+ DOM-Based Stored Cross-Site Scripting
+ |     Fixed in: 1.3.972
+ |     References:
+ |      - https://wpscan.com/vulnerability/98298383-ae46-4893-8874-59b8ea906971
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-2798
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/70582781-9de5-4124-bde4-d3d26724e9b3
+ |
+ | [!] Title: Royal Elementor Addons and Templates < 1.3.972 - Contributor+ Stored Cross-Site Scripting via HTML Tags
+ |     Fixed in: 1.3.972
+ |     References:
+ |      - https://wpscan.com/vulnerability/44284dac-9434-498c-bbca-1c4725d78497
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-2799
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/40ca3778-95ff-4b2c-ac47-4ae8c86e245a
+ |
+ | [!] Title: Royal Elementor Addons and Templates < 1.3.972 - Contributor+ Stored Cross-Site Scripting via Flip Carousel, Flip Box, Post Grid, and Taxonomy List Widget Attributes
+ |     Fixed in: 1.3.972
+ |     References:
+ |      - https://wpscan.com/vulnerability/817b109c-7e46-46f6-b656-3002b6567d2a
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-3675
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/337cbec1-c8a8-41b5-8c32-779be671120f
+ |
+ | [!] Title: Royal Elementor Addons < 1.3.95 - Unauthenticated IP Spoofing
+ |     Fixed in: 1.3.95
+ |     References:
+ |      - https://wpscan.com/vulnerability/61aab095-66b8-4ce7-83a3-0b8770dda453
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-32786
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/2626db42-0047-4801-bbcb-e236440c1677
+ |
+ | [!] Title: Royal Elementor Addons and Templates < 1.3.975 - Authenticated (Contributor+) Stored Cross-Site Scripting via Form Builder Widget
+ |     Fixed in: 1.3.975
+ |     References:
+ |      - https://wpscan.com/vulnerability/a47f0029-6f21-446c-b38d-17674caf230a
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-3887
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/5122800d-f274-4129-84d4-02380269502c
+ |
+ | [!] Title: Royal Elementor Addons and Templates < 1.3.976 - Authenticated (Contributor+) Stored Cross-Site Scripting
+ |     Fixed in: 1.3.976
+ |     References:
+ |      - https://wpscan.com/vulnerability/209cbd21-6ed9-490d-a1f2-41ba4d02ed03
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-4342
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/4d565196-592d-415c-b37c-e54456aa9ed8
+ |
+ | [!] Title: Royal Elementor Addons and Templates < 1.3.976 - Authenticated (Contributor+) Stored Cross-Site Scripting via Back to Top Widget
+ |     Fixed in: 1.3.976
+ |     References:
+ |      - https://wpscan.com/vulnerability/cfc02492-1d73-4adb-b440-a11f9ae91947
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-4087
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/cca7bb88-4a2c-4406-8610-15ce6e77c31f
+ |
+ | [!] Title: Royal Elementor Addons and Templates < 1.3.977 - Authenticated (Author+) Stored Cross-Site Scripting via SVG Uploads
+ |     Fixed in: 1.3.977
+ |     References:
+ |      - https://wpscan.com/vulnerability/6d00d2c8-cffa-43b2-9e7c-ec65988e5e19
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-4489
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/57bf222b-5f49-46e2-be84-3e6444807096
+ |
+ | [!] Title: Royal Elementor Addons and Templates < 1.3.977 - Authenticated (Contributor+) Stored Cross-Site Scripting
+ |     Fixed in: 1.3.977
+ |     References:
+ |      - https://wpscan.com/vulnerability/aaee560f-e286-4dc8-be70-f456cf1f67c8
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-4488
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/cb0ac434-7e85-44d4-b21e-df462f63cd9c
+ |
+ | [!] Title: Royal Elementor Addons and Templates < 1.3.981 - Authenticated (Contributor+) DOM-Based Stored Cross-Site Scripting via Magazine Grid/Slider Widget
+ |     Fixed in: 1.3.981
+ |     References:
+ |      - https://wpscan.com/vulnerability/53a706e5-fcf2-4fd6-9a9c-450a547eed4d
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-5818
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/83a0150d-a9fa-4cc2-8fe8-a429747a9964
+ |
+ | [!] Title: Royal Elementor Addons < 1.3.985 - Authenticated (Contributor+) Stored Cross-Site Scripting
+ |     Fixed in: 1.3.985
+ |     References:
+ |      - https://wpscan.com/vulnerability/7a70ea04-877f-4cfc-aca8-45908edf471f
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-44001
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/4529464e-6830-4c2a-8146-79cf5fc1bc7c
+ |
+ | [!] Title: Royal Elementor Addons and Templates < 1.3.987 - Authenticated (Contributor+) Stored Cross-Site Scripting via Team Member Widget
+ |     Fixed in: 1.3.987
+ |     References:
+ |      - https://wpscan.com/vulnerability/c5290c49-65b7-40ff-8c4d-2b5e968d1716
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-8482
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/5ccece54-18fa-42e4-ba1a-d0879b73d66d
+ |
+ | [!] Title: Royal Elementor Addons and Templates < 1.3.987 - Authenticated (Subscriber+) Private Post Disclosure
+ |     Fixed in: 1.3.987
+ |     References:
+ |      - https://wpscan.com/vulnerability/72d94228-6157-4fcb-ac92-e356d3c4f19c
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-7417
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/c3dfb0b7-5d9f-492b-9a1a-d4445d39c00c
+ |
+ | [!] Title: Royal Elementor Addons < 1.3.981 - Authenticated (Author+) External Entity Injection
+ |     Fixed in: 1.3.981
+ |     References:
+ |      - https://wpscan.com/vulnerability/eecf12c6-9b69-4bd0-9d9e-d90d8081cf12
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-50442
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/30a89e75-2ab1-4e65-8646-b100efed5dbd
+ |
+ | [!] Title: Royal Elementor Addons and Template < 1.7.1002 - Authenticated (Contributor+) DOM-Based Stored Cross-Site Scripting via Google Maps Widget
+ |     Fixed in: 1.7.1002
+ |     References:
+ |      - https://wpscan.com/vulnerability/4215d354-afc8-4d47-9f57-d749c98ab658
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-9059
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/37223d1f-82c8-414f-bf39-63e728541aa3
+ |
+ | [!] Title: Royal Elementor Addons and Templates < 1.7.1002 - Authenticated (Contributor+) Stored Cross-Site Scripting via Countdown Widget
+ |     Fixed in: 1.7.1002
+ |     References:
+ |      - https://wpscan.com/vulnerability/aba70c33-6169-410f-a8e8-377e5e6c80ca
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-9668
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/a8e39f0b-eb4c-4568-9f5a-60a0dc3eb6ba
+ |
+ | [!] Title: Royal Elementor Addons and Templates < 1.7.1002 - Authenticated (Contributor+) DOM-Based Stored Cross-Site Scripting via Form Builder Widget
+ |     Fixed in: 1.7.1002
+ |     References:
+ |      - https://wpscan.com/vulnerability/772800ad-9c58-4008-825e-7188b48eed5e
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-9682
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/bd90b85e-22a9-4c08-b2cf-4f75406e7ca3
+ |
+ | [!] Title: Royal Elementor Addons and Templates < 1.7.1004 - Authenticated (Contributor+) Post Disclosure
+ |     Fixed in: 1.7.1004
+ |     References:
+ |      - https://wpscan.com/vulnerability/77012210-bd79-4b73-885f-a7f4524f326b
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-10798
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/4a7ef5a0-f6c8-41e1-bb3b-119a682be69f
+ |
+ | [!] Title: Royal Elementor Addons < 1.7.1002 - Missing Authorization
+ |     Fixed in: 1.7.1002
+ |     References:
+ |      - https://wpscan.com/vulnerability/5860390b-5ae8-4cb9-9b17-45ad050e94ac
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-56227
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/f7f9b1ef-2efc-4d88-bff8-e0dd711b85ab
+ |
+ | [!] Title: Royal Elementor Addons < 1.7.1002 - Reflected Cross-Site Scripting
+ |     Fixed in: 1.7.1002
+ |     References:
+ |      - https://wpscan.com/vulnerability/02750974-48dd-4597-8211-44f8adeca480
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-56226
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/9e860c60-b330-4a6c-8d15-947451af62fc
+ |
+ | [!] Title: Royal Elementor Addons < 1.7.1 - Contributor+ Stored XSS
+ |     Fixed in: 1.7.1
+ |     References:
+ |      - https://wpscan.com/vulnerability/8210ac7a-3f9f-4557-ae3e-9f7cf801659e
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-56062
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/a4b353bf-f9be-465a-8723-9ea721b5baab
+ |
+ | [!] Title: Royal Elementor Addons and Templates < 1.7.1007 - Stored XSS via CSRF
+ |     Fixed in: 1.7.1007
+ |     References:
+ |      - https://wpscan.com/vulnerability/1fc323e4-31f7-4dfc-ac56-a9c2149788e5
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2025-0393
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/a8e34c05-7431-4acd-91f3-aab5e66f61ad
+ |
+ | The version could not be determined.
+
+[+] sticky-header-effects-for-elementor
+ | Location: https://ethiopianitpark.et/wp-content/plugins/sticky-header-effects-for-elementor/
+ | Latest Version: 1.7.4
+ | Last Updated: 2025-01-23T11:01:00.000Z
+ |
+ | Found By: Urls In Homepage (Passive Detection)
+ | Confirmed By: Urls In 404 Page (Passive Detection)
+ |
+ | The version could not be determined.
+
+[+] tablepress
+ | Location: https://ethiopianitpark.et/wp-content/plugins/tablepress/
+ | Latest Version: 3.0.3
+ | Last Updated: 2025-01-27T06:28:00.000Z
+ |
+ | Found By: Urls In Homepage (Passive Detection)
+ | Confirmed By: Urls In 404 Page (Passive Detection)
+ |
+ | [!] 6 vulnerabilities identified:
+ |
+ | [!] Title: TablePress <= 1.8 - Authenticated XML External Entity (XXE)
+ |     Fixed in: 1.8.1
+ |     References:
+ |      - https://wpscan.com/vulnerability/2eb820c0-1d68-411d-a30b-505d658db8d7
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2017-10889
+ |      - https://jvn.jp/en/jp/JVN05398317/index.html
+ |      - https://github.com/TobiasBg/TablePress/
+ |
+ | [!] Title: Freemius SDK < 2.5.10 - Reflected Cross-Site Scripting
+ |     Fixed in: 2.1.5
+ |     References:
+ |      - https://wpscan.com/vulnerability/7fd1ad0e-9db9-47b7-9966-d3f5a8771571
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2023-33999
+ |
+ | [!] Title: TablePress < 2.2.5 - Authenticated(Author+) Server Side Request Forgery(SSRF) via _get_import_files
+ |     Fixed in: 2.2.5
+ |     References:
+ |      - https://wpscan.com/vulnerability/d444a693-7f2b-451e-8004-b40b8c1c64b0
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-23825
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/8de52b68-c273-4561-98b0-e51afd6cd47b
+ |
+ | [!] Title: TablePress – Tables in WordPress made easy < 2.3.2 - Authenticated (Author+) Server-Side Request Forgery via DNS Rebind
+ |     Fixed in: 2.3.2
+ |     References:
+ |      - https://wpscan.com/vulnerability/952a6a13-0bcc-4f11-a58a-07d11d1a2ed9
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-4354
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/879384eb-bfea-4667-a7de-9f723dbea74b
+ |
+ | [!] Title: TablePress < 2.4.3 - Author+ Stored XSS
+ |     Fixed in: 2.4.3
+ |     References:
+ |      - https://wpscan.com/vulnerability/fdba1d77-a469-4ad5-bab2-8acfac83cf2c
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-9595
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/ffa3b85c-7d08-4f6a-889e-b75620f72a1a
+ |
+ | [!] Title: TablePress < 2.4.3 - XXE Injection
+ |     Fixed in: 2.4.3
+ |     References:
+ |      - https://wpscan.com/vulnerability/c9c13e5b-22ac-44c1-aca7-e2b34238e045
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-45293
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/38f950b7-e3a0-4e05-a8b0-9cc6b6c66b0c
+ |
+ | The version could not be determined.
+
+[+] wordpress-seo
+ | Location: https://ethiopianitpark.et/wp-content/plugins/wordpress-seo/
+ | Last Updated: 2025-01-21T09:01:00.000Z
+ | [!] The version is out of date, the latest version is 24.3
+ |
+ | Found By: Comment (Passive Detection)
+ |
+ | [!] 1 vulnerability identified:
+ |
+ | [!] Title: Yoast SEO < 22.7 - Authenticated (Contributor+) Stored Cross-Site Scripting
+ |     Fixed in: 22.7
+ |     References:
+ |      - https://wpscan.com/vulnerability/467936e2-fe82-4cdc-afec-6782afee3e4e
+ |      - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-4984
+ |      - https://www.wordfence.com/threat-intel/vulnerabilities/id/59bcd246-ca2f-4336-9a6e-89afe873ed25
+ |
+ | Version: 22.6 (60% confidence)
+ | Found By: Comment (Passive Detection)
+ |  - https://ethiopianitpark.et/, Match: 'optimized with the Yoast SEO plugin v22.6 -'
+
+[+] wp-job-openings
+ | Location: https://ethiopianitpark.et/wp-content/plugins/wp-job-openings/
+ | Last Updated: 2024-11-13T18:48:00.000Z
+ | [!] The version is out of date, the latest version is 3.5.0
+ |
+ | Found By: Urls In Homepage (Passive Detection)
+ | Confirmed By: Urls In 404 Page (Passive Detection)
+ |
+ | Version: 3.4.6 (30% confidence)
+ | Found By: Query Parameter (Passive Detection)
+ |  - https://ethiopianitpark.et/wp-content/plugins/wp-job-openings/assets/css/general.min.css?ver=3.4.6
+ |  - https://ethiopianitpark.et/wp-content/plugins/wp-job-openings/assets/css/style.min.css?ver=3.4.6
+ |  - https://ethiopianitpark.et/wp-content/plugins/wp-job-openings/assets/js/script.min.js?ver=3.4.6
+
