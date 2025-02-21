@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import FilterForm from './FilterForm';
-import { Alert, AlertDescription } from "@/components/ui/alert";
 import CostMetrics from './Metrics/CostMetrics';
 import IncomeMetrics from './Metrics/IncomeMetrics';
-import '../../assets/css/Dashboard.css';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 
 const StaffDashboard = () => {
   // Cost metrics state
@@ -18,6 +17,10 @@ const StaffDashboard = () => {
   const [totalIncomeOutcomeETB, setTotalIncomeOutcomeETB] = useState(null);
   const [totalIncomePlanUSD, setTotalIncomePlanUSD] = useState(null);
   const [totalIncomeOutcomeUSD, setTotalIncomeOutcomeUSD] = useState(null);
+  const [totalComparisonIncomePlanOutcomeETB, setComparisonIncomePlanOutcomeETB] = useState(null);
+  const [totalComparisonIncomePlanOutcomeUSD, setComparisonIncomePlanOutcomeUSD] = useState(null);
+
+  const [CompareIncomePlanOutcomeTotal, setCompareIncomePlanOutcomeTotal] = useState(null);
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -69,7 +72,10 @@ const StaffDashboard = () => {
         incomePlanETBRes,
         incomeOutcomeETBRes,
         incomePlanUSDRes,
-        incomeOutcomeUSDRes
+        incomeOutcomeUSDRes,
+        incomePlanOutcomeETBRes,
+        incomePlanOutcomeUSDRes,
+        CompareIncomePlanOutcomeTotalRes
       ] = await Promise.all([
         axios.get(`${API_BASE_URL}/displayTotalCostExcutionPercentage?${queryString}`, { headers }),
         axios.get(`${API_BASE_URL}/displayTotalCost`, { headers }),
@@ -78,7 +84,10 @@ const StaffDashboard = () => {
         axios.get(`${API_BASE_URL}/displayTotalIncomeplanETB?${queryString}`, { headers }),
         axios.get(`${API_BASE_URL}/displayTotalIncomeOutcomeETB?${queryString}`, { headers }),
         axios.get(`${API_BASE_URL}/displayTotalIncomePlanUSD?${queryString}`, { headers }),
-        axios.get(`${API_BASE_URL}/displayTotalIncomeOutcomeUSD?${queryString}`, { headers })
+        axios.get(`${API_BASE_URL}/displayTotalIncomeOutcomeUSD?${queryString}`, { headers }),
+        axios.get(`${API_BASE_URL}/compareIncomePlanOutcomeETB?${queryString}`, { headers }),
+        axios.get(`${API_BASE_URL}/compareIncomePlanOutcomeUSD?${queryString}`, { headers }),
+        axios.get(`${API_BASE_URL}/CompareIncomePlanOutcomeTotal?${queryString}`, { headers })
       ]);
 
       // Set cost metrics
@@ -92,6 +101,13 @@ const StaffDashboard = () => {
       setTotalIncomeOutcomeETB(incomeOutcomeETBRes.data);
       setTotalIncomePlanUSD(incomePlanUSDRes.data);
       setTotalIncomeOutcomeUSD(incomeOutcomeUSDRes.data);
+      setComparisonIncomePlanOutcomeETB(incomePlanOutcomeETBRes.data);
+      setComparisonIncomePlanOutcomeUSD(incomePlanOutcomeUSDRes.data);
+      setCompareIncomePlanOutcomeTotal(CompareIncomePlanOutcomeTotalRes.data);
+
+      // Console log only the fetched CompareIncomePlanOutcomeTotal data
+      console.log("CompareIncomePlanOutcomeTotal data:", CompareIncomePlanOutcomeTotalRes.data);
+
       setError('');
     } catch (axiosError) {
       console.error('Error fetching metrics from backend:', axiosError);
@@ -139,7 +155,7 @@ const StaffDashboard = () => {
     <div className="container-fluid p-4">
       <div className="mx-auto" style={{ maxWidth: '1200px' }}>
         <div className="text-center mb-5">
-          <h1 className="display-4 fw-bold text-primary">Staff Dashboard</h1>
+          <h1 className="display-4 fw-bold text-primary"></h1>
         </div>
 
         <FilterForm filters={filters} onSubmit={handleFilterSubmit} />
@@ -158,11 +174,13 @@ const StaffDashboard = () => {
           totalIncomeOutcomeETB={totalIncomeOutcomeETB}
           totalIncomePlanUSD={totalIncomePlanUSD}
           totalIncomeOutcomeUSD={totalIncomeOutcomeUSD}
-          costComparison={costComparison} // Passing in case you want to reuse its data for charts
+          comparisonIncomePlanOutcomeETB={totalComparisonIncomePlanOutcomeETB}
+          comparisonIncomePlanOutcomeUSD={totalComparisonIncomePlanOutcomeUSD}
+          CompareIncomePlanOutcomeTotal={CompareIncomePlanOutcomeTotal}
         />
       </div>
     </div>
   );
-}; 
+};
 
 export default StaffDashboard;

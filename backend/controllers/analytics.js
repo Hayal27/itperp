@@ -39,11 +39,10 @@ const BASE_JOIN = `
   JOIN specific_objectives so ON sod.specific_objective_id = so.specific_objective_id
   JOIN objectives o ON so.objective_id = o.objective_id
   JOIN goals g ON o.goal_id = g.goal_id
-
 `;
 
 // Function to build additional JOIN clauses based on filters.
-// If department filter is provided, we join the plans table.
+// If department filter is provided, join the plans table.
 const getJoinClause = (req) => {
   let joinClause = BASE_JOIN;
   if (req.query.department) {
@@ -54,7 +53,7 @@ const getJoinClause = (req) => {
 
 // Function to build dynamic WHERE condition string from request query parameters.
 // Base condition ("sod.plan_type = 'cost'") must be already provided in the query.
-// Additional filters will be appended with AND operator.
+// Additional filters will be appended with the AND operator.
 const getFilterConditions = (req) => {
   const conditions = [];
   if (req.query.year) {
@@ -81,11 +80,8 @@ const getFilterConditions = (req) => {
 // Display Total Cost (summing CIoutcome) with additional filters
 const displayTotalCost = async (req, res) => {
   try {
-    // Build join clause (may include plans join)
     const joinClause = getJoinClause(req);
-    // Build additional filter conditions 
     const extraFilters = getFilterConditions(req);
-    // Build query string
     const query = `
       SELECT COALESCE(SUM(sod.CIoutcome), 0) as total_cost
       ${joinClause}
@@ -128,7 +124,6 @@ const compareCostPlanOutcome = async (req, res) => {
   try {
     const joinClause = getJoinClause(req);
     const extraFilters = getFilterConditions(req);
-    // Note: the CASE WHEN uses sod.plan_type = 'cost', but additional filters apply uniformly
     const query = `
       SELECT 
         COALESCE(SUM(CASE WHEN sod.plan_type = 'cost' THEN sod.CIplan END), 0) as total_cost_plan,
@@ -149,15 +144,11 @@ const compareCostPlanOutcome = async (req, res) => {
   }
 };
 
-// Display excution_percentage of Cost
-
+// Display execution_percentage of Cost
 const displayTotalCostExcutionPercentage = async (req, res) => {
   try {
-    // Build join clause (may include plans join)
     const joinClause = getJoinClause(req);
-    // Build additional filter conditions 
     const extraFilters = getFilterConditions(req);
-    // Build query string with proper alias using AVG aggregation
     const query = `
       SELECT COALESCE(AVG(sod.CIexecution_percentage), 0) AS average_cost_CIexecution_percentage
       ${joinClause}
@@ -166,11 +157,7 @@ const displayTotalCostExcutionPercentage = async (req, res) => {
     con.query(query, (err, results) => {
       if (err) return handleDatabaseError(err, res, 'fetching average CIexecution_percentage');
       if (handleEmptyResults(results, res, { average_cost_CIexecution_percentage: 0 })) return;
-      
-      // Log the fetched result for debugging purposes
       console.log('Fetched average cost execution percentage:', results[0].average_cost_CIexecution_percentage);
-      
-      // Display the fetched result by sending it in the response as JSON
       res.json({ averageCostCIExecutionPercentage: results[0].average_cost_CIexecution_percentage });
     });
   } catch (error) {
@@ -179,24 +166,18 @@ const displayTotalCostExcutionPercentage = async (req, res) => {
   }
 };
 
-
-// Display income Plan in USD
-// Display Total Income Plan USD (summing Plan) with additional filters
+// Display Total Income Plan USD (summing CIplan) with additional filters
 const displayTotalIncomePlanUSD = async (req, res) => {
   try {
-    // Build join clause (may include plans join)
     const joinClause = getJoinClause(req);
-    // Build additional filter conditions 
     const extraFilters = getFilterConditions(req);
-    // Build query string
     const query = `
       SELECT COALESCE(SUM(sod.CIplan), 0) as total_income_plan_USD
       ${joinClause}
-      WHERE sod.plan_type = 'income' AND
-      sod.income_exchange='USD' ${extraFilters}
+      WHERE sod.plan_type = 'income' AND sod.income_exchange = 'USD' ${extraFilters}
     `;
     con.query(query, (err, results) => {
-      if (err) return handleDatabaseError(err, res, 'fetchingtotal_income_plan_USD');
+      if (err) return handleDatabaseError(err, res, 'fetching total_income_plan_USD');
       if (handleEmptyResults(results, res, { total_income_plan_USD: 0 })) return;
       res.json(results[0].total_income_plan_USD);
     });
@@ -206,24 +187,18 @@ const displayTotalIncomePlanUSD = async (req, res) => {
   }
 };
 
-
-// Display income plan in ETB
-// Display Total Income ETB (summing CIoutcome) with additional filters
+// Display Total Income Plan ETB (summing CIplan) with additional filters
 const displayTotalIncomeplanETB = async (req, res) => {
   try {
-    // Build join clause (may include plans join)
     const joinClause = getJoinClause(req);
-    // Build additional filter conditions 
     const extraFilters = getFilterConditions(req);
-    // Build query string
     const query = `
       SELECT COALESCE(SUM(sod.CIplan), 0) as total_income_plan_ETB
       ${joinClause}
-      WHERE sod.plan_type = 'income' AND
-      sod.income_exchange='ETB' ${extraFilters}
+      WHERE sod.plan_type = 'income' AND sod.income_exchange = 'ETB' ${extraFilters}
     `;
     con.query(query, (err, results) => {
-      if (err) return handleDatabaseError(err, res, 'fetchingtotal total_income_plan_ETB');
+      if (err) return handleDatabaseError(err, res, 'fetching total_income_plan_ETB');
       if (handleEmptyResults(results, res, { total_income_plan_ETB: 0 })) return;
       res.json(results[0].total_income_plan_ETB);
     });
@@ -233,22 +208,18 @@ const displayTotalIncomeplanETB = async (req, res) => {
   }
 };
 
-// Display income outecome in USD
+// Display Total Income Outcome USD (summing CIoutcome) with additional filters
 const displayTotalIncomeOutcomeUSD = async (req, res) => {
   try {
-    // Build join clause (may include plans join)
     const joinClause = getJoinClause(req);
-    // Build additional filter conditions 
     const extraFilters = getFilterConditions(req);
-    // Build query string
     const query = `
       SELECT COALESCE(SUM(sod.CIoutcome), 0) as total_income_outcome_USD
       ${joinClause}
-      WHERE sod.plan_type = 'income' AND
-      sod.income_exchange='USD' ${extraFilters}
+      WHERE sod.plan_type = 'income' AND sod.income_exchange = 'USD' ${extraFilters}
     `;
     con.query(query, (err, results) => {
-      if (err) return handleDatabaseError(err, res, 'fetchingtotal total_income_outcome_USD');
+      if (err) return handleDatabaseError(err, res, 'fetching total_income_outcome_USD');
       if (handleEmptyResults(results, res, { total_income_outcome_USD: 0 })) return;
       res.json(results[0].total_income_outcome_USD);
     });
@@ -256,36 +227,196 @@ const displayTotalIncomeOutcomeUSD = async (req, res) => {
     console.error('Unexpected error in displayTotalIncomeOutcomeUSD:', error);
     res.status(500).json({ message: "Internal server error", error: error.message });
   }
-};  
+};
 
-
-
-
-// Display income in ETB
-// Display Total Income ETB (summing CIoutcome) with additional filters
+// Display Total Income Outcome ETB (summing CIoutcome) with additional filters
 const displayTotalIncomeOutcomeETB = async (req, res) => {
   try {
-    // Build join clause (may include plans join)
     const joinClause = getJoinClause(req);
-    // Build additional filter conditions 
     const extraFilters = getFilterConditions(req);
-    // Build query string
     const query = `
       SELECT COALESCE(SUM(sod.CIoutcome), 0) as total_income_outcome_ETB
       ${joinClause}
-      WHERE sod.plan_type = 'income' AND
-      sod.income_exchange='ETB' ${extraFilters}
+      WHERE sod.plan_type = 'income' AND sod.income_exchange = 'ETB' ${extraFilters}
     `;
     con.query(query, (err, results) => {
-      if (err) return handleDatabaseError(err, res, 'fetching ttotal_income_outcome_ETB');
+      if (err) return handleDatabaseError(err, res, 'fetching total_income_outcome_ETB');
       if (handleEmptyResults(results, res, { total_income_outcome_ETB: 0 })) return;
       res.json(results[0].total_income_outcome_ETB);
     });
   } catch (error) {
-    console.error('Unexpected error in displayTotalCost:', error);
+    console.error('Unexpected error in displayTotalIncomeOutcomeETB:', error);
     res.status(500).json({ message: "Internal server error", error: error.message });
   }
 };
+
+// Compare Total Income Plan ETB with Total Income Outcome ETB using table, pie chart and bar chart
+const compareIncomePlanOutcomeETB = async (req, res) => {
+  try {
+    const joinClause = getJoinClause(req);
+    const extraFilters = getFilterConditions(req);
+    const query = `
+      SELECT 
+        COALESCE(SUM(sod.CIplan), 0) as total_income_plan_ETB,
+        COALESCE(SUM(sod.CIoutcome), 0) as total_income_outcome_ETB
+      ${joinClause}
+      WHERE sod.plan_type = 'income' AND sod.income_exchange = 'ETB' ${extraFilters}
+    `;
+    con.query(query, (err, results) => {
+      if (err) return handleDatabaseError(err, res, 'comparing income plan and outcome (ETB)');
+      if (handleEmptyResults(results, res, { total_income_plan_ETB: 0, total_income_outcome_ETB: 0 })) return;
+      const { total_income_plan_ETB, total_income_outcome_ETB } = results[0];
+      const difference = total_income_plan_ETB - total_income_outcome_ETB;
+      res.json({ total_income_plan_ETB, total_income_outcome_ETB, difference });
+    });
+  } catch (error) {
+    console.error('Unexpected error in compareIncomePlanOutcomeETB:', error);
+    res.status(500).json({ message: "Internal server error", error: error.message });
+  }
+};
+
+// Compare Total Income Plan USD with Total Income Outcome USD using table, pie chart and bar chart
+const compareIncomePlanOutcomeUSD = async (req, res) => {
+  try {
+    const joinClause = getJoinClause(req);
+    const extraFilters = getFilterConditions(req);
+    const query = `
+      SELECT 
+        COALESCE(SUM(sod.CIplan), 0) as total_income_plan_USD,
+        COALESCE(SUM(sod.CIoutcome), 0) as total_income_outcome_USD
+      ${joinClause}
+      WHERE sod.plan_type = 'income' AND sod.income_exchange = 'USD' ${extraFilters}
+    `;
+    con.query(query, (err, results) => {
+      if (err) return handleDatabaseError(err, res, 'comparing income plan and outcome (USD)');
+      if (handleEmptyResults(results, res, { total_income_plan_USD: 0, total_income_outcome_USD: 0 })) return;
+      const { total_income_plan_USD, total_income_outcome_USD } = results[0];
+      const difference = total_income_plan_USD - total_income_outcome_USD;
+      res.json({ total_income_plan_USD, total_income_outcome_USD, difference });
+    });
+  } catch (error) {
+    console.error('Unexpected error in compareIncomePlanOutcomeUSD:', error);
+    res.status(500).json({ message: "Internal server error", error: error.message });
+  }
+};
+
+// Compare Total Income (Plan vs Outcome) combining both ETB and USD (converted to ETB)
+const compareIncomePlanOutcomeTotal = async (req, res) => {
+  try {
+    const USD_TO_ETB_RATE = 120; // Exchange rate: 1 USD = 120 ETB
+    const joinClause = getJoinClause(req);
+    const extraFilters = getFilterConditions(req);
+    
+    console.log('Starting income comparison with filters:', { joinClause, extraFilters });
+    
+    const query = `
+      SELECT 
+        COALESCE(SUM(CASE 
+          WHEN sod.income_exchange = 'ETB' THEN CIplan
+          WHEN sod.income_exchange = 'USD' THEN CIplan * ${USD_TO_ETB_RATE}
+          ELSE 0 
+        END), 0) as total_income_plan_combined_ETB,
+        COALESCE(SUM(CASE 
+          WHEN sod.income_exchange = 'ETB' THEN CIoutcome
+          WHEN sod.income_exchange = 'USD' THEN CIoutcome * ${USD_TO_ETB_RATE}
+          ELSE 0 
+        END), 0) as total_income_outcome_combined_ETB,
+        COALESCE(SUM(CASE WHEN sod.income_exchange = 'ETB' THEN CIplan ELSE 0 END), 0) as total_income_plan_ETB,
+        COALESCE(SUM(CASE WHEN sod.income_exchange = 'ETB' THEN CIoutcome ELSE 0 END), 0) as total_income_outcome_ETB,
+        COALESCE(SUM(CASE WHEN sod.income_exchange = 'USD' THEN CIplan ELSE 0 END), 0) as total_income_plan_USD,
+        COALESCE(SUM(CASE WHEN sod.income_exchange = 'USD' THEN CIoutcome ELSE 0 END), 0) as total_income_outcome_USD
+      ${joinClause}
+      WHERE sod.plan_type = 'income' ${extraFilters}
+    `;
+
+    console.log('Executing query:', query);
+
+    con.query(query, (err, results) => {
+      if (err) {
+        console.error('Database Error:', {
+          message: err.message,
+          code: err.code,
+          state: err.sqlState,
+          stack: err.stack
+        });
+        return handleDatabaseError(err, res, 'comparing total income plan and outcome');
+      }
+
+      console.log('Query results:', JSON.stringify(results, null, 2));
+
+      if (handleEmptyResults(results, res, {
+        total_income_plan_combined_ETB: 0,
+        total_income_outcome_combined_ETB: 0,
+        breakdown: {
+          ETB: { plan: 0, outcome: 0 },
+          USD: { plan: 0, outcome: 0 }
+        }
+      })) {
+        console.log('No results found for the query');
+        return;
+      }
+
+      const {
+        total_income_plan_combined_ETB,
+        total_income_outcome_combined_ETB,
+        total_income_plan_ETB,
+        total_income_outcome_ETB,
+        total_income_plan_USD,
+        total_income_outcome_USD
+      } = results[0];
+
+      console.log('Extracted values:', {
+        total_income_plan_combined_ETB,
+        total_income_outcome_combined_ETB,
+        total_income_plan_ETB,
+        total_income_outcome_ETB,
+        total_income_plan_USD,
+        total_income_outcome_USD
+      });
+
+      const difference_combined_ETB = total_income_plan_combined_ETB - total_income_outcome_combined_ETB;
+
+      const response = {
+        combined_ETB: {
+          plan: total_income_plan_combined_ETB,
+          outcome: total_income_outcome_combined_ETB,
+          difference: difference_combined_ETB
+        },
+        breakdown: {
+          ETB: {
+            plan: total_income_plan_ETB,
+            outcome: total_income_outcome_ETB,
+            difference: total_income_plan_ETB - total_income_outcome_ETB
+          },
+          USD: {
+            plan: total_income_plan_USD,
+            outcome: total_income_outcome_USD,
+            difference: total_income_plan_USD - total_income_outcome_USD,
+            plan_in_ETB: total_income_plan_USD * USD_TO_ETB_RATE,
+            outcome_in_ETB: total_income_outcome_USD * USD_TO_ETB_RATE
+          }
+        },
+        exchange_rate: {
+          USD_TO_ETB: USD_TO_ETB_RATE
+        }
+      };
+
+      console.log('Final response:', JSON.stringify(response, null, 2));
+      res.json(response);
+    });
+  } catch (error) {
+    console.error('Unexpected error in compareIncomePlanOutcomeTotal:', {
+      message: error.message,
+      stack: error.stack,
+      details: error
+    });
+    res.status(500).json({ message: "Internal server error", error: error.message });
+  }
+};
+
+// Display Total HR with proper relationships
+
+
 
 
 
@@ -501,6 +632,9 @@ module.exports = {
   displayTotalIncomeOutcomeUSD,
   displayTotalIncomeplanETB,
   displayTotalIncomePlanUSD,
+  compareIncomePlanOutcomeETB,
+  compareIncomePlanOutcomeUSD,
+  compareIncomePlanOutcomeTotal
 //   compareCostCIplanAndCIoutcome,
 //   compareCostCIexecutionPercentage,
 //   displayTotalIncome,

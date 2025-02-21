@@ -3,16 +3,13 @@
 
     font-size: 80%;
     max-width: 70%;
-position: relative;
+position: absolute;
 
-
-
-bottom: 50%;
+top: 10%;
 left: 4%;
 right: 7%;
 
 }
-
 
 
 .container-fluid {

@@ -1,72 +1,121 @@
-const getSubmittedReports = async (req, res) => {
-    const token = req.headers["authorization"]?.split(" ")[1];
-    if (!token) {
-      return res.status(403).json({ 
-        success: false, 
-        message: "No token provided. Authorization token is required to access the plans.", 
-        error_code: "TOKEN_MISSING" 
-      });
-    }
-  
-    try {
-      const user_id = await verifyToken(token); // Get user_id from token
-  
-      // Get employee_id from the users table using user_id
-      const getEmployeeQuery = "SELECT employee_id FROM users WHERE user_id = ?";
-      con.query(getEmployeeQuery, [user_id], async (err, results) => {
-        if (err) {
-          return res.status(500).json({
-            success: false,
-            message: "Error fetching employee_id from users table.",
-            error_code: "DB_ERROR",
-            error: err.message
-          });
-        }
-  
-        if (results.length === 0) {
-          return res.status(404).json({
-            success: false,
-            message: "Employee not found. Unable to fetch employee details based on the provided user_id.",
-            error_code: "EMPLOYEE_NOT_FOUND"
-          });
-        }
-  
-        const supervisor_id = results[0].employee_id;
-  
-        // Query to get reports awaiting approval
-        const query = `
-        SELECT r.report_id, r.objective, r.goal, r.details, aw.status
-        FROM reports r
-        JOIN ApprovalWorkflow aw ON r.report_id = aw.report_id
-        WHERE r.supervisor_id = ? AND aw.approver_id = ? AND aw.status = 'Pending'
-      `;
+const compareIncomePlanOutcomeTotal = async (req, res) => {
+  try {
+    const USD_TO_ETB_RATE = 120; // Exchange rate: 1 USD = 120 ETB
+    const joinClause = getJoinClause(req);
+    const extraFilters = getFilterConditions(req);
+    
+    console.log('Starting income comparison with filters:', { joinClause, extraFilters });
+    
+    // Query that handles both currencies and combines them
+    const query = `
+      SELECT 
+        /* Plan Calculations */
+        COALESCE(SUM(CASE 
+          WHEN income_exchange = 'ETB' THEN CIplan
+          WHEN income_exchange = 'USD' THEN CIplan * ${USD_TO_ETB_RATE}
+          ELSE 0 
+        END), 0) as total_income_plan_combined_ETB,
         
-        con.query(query, [supervisor_id, supervisor_id], (err, results) => {
-          if (err) {
-            return res.status(500).json({
-              success: false,
-              message: "Error fetching reports from database.",
-              error_code: "DB_ERROR",
-              error: err.message
-            });
-          }
-  
-          if (results.length === 0) {
-            return res.status(404).json({
-              success: false,
-              message: "No reports found awaiting approval for this supervisor.",
-              error_code: "NO_PLANS_FOUND"
-            });
-          }
-  
-          res.json({ success: true, reports: results });
+        /* Outcome Calculations */
+        COALESCE(SUM(CASE 
+          WHEN income_exchange = 'ETB' THEN CIoutcome
+          WHEN income_exchange = 'USD' THEN CIoutcome * ${USD_TO_ETB_RATE}
+          ELSE 0 
+        END), 0) as total_income_outcome_combined_ETB,
+        
+        /* Original currency totals for reference */
+        COALESCE(SUM(CASE WHEN income_exchange = 'ETB' THEN CIplan ELSE 0 END), 0) as total_income_plan_ETB_comb,
+        COALESCE(SUM(CASE WHEN income_exchange = 'ETB' THEN CIoutcome ELSE 0 END), 0) as total_income_outcome_ETB,
+        COALESCE(SUM(CASE WHEN income_exchange = 'USD' THEN CIplan ELSE 0 END), 0) as total_income_plan_USD,
+        COALESCE(SUM(CASE WHEN income_exchange = 'USD' THEN CIoutcome ELSE 0 END), 0) as total_income_outcome_USD
+      ${joinClause}
+      WHERE sod.plan_type = 'income' ${extraFilters}
+    `;
+
+    console.log('Executing query:', query);
+
+    con.query(query, (err, results) => {
+      if (err) {
+        console.error('Database Error:', {
+          message: err.message,
+          code: err.code,
+          state: err.sqlState,
+          stack: err.stack
         });
+        return handleDatabaseError(err, res, 'comparing total income plan and outcome');
+      }
+
+      console.log('Query results:', JSON.stringify(results, null, 2));
+
+      if (handleEmptyResults(results, res, {
+        total_income_plan_combined_ETB: 0,
+        total_income_outcome_combined_ETB: 0,
+        breakdown: {
+          ETB: { plan: 0, outcome: 0 },
+          USD: { plan: 0, outcome: 0 }
+        }
+      })) {
+        console.log('No results found for the query');
+        return;
+      }
+
+      const {
+        total_income_plan_combined_ETB,
+        total_income_outcome_combined_ETB,
+        total_income_plan_ETB_comb,
+        total_income_outcome_ETB,
+        total_income_plan_USD,
+        total_income_outcome_USD
+      } = results[0];
+
+      // Log the extracted values
+      console.log('Extracted values:', {
+        total_income_plan_combined_ETB,
+        total_income_outcome_combined_ETB,
+        total_income_plan_ETB_comb,
+        total_income_outcome_ETB,
+        total_income_plan_USD,
+        total_income_outcome_USD
       });
-    } catch (error) {
-      res.status(500).json({
-        success: false,
-        message: 'Unknown error occurred while fetching submitted reports. Error: ${error.message}',
-        error_code: "UNKNOWN_ERROR"
-      });
-    }
-  };
+
+      // Calculate the difference in combined ETB
+      const difference_combined_ETB = total_income_plan_combined_ETB - total_income_outcome_combined_ETB;
+
+      // Prepare the response with detailed breakdown
+      const response = {
+        combined_ETB: {
+          plan: total_income_plan_combined_ETB,
+          outcome: total_income_outcome_combined_ETB,
+          difference: difference_combined_ETB
+        },
+        breakdown: {
+          ETB: {
+            plan: total_income_plan_ETB_comb,
+            outcome: total_income_outcome_ETB,
+            difference: total_income_plan_ETB_comb - total_income_outcome_ETB
+          },
+          USD: {
+            plan: total_income_plan_USD,
+            outcome: total_income_outcome_USD,
+            difference: total_income_plan_USD - total_income_outcome_USD,
+            plan_in_ETB: total_income_plan_USD * USD_TO_ETB_RATE,
+            outcome_in_ETB: total_income_outcome_USD * USD_TO_ETB_RATE
+          }
+        },
+        exchange_rate: {
+          USD_TO_ETB: USD_TO_ETB_RATE
+        }
+      };
+
+      console.log('Final response:', JSON.stringify(response, null, 2));
+      res.json(response);
+    });
+  } catch (error) {
+    console.error('Unexpected error in compareIncomePlanOutcomeTotal:', {
+      message: error.message,
+      stack: error.stack,
+      details: error
+    });
+    res.status(500).json({ message: "Internal server error", error: error.message });
+  }
+};

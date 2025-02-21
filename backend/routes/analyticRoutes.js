@@ -9,8 +9,10 @@ const {
     displayTotalIncomeplanETB,
     displayTotalIncomeOutcomeETB, 
     displayTotalIncomePlanUSD,
-    displayTotalIncomeOutcomeUSD
-
+    displayTotalIncomeOutcomeUSD,
+    compareIncomePlanOutcomeETB,
+    compareIncomePlanOutcomeUSD,
+    compareIncomePlanOutcomeTotal
     // compareCostCIplanAndCIoutcome,
     // compareCostCIexecutionPercentage,
     // displayTotalIncome,
@@ -33,6 +35,9 @@ router.get("/displayTotalIncomePlanETB", verifyToken, displayTotalIncomeplanETB)
 router.get("/displayTotalIncomeOutcomeETB", verifyToken, displayTotalIncomeOutcomeETB);
 router.get("/displayTotalIncomePlanUSD", verifyToken, displayTotalIncomePlanUSD);
 router.get("/displayTotalIncomeOutcomeUSD", verifyToken, displayTotalIncomeOutcomeUSD);
+router.get("/compareIncomePlanOutcomeETB", verifyToken, compareIncomePlanOutcomeETB);
+router.get("/compareIncomePlanOutcomeUSD", verifyToken, compareIncomePlanOutcomeUSD);
+router.get("/compareIncomePlanOutcomeTotal", verifyToken, compareIncomePlanOutcomeTotal);
 
 
 
