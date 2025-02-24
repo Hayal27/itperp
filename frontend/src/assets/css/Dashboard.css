@@ -90,3 +90,34 @@ right: 7%;
     background: #e74c3c;
   }
   
+
+  .container-fluid {
+    padding: 20px;
+  }
+  
+  h1 {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #ff6b6b;
+    text-align: center;
+    margin-bottom: 30px;
+  }
+  
+  /* Metrics Card Styling */
+  .metrics-card {
+    background: linear-gradient(135deg, #ff6b6b, #ff8e53);
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(255, 107, 107, 0.3);
+    text-align: center;
+    transition: transform 0.3s ease;
+  }
+  
+  .metrics-card:hover {
+    transform: scale(1.05);
+  }
+  
+  .metrics-card p {
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
