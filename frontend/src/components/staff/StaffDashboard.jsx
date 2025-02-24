@@ -51,29 +51,33 @@ const StaffDashboard = () => {
     return <div style={{ padding: "1rem" }}>Loading dashboard...</div>;
   }
   return (
-    <div style={{ display: "block", flexDirection: "column", margin: "0 auto", padding: "1rem", position: "absolute", left: "15%", top: "7%" }}>
+    <div style={{ display: "block", flexDirection: "column", margin: "0 auto", padding: "1rem", position: "absolute", left: "15%", top: "7%", right:"10%" }}>
 
       
       <FilterForm filters={filters} onSubmit={handleFilterSubmit} />
       
       <div><h1>Income Metrics</h1></div>
       
-      <h2>Total Income sumation both ETB and USD </h2>
-      <IncomeMetricsBarchart data={data} />
+      <h2>Total Income sumation both ETB and USD <IncomeMetricsBarchart data={data} /></h2> <br /> 
+      
       <IncomeMetricsPichart data={data} />
       <IncomeMetricsDataTable data={data} />
 
 
       <br /> <br />
       <h1>Cost Metrics</h1>
+      <br />
       <div style={{ display: "flex", flexWrap: "wrap", gap: "2rem" }}>
        
-       <h2>Total Cost in ETB millions birr</h2>
+       <h4>Total Cost in ETB millions birr  <CostMetricsBarchart data={{ total_cost: data.extra.displayTotalCost }} type="totalCost" /></h4>
 
        
-        <CostMetricsBarchart data={{ total_cost: data.extra.displayTotalCost }} type="totalCost" />
-        <CostMetricsBarchart data={{ total_cost_plan: data.extra.displayTotalCostPlan }} type="totalCostPlan" />
-        <CostMetricsBarchart data={data.extra.compareCostPlanOutcome} type="compareCostPlanOutcome" />
+
+
+       <h3> Cost Plan and Cost Out come <CostMetricsBarchart data={{ total_cost_plan: data.extra.displayTotalCostPlan }} type="totalCostPlan" />
+       <CostMetricsBarchart data={data.extra.compareCostPlanOutcome} type="compareCostPlanOutcome" /> </h3>
+       
+          
         <CostMetricsBarchart
           data={{ averageCostCIExecutionPercentage: data.extra.displayTotalCostExcutionPercentage.averageCostCIExecutionPercentage }}
           type="totalCostExcutionPercentage"
