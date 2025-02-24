@@ -52,12 +52,25 @@ const StaffDashboard = () => {
   }
   return (
     <div style={{ display: "block", flexDirection: "column", margin: "0 auto", padding: "1rem", position: "absolute", left: "15%", top: "7%" }}>
+
+      
       <FilterForm filters={filters} onSubmit={handleFilterSubmit} />
+      
+      <div><h1>Income Metrics</h1></div>
+      
+      <h2>Total Income sumation both ETB and USD </h2>
       <IncomeMetricsBarchart data={data} />
       <IncomeMetricsPichart data={data} />
       <IncomeMetricsDataTable data={data} />
-      <h2>Cost Metrics</h2>
+
+
+      <br /> <br />
+      <h1>Cost Metrics</h1>
       <div style={{ display: "flex", flexWrap: "wrap", gap: "2rem" }}>
+       
+       <h2>Total Cost in ETB millions birr</h2>
+
+       
         <CostMetricsBarchart data={{ total_cost: data.extra.displayTotalCost }} type="totalCost" />
         <CostMetricsBarchart data={{ total_cost_plan: data.extra.displayTotalCostPlan }} type="totalCostPlan" />
         <CostMetricsBarchart data={data.extra.compareCostPlanOutcome} type="compareCostPlanOutcome" />
