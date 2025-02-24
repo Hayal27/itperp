@@ -1,7 +1,9 @@
-
-/* 
-  File: /services/api/getDisplayTotalIncomeplanETB.js
+/*
+  File: /src/components/staff/services/api/getDisplayTotalIncomeplanETB.jsx
   Description: API call for displayTotalIncomeplanETB.
+  
+  Note: The import for the constants file uses "../constants"
+  because constants.js is located one level up in /services/.
 */
 import axios from "axios";
 import { API_BASE_URL } from "../constants";

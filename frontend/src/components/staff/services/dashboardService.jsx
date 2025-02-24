@@ -1,8 +1,6 @@
-
-/* 
-  File: /services/dashboardService.js
-  Description: Combines all the individual API calls into a single service function.
-*/
+// -------------------
+// File: /services/dashboardService.js
+// Description: Combines all the individual API calls into a single service function.
 import { getCompareIncomePlanOutcomeTotal } from "./api/getCompareIncomePlanOutcomeTotal";
 import { getDisplayTotalCostExcutionPercentage } from "./api/getDisplayTotalCostExcutionPercentage";
 import { getDisplayTotalCost } from "./api/getDisplayTotalCost";
@@ -21,7 +19,6 @@ export const buildQueryString = (filters) => {
   return params.toString();
 };
 
-// Utility to get headers with auth token.
 export const getHeaders = () => {
   const token = localStorage.getItem("token");
   if (!token) {
@@ -58,10 +55,10 @@ export const fetchDashboardData = async (filters) => {
   const combinedData = {
     primary,
     extra: {
-      displayTotalCostExcutionPercentage, // e.g. { averageCostCIExecutionPercentage: 41.4 }
-      displayTotalCost,                    // e.g. 3356744
-      displayTotalCostPlan,                // e.g. 129193111.99
-      compareCostPlanOutcome,              // e.g. { total_cost_plan: ..., total_cost_outcome: ..., difference: ... }
+      displayTotalCostExcutionPercentage,
+      displayTotalCost,
+      displayTotalCostPlan,
+      compareCostPlanOutcome,
       displayTotalIncomeplanETB,
       displayTotalIncomeOutcomeETB
     }
