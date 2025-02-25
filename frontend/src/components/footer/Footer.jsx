@@ -8,7 +8,7 @@ const Footer = () => {
     © Copyright <strong><span>ETHIOPIAN IT PARK CORPORATE   </span></strong>. All Rights Reserved
   </div>
   <div className="credits">
-    Developed by <a href="https://bootstrapmade.com/"> ITPC Developer.</a>
+    {/* Developed by <a href="https://bootstrapmade.com/"> ITPC Developer.</a> */}
   </div>
 </footer>{/* End Footer */}
 

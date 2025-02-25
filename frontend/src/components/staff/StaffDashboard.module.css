@@ -1,0 +1,230 @@
+/* StaffDashboard.module.css */
+
+/* Container for the entire dashboard */
+.dashboardContainer {
+  width: 90%;
+  min-height: 100vh;
+  /* padding: 1rem; */
+  box-sizing: border-box;
+  /* background-color: #f9f9f9; */
+  background: transparent;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+
+  position: absolute;
+  top: 12%;
+  left: 10%;
+  right: 5%;
+  transition: all 0.3s ease;
+  /* padding-left: 0%; */
+  /* padding-right: 0%; */
+}
+
+/* Global Heading styles */
+h1, h2, h3, h4 {
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  color: #2c3e50;
+  margin: 0.5rem 0;
+}
+
+/* Global Paragraph styles */
+p {
+  color: #34495e;
+  line-height: 1.6;
+}
+
+/* Top Row: Filter Component */
+.filterRow {
+  width: 70%;
+  /* margin-bottom: 0.5rem; */
+}
+
+/* Bottom Row: Dashboard Content (grid: main content and sidebar) */
+.dashboardContentRow {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 1rem;
+}
+
+/* Main Content Area */
+.mainContent {
+  /* background-color: #fff; */
+
+  background: transparent;
+  padding: 1rem;
+  border-radius: 8px;
+}
+
+/* Metric Group for sections (Income, Cost, etc.) */
+.metricGroup {
+  margin: 2rem 0;
+}
+
+/* Group Title styling */
+.groupTitle {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid #ddd;
+  padding-bottom: 0.5rem;
+  color: #333;
+  cursor: pointer;
+}
+
+/* Row container for charts in the Income Metrics group */
+.chartsRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: stretch;
+  margin-bottom: 1rem;
+}
+
+/* Individual Chart Container styling */
+.chartContainer {
+  flex: 1 1 45%;
+  padding: 1rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease;
+}
+.chartContainer:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Data Table Container styling */
+.dataTableContainer {
+  margin-top: 1rem;
+  padding: 1rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Row container for Cost Charts */
+.costChartsRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+}
+
+/* Individual Cost Chart styling */
+.costChart {
+  flex: 1 1 30%;
+  padding: 1rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+.costChart:hover {
+  transform: translateY(-3px);
+}
+
+/* Right Sidebar styling */
+.rightSidebar {
+  max-width: 300px;
+  width: 100%;
+  padding: 1rem;
+  background-color: #fff;
+  border-left: 3px solid #1e4e96;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  overflow-y: auto;
+}
+
+/* Sidebar Section styling */
+.sidebarSection {
+  margin-bottom: 2rem;
+}
+.sidebarSection h3 {
+  margin-bottom: 0.5rem;
+  font-size: 1.5rem;
+  color: #007bff;
+  background: transparent;
+  padding-bottom: 0.25rem;
+}
+
+/* Sticky Note styling */
+.stickyNote {
+  background: transparent;
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
+  border: 1px solid #ffe58f;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+/* Export Actions styling */
+.exportActions {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin: 20px 0;
+}
+
+/* Error and Loading Message styling */
+.errorMessage, .loadingMessage {
+  padding: 1rem;
+  font-size: 1.1rem;
+  text-align: center;
+}
+.errorMessage {
+  color: red;
+}
+.loadingMessage {
+  color: #555;
+}
+
+/* Responsive adjustments */
+
+/* For Tablets and Small Desktops */
+@media screen and (max-width: 1024px) {
+  .dashboardContainer {
+    padding: 1rem;
+  }
+  .chartContainer, .dataTableContainer, .costChart {
+    flex: 1 1 45%;
+  }
+  .dashboardContentRow {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* For Mobile Devices */
+@media screen and (max-width: 768px) {
+  .dashboardContainer {
+    padding: 0.5rem;
+  }
+  .dashboardContentRow {
+    display: flex;
+    flex-direction: column;
+  }
+  .chartsRow, .costChartsRow {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .mainContent, .rightSidebar {
+    width: 100%;
+  }
+  .groupTitle {
+    font-size: 1.5rem;
+  }
+}
+
+/* For Extra Small Devices */
+@media screen and (max-width: 480px) {
+  .dashboardContainer {
+    padding: 0.5rem;
+  }
+  .groupTitle {
+    font-size: 1.3rem;
+  }
+  .errorMessage, .loadingMessage {
+    font-size: 1rem;
+  }
+}

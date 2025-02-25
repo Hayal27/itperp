@@ -121,3 +121,197 @@ right: 7%;
     font-size: 1.5rem;
     font-weight: bold;
   }
+
+
+
+
+
+  /* Container for the entire dashboard */
+  .dashboardContainer {
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+    padding: 1rem;
+    position: absolute;
+    left: 15%;
+    top: 7%;
+    right: 10%;
+    background-color: #f9f9f9;
+    font-family: Arial, sans-serif;
+  }
+  
+  /* Filter Form Section */
+  .filterForm {
+    margin-bottom: 2rem;
+  }
+  
+  /* Group styling for metrics sections */
+  .metricGroup {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+  }
+  
+  /* Group title styling */
+  .groupTitle {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 0.5rem;
+    color: #333;
+  }
+  
+  /* Row container for charts in the Income Metrics group */
+  .chartsRow {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: stretch;
+    margin-bottom: 1rem;
+  }
+  
+  /* Individual chart container styling */
+  .chartContainer {
+    flex: 1 1 45%;
+    padding: 1rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Data table container styling */
+  .dataTableContainer {
+    margin-top: 1rem;
+    padding: 1rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Row container for cost charts */
+  .costChartsRow {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+  }
+  
+  /* Individual cost chart container styling */
+  .costChart {
+    flex: 1 1 30%;
+    padding: 1rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Error message styling */
+  .errorMessage {
+    padding: 1rem;
+    font-size: 1.1rem;
+    color: red;
+    text-align: center;
+  }
+  
+  /* Loading message styling */
+  .loadingMessage {
+    padding: 1rem;
+    font-size: 1.1rem;
+    color: #555;
+    text-align: center;
+  }/* Container for the entire dashboard */
+  .dashboardContainer {
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+    padding: 1rem;
+    position: absolute;
+    left: 15%;
+    top: 7%;
+    right: 10%;
+    background-color: #f9f9f9;
+    font-family: Arial, sans-serif;
+  }
+  
+  /* Filter Form Section */
+  .filterForm {
+    margin-bottom: 2rem;
+  }
+  
+  /* Group styling for metrics sections */
+  .metricGroup {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+  }
+  
+  /* Group title styling */
+  .groupTitle {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 0.5rem;
+    color: #333;
+  }
+  
+  /* Row container for charts in the Income Metrics group */
+  .chartsRow {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: stretch;
+    margin-bottom: 1rem;
+  }
+  
+  /* Individual chart container styling */
+  .chartContainer {
+    flex: 1 1 45%;
+    padding: 1rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Data table container styling */
+  .dataTableContainer {
+    margin-top: 1rem;
+    padding: 1rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Row container for cost charts */
+  .costChartsRow {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+  }
+  
+  /* Individual cost chart container styling */
+  .costChart {
+    flex: 1 1 30%;
+    padding: 1rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Error message styling */
+  .errorMessage {
+    padding: 1rem;
+    font-size: 1.1rem;
+    color: red;
+    text-align: center;
+  }
+  
+  /* Loading message styling */
+  .loadingMessage {
+    padding: 1rem;
+    font-size: 1.1rem;
+    color: #555;
+    text-align: center;
+  }
