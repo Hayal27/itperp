@@ -219,7 +219,7 @@ const updateReport = async (req, res) => {
       });
     }
 
-    if (updates.progress && !["planned", "progress", "completed"].includes(updates.progress)) {
+    if (updates.progress && !["planned", "የ እቅዱ ሂደት", "completed"].includes(updates.progress)) {
       return res.status(400).json({
         success: false,
         message: "Invalid progress value. Allowed values are 'planned', 'progress', or 'completed'.",
@@ -239,7 +239,7 @@ const updateReport = async (req, res) => {
       "description",
       "year",
       "quarter",
-      "progress",
+      "የ እቅዱ ሂደት",
     ];
 
     const updateFields = Object.keys(updates).filter((field) =>

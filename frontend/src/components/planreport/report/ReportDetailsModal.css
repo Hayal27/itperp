@@ -1,0 +1,98 @@
+/* Modal overlay covers the entire viewport */
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5); /* semi-transparent background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999; /* high z-index to overlay other elements */
+  }
+
+  /* Modal container styling */
+  .modal-container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    width: 90%;
+    max-width: 600px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+    z-index: 10000; /* ensure it is above the overlay's background */
+    pointer-events: auto; /* allow interactions within the modal container */
+  }
+
+  /* Optional: disable pointer events on the modal overlay container aside the modal-container */
+  .modal-overlay > * {
+    pointer-events: none;
+  }
+
+  /* Re-enable pointer events for modal-container and its descendants */
+  .modal-container,
+  .modal-container * {
+    pointer-events: auto;
+  }
+
+  /* Modal header styling */
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+  }
+
+  .modal-title {
+    margin: 0;
+    font-size: 1.5em;
+  }
+
+  .close-button {
+    background: none;
+    border: none;
+    font-size: 1.5em;
+    cursor: pointer;
+  }
+
+  /* Modal body styling */
+  .modal-body .details-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .detail-item {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+  }
+
+  .detail-label {
+    font-weight: bold;
+  }
+
+  .detail-value {
+    color: #555;
+  }
+
+  /* Modal footer styling */
+  .modal-footer {
+    text-align: right;
+    margin-top: 20px;
+  }
+
+  .close-report-button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    border: none;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .close-report-button:hover {
+    background-color: #0056b3;
+  }

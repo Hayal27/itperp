@@ -11,7 +11,7 @@ const StaffViewDeclinedPlan = () => {
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [filters, setFilters] = useState({
-    year: "2017", // Default year set to 2024
+    year: "", // Default changed to empty to display plans for all years
     quarter: "",
     department: "",
     objective: "",
@@ -19,17 +19,17 @@ const StaffViewDeclinedPlan = () => {
   const [showPopup, setShowPopup] = useState(false);
   const [popupType, setPopupType] = useState("");
   const [responseMessage, setResponseMessage] = useState("");
-  const [showDetail, setShowDetail] = useState(false); // For toggling plan details viewInitialize planDetail state
+  const [showDetail, setShowDetail] = useState(false); // For toggling plan details view
   const [selectedPlan, setSelectedPlan] = useState(false);
-
 
   const [sortConfig, setSortConfig] = useState({ key: "", direction: "asc" });
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10; // Set to 10 items per page
 
   const token = localStorage.getItem("token");
- // Declare state for plan details
- const [planDetail, setPlanDetail] = useState(null);  // This was missing
+  // State for plan details
+  const [planDetail, setPlanDetail] = useState(null);
+
   // Fetch plans based on filters and pagination
   const fetchPlans = async () => {
     if (!token) {
@@ -41,14 +41,10 @@ const StaffViewDeclinedPlan = () => {
       Object.entries(filters).filter(([key, value]) => value)
     );
 
-    if (Object.keys(validFilters).length === 0) {
-      setErrorMessage("Please select at least one filter.");
-      return;
-    }
-
+    // Removed the check for no filters to allow fetching all plans by default
     try {
       setLoading(true);
-      const response = await Axios.get("http://localhost:5000/api/plandeclined", {
+      const response = await Axios.get("http://192.168.56.1:5000/api/plandeclined", {
         headers: { Authorization: `Bearer ${token}` },
         params: { ...validFilters, page: currentPage, limit: itemsPerPage },
       });
@@ -60,7 +56,7 @@ const StaffViewDeclinedPlan = () => {
         setErrorMessage("No plans found.");
       }
     } catch (error) {
-      setErrorMessage("no plans found.");
+      setErrorMessage("No plans found.");
       console.error(error);
     } finally {
       setLoading(false);
@@ -111,7 +107,7 @@ const StaffViewDeclinedPlan = () => {
 
     if (window.confirm("Are you sure you want to delete this plan?")) {
       try {
-        await Axios.delete(`http://localhost:5000/api/plandelete/${planId}`, {
+        await Axios.delete(`http://192.168.56.1:5000/api/plandelete/${planId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setPlans((prevPlans) => prevPlans.filter((plan) => plan.ID !== planId));
@@ -140,53 +136,44 @@ const StaffViewDeclinedPlan = () => {
     setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
   };
 
-// Fetch plan details by ID
-const fetchPlanDetail = async (planId) => {
-  try {
-    setLoading(true);
-    const response = await Axios.get(`http://localhost:5000/api/pland/${planId}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+  // Fetch plan details by ID
+  const fetchPlanDetail = async (planId) => {
+    try {
+      setLoading(true);
+      const response = await Axios.get(`http://192.168.56.1:5000/api/pland/${planId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-    if (response.data.success) {
-      setPlanDetail(response.data.plan); // Now `setPlanDetail` is correctly defined
-      setShowDetail(true);  // Toggle the detail view to show the fetched plan
-      setErrorMessage('');
-    } else {
-      setErrorMessage('Failed to fetch plan details.');
+      if (response.data.success) {
+        setPlanDetail(response.data.plan);
+        setShowDetail(true);
+        setErrorMessage('');
+      } else {
+        setErrorMessage('Failed to fetch plan details.');
+      }
+    } catch (error) {
+      console.error(error);
+      setErrorMessage('Error fetching plan details.');
+    } finally {
+      setLoading(false);
     }
-  } catch (error) {
-    console.error(error);
-    setErrorMessage('Error fetching plan details.');
-  } finally {
-    setLoading(false);
-  }
-};
+  };
 
-const handleDetailClick = (planId) => {
-  if (planId) {
-    fetchPlanDetail(planId);
-  } else {
-    console.error("Plan ID is undefined or invalid");
-  }
-};
-
-
-// Close the details view
-
-
-
-
+  const handleDetailClick = (planId) => {
+    if (planId) {
+      fetchPlanDetail(planId);
+    } else {
+      console.error("Plan ID is undefined or invalid");
+    }
+  };
 
   // Close the details view
   const closePlanDetails = () => {
     setSelectedPlan(false);
-    setShowDetail(false); // If using a separate variable
+    setShowDetail(false);
   };
-  
-
 
   return (
     <main id="main" className="main">
@@ -194,11 +181,10 @@ const handleDetailClick = (planId) => {
         <nav>
           <ol className="breadcrumb">
             <li className="breadcrumb-item">
-              <Link to="/">Staff</Link>
+              <Link to="/">Teamleader</Link>
             </li>
             <li className="breadcrumb-item active">Plan Management</li>
           </ol>
-
         </nav>
       </div>
 
@@ -242,7 +228,6 @@ const handleDetailClick = (planId) => {
                       className="form-control"
                     >
                       <option value=""> ⬇️ሩብ አመት ይምረጡ</option>
-                     
                       <option value="Q1">የጀመሪያ ሩብ አመት</option>
                       <option value="Q2">ሁለተኛ ሩብ አመት</option>
                       <option value="Q3">ሶስተኛ ሩብ አመት</option>
@@ -266,8 +251,6 @@ const handleDetailClick = (planId) => {
                       <option value="የግንባታ ፕሮጀክቶች ክትትል እና ቁጥጥር አገልግሎት">የግንባታ ፕሮጀክቶች ክትትል እና ቁጥጥር አገልግሎት</option>
                       <option value="ኢንፎርሜሽን ቴክኖሎጂ ዘርፍ">ኢንፎርሜሽን ቴክኖሎጂ ዘርፍ</option>
                       <option value="የ ኮንስትራክሽን ማናጅመንት ዘርፍ">የ ኮንስትራክሽን ማናጅመንት ዘርፍ</option>
-                    
-                  
                     </select>
                   </div>
                 </div>
@@ -347,7 +330,7 @@ const handleDetailClick = (planId) => {
                             )
                           ) : null}
                         </th>
-                        <th>Quarter</th> {/* Added Quarter Column */}
+                        <th>Quarter</th>
                         <th>Actions</th>
                       </tr>
                     </thead>
@@ -359,34 +342,15 @@ const handleDetailClick = (planId) => {
                           <td>{plan.Details}</td>
                           <td>{plan.Department}</td>
                           <td>{plan.Year}</td>
-                          <td>{plan.Quarter}</td> {/* Added Quarter Data */}
+                          <td>{plan.Quarter}</td>
                           <td>
-
-                            
                             <Link to={`view/update/${plan.Plan_ID}`} className="btn btn-primary">
                               Update
                             </Link>
-
-
-                       <button
-                          onClick={() => handleDelete(plan.Plan_ID)} // Pass the ID of the plan
-                          className="btn btn-danger"
-                        >
-                          Delete
-                        </button>
-
-
-
-                            
-                        <Link to={`add-report/${plan.Plan_ID}`} className="btn btn-info">
-                          Add Report
-                        </Link>
-
-
-                        <button onClick={() => handleDetailClick(plan.Plan_ID)} className="btn btn-secondary">
-                       Detail
-                         </button>
-
+          
+                            <button onClick={() => handleDetailClick(plan.Plan_ID)} className="btn btn-secondary">
+                              Detail
+                            </button>
                           </td>
                         </tr>
                       ))}
@@ -399,10 +363,10 @@ const handleDetailClick = (planId) => {
                 {/* Pagination Controls with Arrows */}
                 <div className="pagination-controls">
                   <button onClick={prevPage} disabled={currentPage === 1}>
-                    &#8592; {/* Left arrow */}
+                    &#8592;
                   </button>
                   <button onClick={nextPage}>
-                    &#8594; {/* Right arrow */}
+                    &#8594;
                   </button>
                 </div>
               </div>
@@ -411,41 +375,32 @@ const handleDetailClick = (planId) => {
         </div>
       </section>
 
-
-
-
-
-
-
       <Outlet />
 
-     {/* Display the plan details in a large box (toggleable) */}
-{/* Display the plan details in a large box (toggleable) */}
-{showDetail && planDetail && (
-  <div className="plan-detail-box">
-    <h3>Plan Details</h3>
-    <p><strong>Department:</strong> {planDetail.Department}</p>
-    <p><strong>Objective:</strong> {planDetail.Objective}</p>
-    <p><strong>Goal:</strong> {planDetail.Goal}</p>
-    <p><strong>Row No:</strong> {planDetail.Row_No}</p>
-    <p><strong>Details:</strong> {planDetail.Details}</p>
-    <p><strong>Measurement:</strong> {planDetail.Measurement}</p>
-    <p><strong>Baseline:</strong> {planDetail.Baseline}</p>
-    <p><strong>Plan:</strong> {planDetail.Plan}</p>
-    <p><strong>Description:</strong> {planDetail.Description}</p>
-    <p><strong>Status:</strong> {planDetail.Status}</p>
-    <p><strong>Comment:</strong> {planDetail.Comment}</p>
-    <p><strong>Created At:</strong> {new Date(planDetail.Created_At).toLocaleString()}</p>
-    <p><strong>Updated At:</strong> {new Date(planDetail.Updated_At).toLocaleString()}</p>
-    <p><strong>Year:</strong> {planDetail.Year}</p>
-    <p><strong>Quarter:</strong> {planDetail.Quarter}</p>
-    <p><strong>Created By:</strong> {planDetail.Created_By}</p>
-    <p><strong>Progress On:</strong> {planDetail.Progress}</p>
-
-    <button onClick={closePlanDetails} className="btn btn-primary">Close</button>
-  </div>
-)}
-
+      {/* Display the plan details in a large box (toggleable) */}
+      {showDetail && planDetail && (
+        <div className="plan-detail-box">
+          <h3>Plan Details</h3>
+          <p><strong>Department:</strong> {planDetail.Department}</p>
+          <p><strong>አላማ:</strong> {planDetail.Objective}</p>
+          <p><strong>ግብ:</strong> {planDetail.Goal}</p>
+          <p><strong>Row No:</strong> {planDetail.Row_No}</p>
+          <p><strong>Details:</strong> {planDetail.Details}</p>
+          <p><strong>Measurement:</strong> {planDetail.Measurement}</p>
+          <p><strong>Baseline:</strong> {planDetail.Baseline}</p>
+          <p><strong>Plan:</strong> {planDetail.Plan}</p>
+          <p><strong>Description:</strong> {planDetail.Description}</p>
+          <p><strong>Status:</strong> {planDetail.Status}</p>
+          <p><strong>Comment:</strong> {planDetail.Comment}</p>
+          <p><strong>Created At:</strong> {new Date(planDetail.Created_At).toLocaleString()}</p>
+          <p><strong>Updated At:</strong> {new Date(planDetail.Updated_At).toLocaleString()}</p>
+          <p><strong>Year:</strong> {planDetail.Year}</p>
+          <p><strong>ሩብ አመት:</strong> {planDetail.Quarter}</p>
+          <p><strong>Created By:</strong> {planDetail.Created_By}</p>
+          <p><strong>Progress On:</strong> {planDetail.Progress}</p>
+          <button onClick={closePlanDetails} className="btn btn-primary">Close</button>
+        </div>
+      )}
     </main>
   );
 };

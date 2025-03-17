@@ -117,113 +117,125 @@ const addPlan = (req, res) => {
 };
 
 // getAllPlans function with dynamic query updates
-const getAllPlans = async (req, res) => {
-  try {
-    const user_id = req.user_id; // Access the user_id added by verifyToken
-    const {
-      year,
-      quarter,
-      department,
-      objective_id,
-      goal_id,
-      specific_objective_id,
-      specific_objective_detail_id,
-      page = 1,
-      limit = 10,
-    } = req.query;
 
-    let filterConditions = ["p.user_id = ?"];
-    let filterValues = [user_id];
+  // getAllPlans function with dynamic query updates
 
-    // Dynamically add filters based on query parameters
-    if (year) {
-      filterConditions.push("g.year = ?");
-      filterValues.push(year);
-    }
-
-    if (quarter) {
-      filterConditions.push("g.quarter = ?");
-      filterValues.push(quarter);
-    }
-
-    if (department) {
-      filterConditions.push("d.name = ?");
-      filterValues.push(department);
-    }
-
-    if (objective_id) {
-      filterConditions.push("p.objective_id = ?");
-      filterValues.push(objective_id);
-    }
-
-    if (goal_id) {
-      filterConditions.push("p.goal_id = ?");
-      filterValues.push(goal_id);
-    }
-
-    if (specific_objective_id) {
-      filterConditions.push("p.specific_objective_id = ?");
-      filterValues.push(specific_objective_id);
-    }
-
-    if (specific_objective_detail_id) {
-      filterConditions.push("p.specific_objective_detail_id = ?");
-      filterValues.push(specific_objective_detail_id);
-    }
-
-    const whereClause = filterConditions.length ? `WHERE ${filterConditions.join(" AND ")}` : '';
-
-    const offset = (page - 1) * limit;
-
-    const getPlansQuery = `
-      SELECT 
-        p.plan_id AS Plan_ID,
-        p.user_id AS User_ID,
-        g.goal_id AS SpecificObjectiveDetail_ID,
-        g.name AS Goal,
-        g.year AS Year,
-        g.quarter AS Quarter,
-        o.objective_id AS Objective_ID,
-        o.name AS Objective,
-        so.specific_objective_id AS Specific_Objective_ID,
-        so.specific_objective_name AS SpecificObjective ,
-        sod.specific_objective_detail_id AS Specific_Objective_Detail_ID,
-        sod.details AS Specific_Objective_Detail,
-        p.status AS Status,
-        p.created_at AS Created_At,
-        p.updated_at AS Updated_At,
-        d.name AS Department,
-        aw.comment AS Comment
-      FROM plans p
-      LEFT JOIN departments d ON p.department_id = d.department_id
-      LEFT JOIN approvalworkflow aw ON p.plan_id = aw.plan_id
-      LEFT JOIN goals g ON p.goal_id = g.goal_id
-      LEFT JOIN objectives o ON p.objective_id = o.objective_id
-      LEFT JOIN specific_objectives so ON p.specific_objective_id = so.specific_objective_id
-      LEFT JOIN specific_objective_details sod ON p.specific_objective_detail_id = sod.specific_objective_detail_id
-      ${whereClause}
-      LIMIT ? OFFSET ?
-    `;
-
-    filterValues.push(parseInt(limit), parseInt(offset));
-
-    con.query(getPlansQuery, filterValues, (err, results) => {
-      if (err) {
-        console.error("Error fetching plans:", err);
-        return res.status(500).json({ message: "Error fetching plans", error: err });
+  const getAllPlans = async (req, res) => {
+    try {
+      const user_id = req.user_id; // Access the user_id added by verifyToken
+      const {
+        year,
+        quarter,
+        department,
+        objective_id,
+        goal_id,
+        specific_objective_id,
+        specific_objective_detail_id,
+        page = 1,
+        limit = 10,
+      } = req.query;
+  
+      let filterConditions = ["p.user_id = ?"];
+      let filterValues = [user_id];
+  
+      // Dynamically add filters based on query parameters
+      if (year) {
+        filterConditions.push("g.year = ?");
+        filterValues.push(year);
       }
-
-      if (results.length === 0) {
-        return res.status(404).json({ message: "No plans found" });
+  
+      if (quarter) {
+        filterConditions.push("g.quarter = ?");
+        filterValues.push(quarter);
       }
+  
+      if (department) {
+        filterConditions.push("d.name = ?");
+        filterValues.push(department);
+      }
+  
+      if (objective_id) {
+        filterConditions.push("p.objective_id = ?");
+        filterValues.push(objective_id);
+      }
+  
+      if (goal_id) {
+        filterConditions.push("p.goal_id = ?");
+        filterValues.push(goal_id);
+      }
+  
+      if (specific_objective_id) {
+        filterConditions.push("p.specific_objective_id = ?");
+        filterValues.push(specific_objective_id);
+      }
+  
+      if (specific_objective_detail_id) {
+        filterConditions.push("p.specific_objective_detail_id = ?");
+        filterValues.push(specific_objective_detail_id);
+      }
+  
+      // Adding the reporting column filter to show only active reporting plans
+      filterConditions.push("p.reporting = ?");
+      filterValues.push("active");
+  
+      const whereClause = filterConditions.length ? `WHERE ${filterConditions.join(" AND ")}` : "";
+  
+      const offset = (page - 1) * limit;
+  
+      const getPlansQuery = `
+        SELECT 
+          p.plan_id AS Plan_ID,
+          p.user_id AS User_ID,
+          g.goal_id AS SpecificObjectiveDetail_ID,
+          g.name AS Goal,
+          g.year AS Year,
+          g.quarter AS Quarter,
+          o.objective_id AS Objective_ID,
+          o.name AS Objective,
+          so.specific_objective_id AS Specific_Objective_ID,
+          so.specific_objective_name AS SpecificObjective,
+          sod.specific_objective_detail_id AS Specific_Objective_Detail_ID,
+          sod.details AS Specific_Objective_Detail,
+          p.status AS Status,
+          p.created_at AS Created_At,
+          p.updated_at AS Updated_At,
+          d.name AS Department,
+          aw.comment AS Comment
+        FROM plans p
+        LEFT JOIN departments d ON p.department_id = d.department_id
+        LEFT JOIN approvalworkflow aw ON p.plan_id = aw.plan_id
+        LEFT JOIN goals g ON p.goal_id = g.goal_id
+        LEFT JOIN objectives o ON p.objective_id = o.objective_id
+        LEFT JOIN specific_objectives so ON p.specific_objective_id = so.specific_objective_id
+        LEFT JOIN specific_objective_details sod ON p.specific_objective_detail_id = sod.specific_objective_detail_id
+        ${whereClause}
+        GROUP BY p.plan_id
+        LIMIT ? OFFSET ?
+      `;
+  
+      filterValues.push(parseInt(limit), parseInt(offset));
+  
+      con.query(getPlansQuery, filterValues, (err, results) => {
+        if (err) {
+          console.error("Error fetching plans:", err);
+          return res.status(500).json({ message: "Error fetching plans", error: err });
+        }
+  
+        if (results.length === 0) {
+          return res.status(404).json({ message: "No plans found" });
+        }
+  
+        res.status(200).json({ success: true, plans: results });
+      });
+    } catch (error) {
+      console.error("Error in getAllPlans:", error.message);
+      res.status(500).json({ success: false, message: error.message });
+    }
+  };
+  
+  module.exports = { getAllPlans };
+  
 
-      res.status(200).json({ success: true, plans: results });
-    });
-  } catch (error) {
-    console.error("Error in getAllPlans:", error.message);
-    res.status(500).json({ success: false, message: error.message });
-  }
-};
 
 
 const getAllPlansDeclined = async (req, res) => {
@@ -540,65 +552,61 @@ const getApprovedOrgPlans = async (req, res) => {
 
 
 // Get plan detail (with Specifc Objective Detail, Objective, and SpecificObjectiveDetail details)
+
 const getPlanDetail = async (req, res) => {
   try {
     const { id } = req.params;
 
-   const getPlanQuery = `
-        SELECT 
-          p.plan_id AS Plan_ID,
-          p.user_id AS User_ID,
-          p.department_id AS Department_ID,
-          sod.plan AS Plan,
-          -- Fields from specific_objective_details with consistent aliasing
-          sod.details AS Details,
-          sod.measurement AS Measurement,
-          sod.baseline AS Baseline,
-          sod.deadline AS Deadline,
-          sod.priority AS Priority,
-          sod.progress AS Progress,
-          sod.specific_objective_detailname AS specObjectiveDetail,
-          sod.plan_type,
-          sod.income_exchange AS income_exchange,
-          sod.cost_type,
-          sod.employment_type,
-          sod.incomeName,
-          sod.costName,
-          sod.attribute,
-          -- Reorder the CI fields so that CIbaseline is selected first,
-          -- then CIplan, then CIoutcome. Use exact aliases.
-          sod.CIbaseline AS CIBaseline,
-          sod.CIplan AS CIplan,
-          sod.CIoutcome AS CIoutcome,
-          -- Other related fields
-          o.description AS Description,
-          aw.comment AS Comment,
-          p.created_at AS Created_At,
-          p.updated_at AS Updated_At,
-          g.year AS year,
-          g.quarter AS Quarter,
-          sod.created_by AS Created_By,
-          p.status AS Status,
-          d.name AS Department,
-          o.name AS Objective_Name,
-          g.name AS Goal_Name,
-          so.specific_objective_name AS Specific_Objective_Name,
-          so.specific_objective_name AS Specific_Objective_NameDetail,
-          /* Calculated type name field */
-          CASE 
-            WHEN sod.plan_type = 'cost' THEN sod.costName
-            WHEN sod.plan_type = 'income' THEN sod.incomeName
-            ELSE NULL 
-          END AS type_name
-        FROM plans p
-        LEFT JOIN departments d ON p.department_id = d.department_id 
-        LEFT JOIN objectives o ON p.objective_id = o.objective_id 
-        LEFT JOIN goals g ON p.goal_id = g.goal_id
-        LEFT JOIN approvalworkflow aw ON p.plan_id = aw.plan_id
-        LEFT JOIN specific_objectives so ON p.specific_objective_id = so.specific_objective_id
-        LEFT JOIN specific_objective_details sod ON p.specific_objective_detail_id = sod.specific_objective_detail_id
-        WHERE p.plan_id = ?;
-      `;
+    const getPlanQuery = `
+      SELECT 
+        p.plan_id,
+        p.user_id,
+        sod.specific_objective_detail_id,
+        sod.specific_objective_detailname,
+        sod.details,
+        sod.baseline,
+        sod.plan,
+        sod.measurement,
+        sod.execution_percentage,
+        sod.created_at,
+        sod.updated_at,
+        sod.year,
+        sod.month,
+        sod.day,
+        sod.deadline,
+        sod.status,
+        sod.priority,
+        p.department_id,
+        d.name AS department_name,
+        sod.count,
+        sod.outcome,
+        sod.progress,
+        sod.created_by,
+        sod.specific_objective_id,
+        sod.plan_type,
+        sod.income_exchange,
+        sod.cost_type,
+        sod.employment_type,
+        sod.incomeName,
+        sod.costName,
+        sod.CIbaseline,
+        sod.CIplan,
+        sod.CIoutcome,
+        sod.editing_status,
+        sod.reporting,
+        p.goal_id,
+        o.name AS objective_name,
+        g.name AS goal_name,
+        so.specific_objective_name
+      FROM plans p
+      JOIN ApprovalWorkflow aw ON p.plan_id = aw.plan_id
+      JOIN departments d ON p.department_id = d.department_id
+      JOIN objectives o ON p.objective_id = o.objective_id
+      JOIN goals g ON p.goal_id = g.goal_id
+      JOIN specific_objectives so ON p.specific_objective_id = so.specific_objective_id
+      JOIN specific_objective_details sod ON p.specific_objective_detail_id = sod.specific_objective_detail_id
+      WHERE p.plan_id = ?;
+    `;
 
     // Execute query with provided id
     con.query(getPlanQuery, [id], (err, results) => {
@@ -611,23 +619,30 @@ const getPlanDetail = async (req, res) => {
         });
       }
 
-      if (results.length === 0) {
+      if (!results || results.length === 0) {
         return res.status(404).json({
           success: false,
           message: "Plan not found.",
         });
       }
 
-      // Retrieve plan details and parse numerical values if needed
+      // Retrieve plan details and filter out keys with null values
       const plan = results[0];
-      
-      if (plan.CIbaseline) plan.CIbaseline = parseFloat(plan.CIbaseline);
-      if (plan.CIplan) plan.CIplan = parseFloat(plan.CIplan);
-      if (plan.CIoutcome) plan.CIoutcome = parseFloat(plan.CIoutcome);
+      const filteredPlan = {};
+      Object.keys(plan).forEach(key => {
+        if (plan[key] !== null) {
+          filteredPlan[key] = plan[key];
+        }
+      });
+
+      // Convert CI fields to floats if they are present
+      if (filteredPlan.CIbaseline) filteredPlan.CIbaseline = parseFloat(filteredPlan.CIbaseline);
+      if (filteredPlan.CIplan) filteredPlan.CIplan = parseFloat(filteredPlan.CIplan);
+      if (filteredPlan.CIoutcome) filteredPlan.CIoutcome = parseFloat(filteredPlan.CIoutcome);
 
       res.status(200).json({
         success: true,
-        plan
+        plan: filteredPlan,
       });
     });
   } catch (error) {
@@ -638,6 +653,8 @@ const getPlanDetail = async (req, res) => {
     });
   }
 };
+
+module.exports = { getPlanDetail };
 
 
 
@@ -773,11 +790,11 @@ const getPlanById = async (req, res) => {
 // Update plan
 const updatePlan = async (req, res) => {
   try {
-    const user_id = req.user_id; // Get user_id from the request
+    const user_id = req.user_id; // Get user_id from the request (assumed to be set previously)
     const { planId } = req.params; // Get planId from URL params
     const updates = req.body; // Get the updates from the request body
 
-    // Input validation for year
+    // Input validation for year (ensure year is a number if provided)
     if (updates.year && isNaN(updates.year)) {
       console.error("Invalid year format:", updates.year);
       return res.status(400).json({
@@ -787,28 +804,17 @@ const updatePlan = async (req, res) => {
       });
     }
 
-    // Input validation for Progress
-    if (updates.Progress && !["started", "on going", "completed"].includes(updates.Progress)) {
-      console.error("Invalid Progress value:", updates.Progress);
-      return res.status(400).json({
-        success: false,
-        message: "Invalid Progress value. Allowed values are 'started', 'on going', or 'completed'.",
-        error_code: "INVALID_PROGRESS_VALUE",
-      });
-    }
-
-    // Allowed fields for update including the additional attributes
+    // Extended allowed fields to cover additional fields sent by the frontend.
     const allowedUpdates = [
       "details",
       "measurement",
       "baseline",
       "plan",
       "description",
-      
       "deadline",
       "quarter",
-      "Progress",
-  "specific_objective_detailname",
+      "የ እቅዱ ሂደት",
+      "specific_objective_detailname",
       "plan_type",
       "cost_type",
       "costName",
@@ -816,12 +822,16 @@ const updatePlan = async (req, res) => {
       "income_exchange",
       "CIplan",
       "CIbaseline",
-      "employment_type"
+      "employment_type",
+      "year",
+      "outcome",
+      "execution_percentage",
+      "CIoutcome",
+      "CIexecution_percentage"
     ];
 
-    // Filter out invalid fields
+    // Filter out invalid fields from the incoming update request.
     const updateFields = Object.keys(updates).filter(field => allowedUpdates.includes(field));
-
     if (updateFields.length === 0) {
       console.error("No valid fields to update.");
       return res.status(400).json({
@@ -831,14 +841,10 @@ const updatePlan = async (req, res) => {
       });
     }
 
-    // Step 1: Fetch specific_objective_detail_id from plan table
-    const fetchSpecificObjectiveDetailIDdQuery = `
-      SELECT specific_objective_detail_id 
-      FROM plans 
-      WHERE plan_id = ? AND user_id = ?
-    `;
-
-    con.query(fetchSpecificObjectiveDetailIDdQuery, [planId, user_id], (err, planResults) => {
+    // Step 1: Fetch specific_objective_detail_id from the plans table using planId and user_id.
+    const fetchSpecificObjectiveDetailIDQuery = 
+      `SELECT specific_objective_detail_id FROM plans WHERE plan_id = ? AND user_id = ?`;
+    con.query(fetchSpecificObjectiveDetailIDQuery, [planId, user_id], (err, planResults) => {
       if (err) {
         console.error("Error fetching plan:", err.stack);
         return res.status(500).json({
@@ -848,7 +854,6 @@ const updatePlan = async (req, res) => {
           error: err.message,
         });
       }
-
       if (planResults.length === 0) {
         console.error("Plan not found or unauthorized access. Plan ID:", planId);
         return res.status(404).json({
@@ -857,16 +862,12 @@ const updatePlan = async (req, res) => {
           error_code: "PLAN_NOT_FOUND_OR_UNAUTHORIZED",
         });
       }
-
       const specific_objective_detail_id = planResults[0].specific_objective_detail_id;
 
-      // Step 2: Check if the specific objective detail exists and belongs to the user
-      const checkSpecificObjectiveDetailQuery = `
-        SELECT * FROM specific_objective_details 
-        WHERE specific_objective_detail_id = ? AND user_id = ?
-      `;
-
-      con.query(checkSpecificObjectiveDetailQuery, [specific_objective_detail_id, user_id], (err, SpecificObjectiveDetailResults) => {
+      // Step 2: Check if the specific objective detail exists and belongs to the user.
+      const checkSpecificObjectiveDetailQuery = 
+        `SELECT * FROM specific_objective_details WHERE specific_objective_detail_id = ? AND user_id = ?`;
+      con.query(checkSpecificObjectiveDetailQuery, [specific_objective_detail_id, user_id], (err, specificObjDetailResults) => {
         if (err) {
           console.error("Error checking specific objective detail existence:", err.stack);
           return res.status(500).json({
@@ -876,24 +877,20 @@ const updatePlan = async (req, res) => {
             error: err.message,
           });
         }
-
-        if (SpecificObjectiveDetailResults.length === 0) {
-          console.error("specific objective detail not found or unauthorized for update. Specific Objective Detail ID:", specific_objective_detail_id);
+        if (specificObjDetailResults.length === 0) {
+          console.error("Specific objective detail not found or unauthorized for update. ID:", specific_objective_detail_id);
           return res.status(404).json({
             success: false,
-            message: "specific objective detail not found or you don't have permission to update this SpecificObjectiveDetail.",
+            message: "Specific objective detail not found or you don't have permission to update it.",
             error_code: "SPECIFIC_OBJECTIVE_DETAIL_NOT_FOUND_OR_UNAUTHORIZED",
           });
         }
 
-        // Step 3: Prepare and execute the update query dynamically using the fields from updateFields
-        const updateQuery = `
-          UPDATE specific_objective_details 
-          SET ${updateFields.map((field) => `${field} = ?`).join(", ")}
-          WHERE specific_objective_detail_id = ? AND user_id = ?
-        `;
-        const updateValues = [...updateFields.map((field) => updates[field]), specific_objective_detail_id, user_id];
-
+        // Step 3: Prepare and execute the update query dynamically using the fields from updateFields.
+        // Using concatenation instead of nested template literals.
+        const updateQuery = 
+          `UPDATE specific_objective_details SET ${updateFields.map(field => field + ' = ?').join(", ")} WHERE specific_objective_detail_id = ? AND user_id = ?`;
+        const updateValues = [...updateFields.map(field => updates[field]), specific_objective_detail_id, user_id];
         con.query(updateQuery, updateValues, (err, result) => {
           if (err) {
             console.error("Error during update:", err.stack);
@@ -904,25 +901,19 @@ const updatePlan = async (req, res) => {
               error: err.message,
             });
           }
-
           if (result.affectedRows === 0) {
-            console.warn("No updates applied. The specific objective detail may not exist or no changes were made.");
+            console.warn("No updates applied. Either the record does not exist or no changes were made.");
             return res.status(404).json({
               success: false,
               message: "No updates were applied. The specific objective detail may not exist or no changes were made.",
               error_code: "NO_UPDATES_APPLIED",
             });
           }
+          console.log("Specific objective detail updated successfully. ID:", specific_objective_detail_id);
 
-          console.log("specific objective detail updated successfully. Specific Objective Detail ID:", specific_objective_detail_id);
-
-          // Step 4: Update the approval workflow status
-          const updateApprovalWorkflowQuery = `
-            UPDATE approvalworkflow
-            SET status = 'pending'
-            WHERE plan_id = ?
-          `;
-
+          // Step 4: Update the approval workflow status to 'pending'.
+          const updateApprovalWorkflowQuery = 
+            `UPDATE approvalworkflow SET status = 'pending' WHERE plan_id = ?`;
           con.query(updateApprovalWorkflowQuery, [planId], (err, approvalResult) => {
             if (err) {
               console.error("Error updating approval workflow:", err.stack);
@@ -933,16 +924,12 @@ const updatePlan = async (req, res) => {
                 error: err.message,
               });
             }
+            console.log("Approval workflow updated to 'pending'. Plan ID:", planId);
 
-            console.log("Approval workflow status updated to 'pending'. Plan ID:", planId);
-
-            // Step 5: Fetch the updated specific objective detail to display the changes
-            const fetchUpdatedSpecificObjectiveDetailQuery = `
-              SELECT * FROM specific_objective_details 
-              WHERE specific_objective_detail_id = ? AND user_id = ?
-            `;
-
-            con.query(fetchUpdatedSpecificObjectiveDetailQuery, [specific_objective_detail_id, user_id], (err, updatedSpecificObjectiveDetailResults) => {
+            // Step 5: Fetch the updated specific objective detail and return it.
+            const fetchUpdatedSpecificObjectiveDetailQuery = 
+              `SELECT * FROM specific_objective_details WHERE specific_objective_detail_id = ? AND user_id = ?`;
+            con.query(fetchUpdatedSpecificObjectiveDetailQuery, [specific_objective_detail_id, user_id], (err, updatedResults) => {
               if (err) {
                 console.error("Error fetching updated specific objective detail:", err.stack);
                 return res.status(500).json({
@@ -952,23 +939,20 @@ const updatePlan = async (req, res) => {
                   error: err.message,
                 });
               }
-
-              if (updatedSpecificObjectiveDetailResults.length === 0) {
-                console.error("Updated specific objective detail not found. Specific Objective Detail ID:", specific_objective_detail_id);
+              if (updatedResults.length === 0) {
+                console.error("Updated specific objective detail not found. ID:", specific_objective_detail_id);
                 return res.status(404).json({
                   success: false,
                   message: "Updated specific objective detail not found. Please try again.",
                   error_code: "UPDATED_SPECIFIC_OBJECTIVE_DETAIL_NOT_FOUND",
                 });
               }
-
-              const updatedSpecificObjectiveDetail = updatedSpecificObjectiveDetailResults[0];
-              console.log("Fetched updated specific objective details:", updatedSpecificObjectiveDetail);
-
+              const updatedSpecificObjectiveDetail = updatedResults[0];
+              console.log("Fetched updated specific objective detail:", updatedSpecificObjectiveDetail);
               return res.status(200).json({
                 success: true,
-                message: "specific objective detail and approval workflow updated successfully.",
-                data: updatedSpecificObjectiveDetail, // Return the updated specific objective detail details
+                message: "Specific objective detail and approval workflow updated successfully.",
+                data: updatedSpecificObjectiveDetail,
               });
             });
           });
@@ -984,6 +968,7 @@ const updatePlan = async (req, res) => {
     });
   }
 };
+  
 
 const addReport = async (req, res) => {
   try {

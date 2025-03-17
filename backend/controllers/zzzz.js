@@ -1,121 +1,103 @@
-const compareIncomePlanOutcomeTotal = async (req, res) => {
+const getPlanDetail = async (req, res) => {
   try {
-    const USD_TO_ETB_RATE = 120; // Exchange rate: 1 USD = 120 ETB
-    const joinClause = getJoinClause(req);
-    const extraFilters = getFilterConditions(req);
-    
-    console.log('Starting income comparison with filters:', { joinClause, extraFilters });
-    
-    // Query that handles both currencies and combines them
-    const query = `
-      SELECT 
-        /* Plan Calculations */
-        COALESCE(SUM(CASE 
-          WHEN income_exchange = 'ETB' THEN CIplan
-          WHEN income_exchange = 'USD' THEN CIplan * ${USD_TO_ETB_RATE}
-          ELSE 0 
-        END), 0) as total_income_plan_combined_ETB,
-        
-        /* Outcome Calculations */
-        COALESCE(SUM(CASE 
-          WHEN income_exchange = 'ETB' THEN CIoutcome
-          WHEN income_exchange = 'USD' THEN CIoutcome * ${USD_TO_ETB_RATE}
-          ELSE 0 
-        END), 0) as total_income_outcome_combined_ETB,
-        
-        /* Original currency totals for reference */
-        COALESCE(SUM(CASE WHEN income_exchange = 'ETB' THEN CIplan ELSE 0 END), 0) as total_income_plan_ETB_comb,
-        COALESCE(SUM(CASE WHEN income_exchange = 'ETB' THEN CIoutcome ELSE 0 END), 0) as total_income_outcome_ETB,
-        COALESCE(SUM(CASE WHEN income_exchange = 'USD' THEN CIplan ELSE 0 END), 0) as total_income_plan_USD,
-        COALESCE(SUM(CASE WHEN income_exchange = 'USD' THEN CIoutcome ELSE 0 END), 0) as total_income_outcome_USD
-      ${joinClause}
-      WHERE sod.plan_type = 'income' ${extraFilters}
-    `;
+    const { id } = req.params;
 
-    console.log('Executing query:', query);
+   const getPlanQuery = `
+        SELECT 
+          p.plan_id AS Plan_ID,
+          p.user_id AS User_ID,
+          p.department_id AS Department_ID,
+          sod.plan AS Plan,
+          -- Fields from specific_objective_details with consistent aliasing
+          sod.details AS Details,
+          sod.measurement AS Measurement,
+          sod.baseline AS Baseline,
+          sod.deadline AS Deadline,
+          sod.priority AS Priority,
+          sod.progress AS Progress,
+          sod.specific_objective_detailname AS specObjectiveDetail,
+          sod.plan_type,
+          sod.income_exchange AS income_exchange,
+          sod.cost_type,
+          sod.employment_type,
+          sod.incomeName,
+          sod.costName,
+          sod.attribute,
+          -- Reorder the CI fields so that CIbaseline is selected first,
+          -- then CIplan, then CIoutcome. Use exact aliases.
+          sod.CIbaseline AS CIBaseline,
+          sod.CIplan AS CIplan,
+          sod.CIoutcome AS CIoutcome,
+          -- Other related fields
+          o.description AS Description,
+          aw.comment AS Comment,
+          p.created_at AS Created_At,
+          p.updated_at AS Updated_At,
+          g.year AS year,
+          g.quarter AS Quarter,
+          sod.created_by AS Created_By,
+          p.status AS Status,
+          d.name AS Department,
+          o.name AS Objective_Name,
+          g.name AS Goal_Name,
+          so.specific_objective_name AS Specific_Objective_Name,
+          so.specific_objective_name AS Specific_Objective_NameDetail,
+          /* Calculated type name field */
+          CASE 
+            WHEN sod.plan_type = 'cost' THEN sod.costName
+            WHEN sod.plan_type = 'income' THEN sod.incomeName
+            ELSE NULL 
+          END AS type_name
+        FROM plans p
+        LEFT JOIN departments d ON p.department_id = d.department_id 
+        LEFT JOIN objectives o ON p.objective_id = o.objective_id 
+        LEFT JOIN goals g ON p.goal_id = g.goal_id
+        LEFT JOIN approvalworkflow aw ON p.plan_id = aw.plan_id
+        LEFT JOIN specific_objectives so ON p.specific_objective_id = so.specific_objective_id
+        LEFT JOIN specific_objective_details sod ON p.specific_objective_detail_id = sod.specific_objective_detail_id
+        WHERE p.plan_id = ?;
+      `;
 
-    con.query(query, (err, results) => {
+    // Execute query with provided id
+    con.query(getPlanQuery, [id], (err, results) => {
       if (err) {
-        console.error('Database Error:', {
-          message: err.message,
-          code: err.code,
-          state: err.sqlState,
-          stack: err.stack
+        console.error("Error fetching plan details:", err.message);
+        return res.status(500).json({
+          success: false,
+          message: "Error fetching plan details from the database.",
+          error: err.message,
         });
-        return handleDatabaseError(err, res, 'comparing total income plan and outcome');
       }
 
-      console.log('Query results:', JSON.stringify(results, null, 2));
-
-      if (handleEmptyResults(results, res, {
-        total_income_plan_combined_ETB: 0,
-        total_income_outcome_combined_ETB: 0,
-        breakdown: {
-          ETB: { plan: 0, outcome: 0 },
-          USD: { plan: 0, outcome: 0 }
-        }
-      })) {
-        console.log('No results found for the query');
-        return;
+      if (results.length === 0) {
+        return res.status(404).json({
+          success: false,
+          message: "Plan not found.",
+        });
       }
 
-      const {
-        total_income_plan_combined_ETB,
-        total_income_outcome_combined_ETB,
-        total_income_plan_ETB_comb,
-        total_income_outcome_ETB,
-        total_income_plan_USD,
-        total_income_outcome_USD
-      } = results[0];
+      // Retrieve plan details and parse numerical values if needed
+      const plan = results[0];
+      
+      if (plan.CIbaseline) plan.CIbaseline = parseFloat(plan.CIbaseline);
+      if (plan.CIplan) plan.CIplan = parseFloat(plan.CIplan);
+      if (plan.CIoutcome) plan.CIoutcome = parseFloat(plan.CIoutcome);
 
-      // Log the extracted values
-      console.log('Extracted values:', {
-        total_income_plan_combined_ETB,
-        total_income_outcome_combined_ETB,
-        total_income_plan_ETB_comb,
-        total_income_outcome_ETB,
-        total_income_plan_USD,
-        total_income_outcome_USD
+      res.status(200).json({
+        success: true,
+        plan
       });
-
-      // Calculate the difference in combined ETB
-      const difference_combined_ETB = total_income_plan_combined_ETB - total_income_outcome_combined_ETB;
-
-      // Prepare the response with detailed breakdown
-      const response = {
-        combined_ETB: {
-          plan: total_income_plan_combined_ETB,
-          outcome: total_income_outcome_combined_ETB,
-          difference: difference_combined_ETB
-        },
-        breakdown: {
-          ETB: {
-            plan: total_income_plan_ETB_comb,
-            outcome: total_income_outcome_ETB,
-            difference: total_income_plan_ETB_comb - total_income_outcome_ETB
-          },
-          USD: {
-            plan: total_income_plan_USD,
-            outcome: total_income_outcome_USD,
-            difference: total_income_plan_USD - total_income_outcome_USD,
-            plan_in_ETB: total_income_plan_USD * USD_TO_ETB_RATE,
-            outcome_in_ETB: total_income_outcome_USD * USD_TO_ETB_RATE
-          }
-        },
-        exchange_rate: {
-          USD_TO_ETB: USD_TO_ETB_RATE
-        }
-      };
-
-      console.log('Final response:', JSON.stringify(response, null, 2));
-      res.json(response);
     });
   } catch (error) {
-    console.error('Unexpected error in compareIncomePlanOutcomeTotal:', {
-      message: error.message,
-      stack: error.stack,
-      details: error
+    console.error("Error in getPlanDetail:", error.message);
+    res.status(500).json({
+      success: false,
+      message: `Unknown error occurred. ${error.message}`,
     });
-    res.status(500).json({ message: "Internal server error", error: error.message });
   }
 };
+
+
+
+
+

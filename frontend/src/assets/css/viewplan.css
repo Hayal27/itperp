@@ -89,10 +89,10 @@
   .modal {
     display: block;
     position: fixed;
-    top: 10%;
+    top: 4%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background-color: #fff;
+    background-color: #ffffff;
     padding: 30px;
     border-radius: 10px;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
@@ -101,6 +101,7 @@
     transition: transform 0.3s ease, opacity 0.3s ease;
     opacity: 0;
     animation: fadeIn 0.4s forwards;
+    /* color: #2a9cd5; */
   }
   
   /* Modal Fade-in Animation */
@@ -126,7 +127,8 @@
     resize: none;
     font-size: 14px;
     transition: all 0.3s ease;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    background: #bdaeae;
+    /* box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); */
   }
   
   textarea:focus {
@@ -151,6 +153,7 @@
     /* background-color: #f4f7f6;
     background: transparent; */
     font-family: 'Arial', sans-serif;
+    
   }
   
   /* Ensure modal overlay is on top */

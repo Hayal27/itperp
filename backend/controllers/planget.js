@@ -127,10 +127,50 @@ const getSpecificGoal = (req, res) => {
   });
 };
 
+// get spesific objectives function
+const getSpesificObjectives = async (req, res) => {
+  try {
+    const sql = "SELECT specific_objective_name FROM specific_objectives";
+    con.query(sql, (err, results) => {
+      if (err) {
+        console.error("Database query error:", err);
+        return res.status(500).json({ error: "Internal server error" });
+      }
+      // Send result as JSON.
+      res.json(results);
+    });
+  } catch (error) {
+    console.error("Error in getSpesificObjectives:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+// get department
+
+const getdepartment = async (req, res) => {
+  try {
+    const sql = "SELECT name FROM departmens";
+    con.query(sql, (err, results) => {
+      if (err) {
+        console.error("Database query error:", err);
+        return res.status(500).json({ error: "Internal server error" });
+      }
+      // Send result as JSON.
+      res.json(results);
+    });
+  } catch (error) {
+    console.error("Error in getdepartment:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+
 // Exporting all functions
 module.exports = {
   getObjective,
   getGoals,
   getSpecificGoal,
+  getSpesificObjectives,
+  getdepartment
 };
 

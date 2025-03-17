@@ -22,7 +22,7 @@ const Step3SpecificObjective = ({ objectiveId, token, onBack, onNext }) => {
     setIsLoading(true);
     try {
       const response = await axios.get(
-        `http://localhost:5000/api/spesificObjectivesg?objective_id=${objectiveId}`,
+        `http://192.168.56.1:5000/api/spesificObjectivesg?objective_id=${objectiveId}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -100,7 +100,7 @@ const Step3SpecificObjective = ({ objectiveId, token, onBack, onNext }) => {
 
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/addSpecificObjective",
+        "http://192.168.56.1:5000/api/addSpecificObjective",
         {
           specific_objective_name: newSpecificObjective.specific_objective_name,
           view: newSpecificObjective.view,
@@ -200,46 +200,6 @@ const Step3SpecificObjective = ({ objectiveId, token, onBack, onNext }) => {
         </table>
       )}
 
-      {/* Create New Specific Objective */}
-      <h4>ኣዲስ ውጤት ይፍጠሩ⬇️</h4>
-      <div className="row">
-        <div className="col-md-6">
-          <label htmlFor="specific_objective_name">Name:</label>
-          <input
-            type="text"
-            id="specific_objective_name"
-            name="specific_objective_name"
-            value={newSpecificObjective.specific_objective_name}
-            onChange={handleInputChange}
-            className="form-control"
-            placeholder="Enter name"
-          />
-        </div>
-        <div className="col-md-6">
-          <label htmlFor="view">View:</label>
-          <select
-            id="view"
-            name="view"
-            value={newSpecificObjective.view}
-            onChange={handleInputChange}
-            className="form-control"
-          >
-            <option value="">Select View</option>
-            <option value="1">Financial View</option>
-            <option value="2">Customer View</option>
-            <option value="3">Internal Process View</option>
-            <option value="4">Learning & Growth View</option>
-          </select>
-        </div>
-      </div>
-
-      <button
-        className="btn btn-primary mt-3"
-        onClick={handleCreateSpecificObjective}
-        disabled={isCreating}
-      >
-        {isCreating ? "Creating..." : "Create Specific Objective"}
-      </button>
 
       {/* Next Button */}
       <div className="mt-3">

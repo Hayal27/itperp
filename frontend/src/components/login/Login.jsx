@@ -36,7 +36,7 @@ const Login = () => {
   
     try {
       // Sending login request
-      const response = await Axios.post("http://localhost:5000/login", {
+      const response = await Axios.post("http://192.168.56.1:5000/login", {
         user_name,
         pass,
       });

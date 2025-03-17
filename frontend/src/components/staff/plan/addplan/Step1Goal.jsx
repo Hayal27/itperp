@@ -35,7 +35,7 @@ const Step1Goal = ({ onNext }) => {
   useEffect(() => {
     const fetchgoals = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/goalsg", {
+        const response = await axios.get("http://192.168.56.1:5000/api/goalsg", {
           headers: { 
             Authorization: `Bearer ${token}`,
           },
@@ -138,7 +138,7 @@ const Step1Goal = ({ onNext }) => {
   
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/addgoal",
+        "http://192.168.56.1:5000/api/addgoal",
         {
           name: newgoal.name,
           description: newgoal.description,
@@ -391,88 +391,7 @@ const toggleFilterVisibility = () => {
   )}
 </div>
 
-  
-    <div className="creat">
-      {/* Toggle Create New goal Section */}
-      <button 
-        className="btn btn-info mt-4 mb-3" 
-        onClick={toggleCreateVisibility}
-        style={{ width: '17%' }}
-      >
-        <FontAwesomeIcon icon={isCreateVisible ? faArrowUp : faArrowDown} />
-        {isCreateVisible ? ' Hide ' : ' Show '}
-      </button>
-  
-      {/* Create new goal */}
-      <div className={`create-section ${isCreateVisible ? 'show' : ''}`}>
-        <div className=" mt-4">
-          <h3>አዲስ ግብ እዝህ ይፍጠሩ⬇️</h3>
-          <div className=" row">
-            <div className="col-md-6">
-              <label htmlFor="name">Name:</label>
-              <input
-                type="text"
-                id="name"
-                name="name"
-                value={newgoal.name}
-                onChange={handleInputChange}
-                placeholder="goal name"
-                className="form-control"
-              />
-            </div>
-  
-            <div className="col-md-6">
-              <label htmlFor="description">Description:</label>
-              <input
-                type="text"
-                id="description"
-                name="description"
-                value={newgoal.description}
-                onChange={handleInputChange}
-                placeholder="goal description"
-                className="form-control"
-              />
-            </div>
-          </div>
-          <div className="row mt-3">
-            <div className="col-md-6">
-              <label htmlFor="year-create">Year:</label>
-              <input
-                type="number"
-                id="year-create"
-                name="year"
-                value={newgoal.year}
-                onChange={handleInputChange}
-                placeholder="Enter year"
-                className="form-control"
-              />
-            </div>
-            <div className="col-md-6">
-              <label htmlFor="quarter-create">Quarter:</label>
-              <select
-                id="quarter-create"
-                name="quarter"
-                value={newgoal.quarter}
-                onChange={handleInputChange}
-                className="form-control"
-              >
-                <option value="">Select Quarter</option>
-                <option value={1}>Quarter 1</option>
-                <option value={2}>Quarter 2</option>
-                <option value={3}>Quarter 3</option>
-                <option value={4}>Quarter 4</option>
-              </select>
-            </div>
-          </div>
-          <button
-            className="btn btn-primary mt-3"
-            onClick={handleCreategoal}
-          >
-            Create goal
-          </button>
-        </div>
-      </div>
-    </div>
+ 
   
     {/* Navigation buttons */}
     <div className="next">

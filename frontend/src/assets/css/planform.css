@@ -357,3 +357,16 @@ textarea, input {
   border-radius: 5px;
   border: 1px solid #ccc;
 }
+
+
+.btn-position{
+  position: absolute;
+  /* top: 0%; */
+  top: 95%;
+  left: 30%;
+  max-width: 20%;
+  max-height: 20%;
+  /* transform: translate(50%, -300%); */
+  /* background-color: #007bff; */
+}
+

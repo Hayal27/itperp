@@ -19,7 +19,7 @@ const Step2Objective = ({ goalId, onNext, onBack }) => {
   useEffect(() => {
     const fetchObjectives = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/objectivesg?goal_id=${goalId}`, {
+        const response = await axios.get(`http://192.168.56.1:5000/api/objectivesg?goal_id=${goalId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setObjectives(response.data);
@@ -82,7 +82,7 @@ const handleCreateObjective = async () => {
 
   try {
     const response = await axios.post(
-      "http://localhost:5000/api/addobjective",
+      "http://192.168.56.1:5000/api/addobjective",
       { name: newObjective.name, description: newObjective.description, goal: goalId },
       { headers: { Authorization: `Bearer ${token}` } }
     );
@@ -116,7 +116,7 @@ const fetchObjectives = async () => {
   setIsLoading(true); // Show loading spinner while fetching
   try {
     const response = await axios.get(
-      `http://localhost:5000/api/objectivesg?goal_id=${goalId}`,
+      `http://192.168.56.1:5000/api/objectivesg?goal_id=${goalId}`,
       { headers: { Authorization: `Bearer ${token}` } }
     );
     setObjectives(response.data);
@@ -221,37 +221,6 @@ const fetchObjectives = async () => {
       {/* No Objectives Found */}
       {filteredObjectives.length === 0 && <p>No objectives found. Try creating a new objective.</p>}
 
-      {/* Create New Objective */}
-      <h4>አዲስ አላማ ይፍጠሩ⬇️</h4>
-      <div className="row">
-        <div className="col-md-6">
-          <label htmlFor="name" className="form-label">Name:</label>
-          <input
-            type="text"
-            id="name"
-            name="name"
-            value={newObjective.name}
-            onChange={handleInputChange}
-            className="form-control"
-            placeholder="Enter objective name"
-          />
-        </div>
-        <div className="col-md-6">
-          <label htmlFor="description" className="form-label">Description:</label>
-          <input
-            type="text"
-            id="description"
-            name="description"
-            value={newObjective.description}
-            onChange={handleInputChange}
-            className="form-control"
-            placeholder="Enter objective description"
-          />
-        </div>
-      </div>
-      <button className="btn btn-primary mt-3" onClick={handleCreateObjective}>
-        Create Objective
-      </button>
 
       {/* Next Button */}
       <div className="mt-3">

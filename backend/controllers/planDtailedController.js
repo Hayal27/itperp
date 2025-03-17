@@ -173,166 +173,124 @@ const values = [user_id, objective_id, specific_objective_name, view];
 
 
 // Add Specific specific_objective_detail
+
 const addspecificObjectiveDetails = (req, res) => {
   const token = req.headers["authorization"]?.split(" ")[1];
   if (!token) {
-    return res.status(401).json({ message: "Authorization token is required" });
+      return res.status(401).json({ message: "Authorization token is required" });
   }
 
   jwt.verify(token, "hayaltamrat@27", (err, decoded) => {
-    if (err) {
-      console.error("JWT Error:", err);
-      return res.status(401).json({ message: "Invalid or expired token" });
-    }
-
-    const user_id = decoded.user_id;
-    console.log("user_id from token:", user_id);
-
-    let { specific_objective } = req.body;
-
-    if (!Array.isArray(specific_objective)) {
-      if (req.body.specific_objective_id) {
-        specific_objective = [req.body];
-      } else {
-        return res.status(400).json({ message: "specific_objective array or single specific_objective is required." });
-      }
-    }
-
-    if (specific_objective.length === 0) {
-      return res.status(400).json({ message: "specific_objective array cannot be empty." });
-    }
-
-    const getEmployeeNameQuery = `
-      SELECT e.fname 
-      FROM employees e
-      JOIN users u ON e.employee_id = u.employee_id
-      WHERE u.user_id = ?
-    `;
-
-    con.query(getEmployeeNameQuery, [user_id], (err, employeeResults) => {
       if (err) {
-        console.error("Error fetching employee name:", err.message);
-        return res.status(500).json({ message: "Error fetching employee name from the database.", error: err.message });
+          console.error("JWT Error:", err);
+          return res.status(401).json({ message: "Invalid or expired token" });
+      }
+      const user_id = decoded.user_id;
+      console.log("user_id from token:", user_id);
+
+      let { specific_objective } = req.body;
+      if (!Array.isArray(specific_objective)) {
+          if (req.body.specific_objective_id) {
+              specific_objective = [req.body];
+          } else {
+              return res.status(400).json({ message: "specific_objective array or single specific_objective is required." });
+          }
+      }
+      if (specific_objective.length === 0) {
+          return res.status(400).json({ message: "specific_objective array cannot be empty." });
       }
 
-      if (employeeResults.length === 0) {
-        return res.status(404).json({ message: "Employee not found for the given user." });
-      }
+      // Get employee details
+      const getEmployeeDetailsQuery = `
+          SELECT e.fname, e.department_id 
+          FROM employees e 
+          JOIN users u ON e.employee_id = u.employee_id 
+          WHERE u.user_id = ?`;
 
-      const employeeName = employeeResults[0].fname;
-
-      // Validate required fields
-      const validationErrors = specific_objective
-        .map((item) => {
-          const requiredFields = [
-            'specific_objective_id',
-            'specific_objective_detailname',
-            'details',
-            'baseline',
-            'plan',
-            'measurement',
-            'year',
-            'month',
-            'day'
-          ];
+      con.query(getEmployeeDetailsQuery, [user_id], (err, employeeResults) => {
+          if (err) {
+              console.error("Error fetching employee details:", err.message);
+              return res.status(500).json({ message: "Error fetching employee details from the database.", error: err.message });
+          }
+          if (employeeResults.length === 0) {
+              return res.status(404).json({ message: "Employee not found for the given user." });
+          }
           
-          const missingFields = requiredFields.filter(field => !item[field]);
-          return missingFields.length ? `Missing required fields: ${missingFields.join(', ')}` : null;
-        })
-        .filter(error => error !== null);
+          const { fname: employeeName,  department_id } = employeeResults[0];
 
-      if (validationErrors.length > 0) {
-        return res.status(400).json({ message: "Validation failed.", errors: validationErrors });
-      }
+          // Validate required fields
+          const validationErrors = specific_objective.map((item) => {
+              const requiredFields = [
+                  'specific_objective_id', 'specific_objective_detailname', 'details', 'baseline', 'plan', 'measurement', 'year', 'month', 'day'
+              ];
+              const missingFields = requiredFields.filter(field => !item[field]);
+              return missingFields.length ? `Missing required fields: ${missingFields.join(', ')}` : null;
+          }).filter(error => error !== null);
 
-      // Process each specific objective
-      const processObjectives = specific_objective.map((item) => {
-        return new Promise((resolve, reject) => {
-          // Query to get goal_id through the relationship chain
-          const getGoalIdQuery = `
-            SELECT o.goal_id
-            FROM specific_objectives so
-            JOIN objectives o ON so.objective_id = o.objective_id
-            WHERE so.specific_objective_id = ?
-          `;
+          if (validationErrors.length > 0) {
+              return res.status(400).json({ message: "Validation failed.", errors: validationErrors });
+          }
 
-          con.query(getGoalIdQuery, [item.specific_objective_id], (err, goalResults) => {
-            if (err) {
-              console.error("Error fetching goal_id:", err.message);
-              reject(`Error fetching goal_id for specific objective: ${item.specific_objective_id}`);
-              return;
-            }
+          // Process each specific objective
+          const processObjectives = specific_objective.map((item) => {
+              return new Promise((resolve, reject) => {
+                  // Query to get goal_id
+                  const getGoalIdQuery = `
+                      SELECT o.goal_id FROM specific_objectives so 
+                      JOIN objectives o ON so.objective_id = o.objective_id 
+                      WHERE so.specific_objective_id = ?`;
 
-            if (goalResults.length === 0) {
-              reject(`No goal found for specific objective: ${item.specific_objective_id}`);
-              return;
-            }
+                  con.query(getGoalIdQuery, [item.specific_objective_id], (err, goalResults) => {
+                      if (err) {
+                          console.error("Error fetching goal_id:", err.message);
+                          reject(`Error fetching goal_id for specific objective: ${item.specific_objective_id}`);
+                          return;
+                      }
+                      if (goalResults.length === 0) {
+                          reject(`No goal found for specific objective: ${item.specific_objective_id}`);
+                          return;
+                      }
+                      const goal_id = goalResults[0].goal_id;
 
-            const goal_id = goalResults[0].goal_id;
+                      // Insert specific objective details including department_id and supervisor_id
+                      const insertQuery = `
+                          INSERT INTO specific_objective_details (
+                              user_id, goal_id, specific_objective_id, specific_objective_detailname, details, 
+                              baseline, plan, measurement, created_by, year, month, day, deadline, status, 
+                              plan_type, cost_type, income_exchange, employment_type, incomeName, costName, 
+                              CIbaseline, CIplan, department_id
+                          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,  ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
 
-            const insertQuery = `
-              INSERT INTO specific_objective_details (
-                user_id, goal_id, specific_objective_id, specific_objective_detailname, 
-                details, baseline, plan, measurement, created_by, year, month, day, 
-                deadline, status, plan_type, cost_type, income_exchange, employment_type, 
-                incomeName, costName, CIbaseline, CIplan
-              ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-            `;
+                      const sqlParameters = [
+                          user_id, goal_id, item.specific_objective_id, item.specific_objective_detailname, item.details,
+                          item.baseline, item.plan, item.measurement, employeeName, item.year, item.month, item.day,
+                          item.deadline || null, item.status || "Pending", item.plan_type || null, item.cost_type || null,
+                          item.income_exchange || null, item.employment_type || null, item.incomeName || null,
+                          item.costName || null, item.CIbaseline || null, item.CIplan || null, department_id
+                      ];
 
-            const sqlParameters = [
-              user_id,
-              goal_id,
-              item.specific_objective_id,
-              item.specific_objective_detailname,
-              item.details,
-              item.baseline,
-              item.plan,
-              item.measurement,
-              employeeName,
-              item.year,
-              item.month,
-              item.day,
-              item.deadline || null,
-              item.status || "Pending",
-              item.plan_type || null,
-              item.cost_type || null,
-              item.income_exchange || null,
-              item.employment_type || null,
-              item.incomeName || null,
-              item.costName || null,
-              item.CIbaseline || null,
-              item.CIplan || null
-            ];
-
-            con.query(insertQuery, sqlParameters, (err, result) => {
-              if (err) {
-                console.error("Database Error:", err.message);
-                reject(`Database error for specific objective detail: ${item.specific_objective_detailname}`);
-              } else {
-                resolve(result.insertId);
-              }
-            });
+                      con.query(insertQuery, sqlParameters, (err, result) => {
+                          if (err) {
+                              console.error("Database Error:", err.message);
+                              reject(`Database error for specific objective detail: ${item.specific_objective_detailname}`);
+                          } else {
+                              resolve(result.insertId);
+                          }
+                      });
+                  });
+              });
           });
-        });
+
+          Promise.all(processObjectives)
+              .then((insertIds) => {
+                  res.status(201).json({ message: "Specific objective details added successfully.", insertIds });
+              })
+              .catch((err) => {
+                  res.status(500).json({ message: "Error processing specific objective details.", error: err });
+              });
       });
-
-      Promise.all(processObjectives)
-        .then((insertIds) => {
-          res.status(201).json({ 
-            message: "Specific objective details added successfully.", 
-            insertIds 
-          });
-        })
-        .catch((err) => {
-          res.status(500).json({ 
-            message: "Error processing specific objective details.", 
-            error: err 
-          });
-        });
-    });
   });
-};``
-
+};
 
 
 

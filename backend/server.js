@@ -1,64 +1,58 @@
 // server.js
 const express = require("express");
 const cors = require("cors");
+const session = require("express-session");
 
-// imoprting the routes 
-const userRoutes = require('./routes/userRoutes.js'); // Import user routes
-const employeeRoutes = require('./routes/employeeRoutes.js')
-const planRoutes = require('./routes/planRoutes.js')
-const reportRoutes = require('./routes/reportRoutes.js')
-const dashboardRoutes = require('./routes/dashboardRoutes.js')
-const analyticsRoutes = require('./routes/analyticRoutes.js');
-// const approvalRoutes = require('./routes/approvalRoutes');
-// const approvalWorkflowRoutes = require('./routes/approvalWorkflowRoutes.js')
-const session = require('express-session');
-
+// Importing Routes
+const userRoutes = require("./routes/userRoutes.js");
+const employeeRoutes = require("./routes/employeeRoutes.js");
+const planRoutes = require("./routes/planRoutes.js");
+const reportRoutes = require("./routes/reportRoutes.js");
+const dashboardRoutes = require("./routes/dashboardRoutes.js");
+const analyticsRoutes = require("./routes/analyticRoutes.js");
 const authMiddleware = require("./middleware/authMiddleware.js");
-// const fileUploadMiddleware = require("./middleware/fileUploadMiddleware.js");
 const loggingMiddleware = require("./middleware/loggingMiddleware.js");
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = 5000;
 
 // Middleware
-app.use(cors());
+const corsOptions = {
+  origin: "*", // Allow all origins
+  methods: "GET,POST,PUT,DELETE",
+  allowedHeaders: "Content-Type,Authorization"
+};
+app.use(cors(corsOptions));
+
 app.use(session({
-  secret: 'hayaltamrat@27', // Replace with a strong secret key
+  secret: "hayaltamrat@27", // Replace with a strong secret key
   resave: false,
   saveUninitialized: true,
-  cookie: {
-    maxAge: 30000// Session expiration time (1 hour in milliseconds)
-  }
+  cookie: { maxAge: 3600000 } // 1 hour session expiration
 }));
 
-app.use(express.json()); // Middleware to parse JSON requests
-app.use(express.urlencoded({ extended: true })); // Middleware to parse URL-encoded requests
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(loggingMiddleware); // Logs every request
 
-// using the routes Routes
-app.use('/api', userRoutes); // Use user routes
-app.use('/api',employeeRoutes)
-app.use('/api',planRoutes)
-app.use('/api',dashboardRoutes)
-app.use('/api',reportRoutes)
-app.use('/api',analyticsRoutes);
+// Using Routes
+app.use("/api", userRoutes);
+app.use("/api", employeeRoutes);
+app.use("/api", planRoutes);
+app.use("/api", dashboardRoutes);
+app.use("/api", reportRoutes);
+app.use("/api", analyticsRoutes);
 
-// app.use('/api/approvals', approvalRoutes);
-// app.use('/api',approvalWorkflowRoutes)
 app.post("/login", authMiddleware.login);
 app.put("/logout/:user_id", authMiddleware.logout);
 
-// Serve static files from the public directory if needed
-// app.use('/images', express.static('public/images'));
-
-// Global error handling middleware
+// Global Error Handling Middleware
 app.use((err, req, res, next) => {
-  console.error(err.stack); // Log the error stack
-  res.status(500).send({ message: 'Something went wrong!', error: err.message });
+  console.error(err.stack);
+  res.status(500).send({ message: "Something went wrong!", error: err.message });
 });
 
-// Start server
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-
+// Start Server and Listen on All Network Interfaces
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`Server running on http://0.0.0.0:${PORT}`);
 });

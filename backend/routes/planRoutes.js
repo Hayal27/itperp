@@ -7,7 +7,7 @@ const { addPlan} = require("../controllers/planController");
 const {getAllPlansDeclined,getApprovedOrgPlans, getPlanDetail,getAllOrgPlans,getPlanById,getAllPlans, deletePlan, updatePlan,addReport } = require("../controllers/plansFetch");
 // const {getSubmittedPlans, updatePlanStatus, getDetailedPlanForSupervisor,getSubmittedPlanssp,updatePlanApprovalStatus} = require("../controllers/planAproveController");
 const {getGoals,getGoalById,getObjectiveById,getObjectivesByGoals,getspesificObjectivesByGoals,getGoal, getPlansBySpecificGoal} = require("../controllers/planDetailFetchController");
-const {getSpecificGoal} = require("../controllers/planget");
+const {getSpecificGoal,getSpesificObjectives,getdepartment} = require("../controllers/planget");
 const { addGoals, addObjectives, addSpecificObjectives, addspecificObjectiveDetails} =require("../controllers/planDtailedController")
 
 
@@ -29,7 +29,7 @@ router.get("/supervisor/plans", verifyToken, getSubmittedPlans);
 router.get("/supervisor/planssp", verifyToken, getSubmittedPlanssp);
 // Route to approve or decline a plan
 router.put("/supervisor/plans/approve", verifyToken, updatePlanStatus);
-router.put("/supervisor/plans/approvesp", verifyToken, updatePlanApprovalStatus);
+router.put("/supervisor/plans/approveceo", verifyToken, updatePlanApprovalStatus);
 // Route to fetch detailed plan information for the next supervisor (GET)
 router.get("/supervisor/plans/detailed", verifyToken, getDetailedPlanForSupervisor);
 // adding plan routes 
@@ -53,6 +53,9 @@ router.get('/objectivesbyid/:objective_id',verifyToken, getObjectiveById);
 router.get('/goalsbyid/:goal_id', verifyToken, getGoalById);
 
 router.get("/specificGoals/:sgoalId",verifyToken, getSpecificGoal);
+router.get("/getSpesificObjectives",verifyToken, getSpesificObjectives);
+router.get("/getdepartment",verifyToken, getdepartment)
+
 
 
 

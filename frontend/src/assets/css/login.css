@@ -18,7 +18,7 @@ body {
   background-color: transparent;
   max-width: 1200px;
   position: relative;
-  left: -30%;
+  /* left: 10%; */
 
   
   overflow: hidden;
@@ -51,7 +51,7 @@ body {
     width: 120px;
     animation: logoPulse 2s infinite;
     position: relative;
-    left: -110%;
+    left: -1%;
     top: 55%;
   }
   
@@ -167,5 +167,5 @@ body {
  .credits
  {
   position: relative;
-  left: -35%;
+  /* left: ; */
  }

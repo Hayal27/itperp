@@ -12,7 +12,10 @@ const {
     displayTotalIncomeOutcomeUSD,
     compareIncomePlanOutcomeETB,
     compareIncomePlanOutcomeUSD,
-    compareIncomePlanOutcomeTotal
+    compareIncomePlanOutcomeTotal,
+    costPlanOutcomeDifferenceRegularBudget,
+    costPlanOutcomeDifferenceCapitalBudget
+    // costPlan_Outcome_difference_capital_budget,
     // compareCostCIplanAndCIoutcome,
     // compareCostCIexecutionPercentage,
     // displayTotalIncome,
@@ -38,6 +41,11 @@ router.get("/displayTotalIncomeOutcomeUSD", verifyToken, displayTotalIncomeOutco
 router.get("/compareIncomePlanOutcomeETB", verifyToken, compareIncomePlanOutcomeETB);
 router.get("/compareIncomePlanOutcomeUSD", verifyToken, compareIncomePlanOutcomeUSD);
 router.get("/compareIncomePlanOutcomeTotal", verifyToken, compareIncomePlanOutcomeTotal);
+router.get("/costPlanOutcomeDifferenceRegularBudget", verifyToken, costPlanOutcomeDifferenceRegularBudget);
+router.get("/costPlanOutcomeDifferenceCapitalBudget", verifyToken, costPlanOutcomeDifferenceCapitalBudget);
+
+
+// router.get("/costPlan_Outcome_difference_capital_budget", verifyToken, costPlan_Outcome_difference_capital_budget);
 
 
 
@@ -49,7 +57,9 @@ router.get("/compareIncomePlanOutcomeTotal", verifyToken, compareIncomePlanOutco
 
 
 
-
+        //cost type based 
+// router.get("/compareCostCIplanAndCIoutcome", verifyToken, compareCostCIplanAndCIoutcome);
+ 
 // router.get("/compareCostCIplanAndCIoutcome", verifyToken, compareCostCIplanAndCIoutcome);
 // router.get("/compareCostCIexecutionPercentage", verifyToken, compareCostCIexecutionPercentage);
 // router.get("/displayTotalIncome", verifyToken, displayTotalIncome);

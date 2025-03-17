@@ -14,7 +14,7 @@ const TeamleaderSubmittedViewPlan = () => {
 
   const fetchPlans = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/api/supervisor/reports", {
+      const response = await axios.get("http://192.168.56.1:5000/api/supervisor/plans", {
         headers: { Authorization: `Bearer ${token}` }
       });
 
@@ -37,7 +37,7 @@ const TeamleaderSubmittedViewPlan = () => {
 
     try {
       const response = await axios.put(
-        "http://localhost:5000/api/supervisor/reports/approve",
+        "http://192.168.56.1:5000/api/supervisor/plans/approve",
         { plan_id: planId, status: action, comment }, // Send plan_id along with status and comment
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -69,9 +69,12 @@ const TeamleaderSubmittedViewPlan = () => {
           <table>
             <thead>
               <tr>
-                <th>Objective</th>
+                <th>Department</th>
+                <th>Pland By</th>
                 <th>Goal</th>
-                <th>Specific Goal</th>
+                <th>Objective</th>
+                <th>Specific Objecive </th>
+                <th>Specific Objecive detail</th>
                 <th>Status</th>
                 <th>Actions</th>
               </tr>
@@ -79,9 +82,13 @@ const TeamleaderSubmittedViewPlan = () => {
             <tbody>
               {plans.map((plan) => (
                 <tr key={plan.plan_id}>
-                  <td>{plan.objective_name}</td>
+                  <td>{plan.department_name}</td>
+                  <td>{plan.created_by}</td>
+                 
                   <td>{plan.goal_name}</td>
-                  <td>{plan.specific_goals_name}</td>
+                  <td>{plan.objective_name}</td>
+                  <td>{plan.specific_objective_name}</td>
+                  <td>{plan.specific_obective_detailname}</td>
                   <td>{plan.approval_status}</td>
                   <td>
                     <button onClick={() => handleReviewClick(plan)}>Review</button>
@@ -98,19 +105,17 @@ const TeamleaderSubmittedViewPlan = () => {
       {selectedPlan && (
         <div className="modal">
           <h3>Review Plan</h3>
-          <p><strong>Objective:</strong> {selectedPlan.objective_name}</p>
-          <p><strong>Goal:</strong> {selectedPlan.goal_name}</p>
-          <p><strong>Specific Goal:</strong> {selectedPlan.specific_goals_name}</p>
-          <p><strong>Measurement:</strong> {selectedPlan.measurement}</p>
+          <p><strong>ግብ:</strong> {selectedPlan.goal_name}</p>
+          <p><strong>አላማ:</strong> {selectedPlan.objective_name}</p>
+         
+          <p><strong>የ አላማው ውጤት </strong> {selectedPlan.specific_objective_name}</p>
+          <p><strong>የ ውጤቱ ዝርዝር ተግባር :</strong> {selectedPlan.specific_obective_detailname}</p>
           <p><strong>Baseline:</strong> {selectedPlan.baseline}</p>
-          <p><strong>Plan:</strong> {selectedPlan.specific_goal_plan}</p>
-          <p><strong>Outcome:</strong> {selectedPlan.outcome}</p>
-          <p><strong>Execution Percentage:</strong> {selectedPlan.execution_percentage}</p>
-          <p><strong>Description:</strong> {selectedPlan.description}</p>
+          <p><strong>Plan:</strong> {selectedPlan.plan}</p>
+          <p><strong>Measurement:</strong> {selectedPlan.measurement}</p>
+          <p><strong>Description:</strong> {selectedPlan.Description}</p>
 
-
-   
-          <p><strong>Status:</strong> {selectedPlan.specific_goal_status}</p>
+          <p><strong>Status:</strong> {selectedPlan.specific_objective_detail_status}</p>
           <p><strong>Priority:</strong> {selectedPlan.priority}</p>
           <textarea
             placeholder="Add a comment (required)"

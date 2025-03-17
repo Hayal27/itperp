@@ -315,3 +315,11 @@ right: 7%;
     color: #555;
     text-align: center;
   }
+
+  .position1{
+    position: absolute;
+    top: 1%;
+    left: 40%;
+width: 100%;
+    background-color: #fff;
+  }

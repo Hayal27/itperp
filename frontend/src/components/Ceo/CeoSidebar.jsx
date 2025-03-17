@@ -71,10 +71,10 @@ function CeoSidebar() {
           /* Sidebar Toggle Button */
           .toggle-sidebar-btn {
             cursor: pointer;
-            font-size: 1.5rem;
+            font-size: 2.5rem;
             position: fixed;
             top: 15px;
-            left: 15px;
+            left: 170px;
             z-index: 1050;
             color: #007bff;
             transition: color 0.3s ease;
@@ -133,21 +133,37 @@ function CeoSidebar() {
               <li>
                 <Link to='/plan/view' className="nav-link">
                   <i className="bi bi-circle" />
-                  <span>View Plan</span>
+                  <span>Pending Plans</span>
                 </Link>
               </li>
+
               <li>
-                <Link to='/UserTable' className="nav-link">
+                <Link to='/plan/View_myplan' className="nav-link">
+                  <i className="bi bi-circle" />
+                  <span>Approved Plans</span>
+                </Link>
+              </li>
+              {/* <li>
+                <Link to='/plan/PlanSteps/Add' className="nav-link">
                   <i className="bi bi-circle" />
                   <span>Add Plan</span>
                 </Link>
-              </li>
-              <li>
-                <Link to='/UserForm' className="nav-link">
-                  <i className="bi bi-circle" />
-                  <span>Edit Plan</span>
+              </li> */}
+{/* 
+    <li>
+                <Link to='/plan/CeoViewDeclinedPlan' className="nav-link">
+                  <i className="bi bi-eye" />
+                  <span>Declined Plan</span>
                 </Link>
-              </li>
+              </li> */}
+
+{/* 
+              <li>
+                <Link to='/plan/ViewOrgPlan' className="nav-link">
+                  <i className="bi bi-circle" />
+                  <span>Orginazation Plans</span>
+                </Link>
+              </li> */}
             </ul>
           </li>
         </ul>
@@ -170,21 +186,31 @@ function CeoSidebar() {
             </a>
             <ul id="components-nav" className="nav-content collapse" data-bs-parent="#sidebar-nav">
               <li>
-                <Link to='/UserForm' className="nav-link">
+                <Link to='/report/Viewapprovedreport' className="nav-link">
                   <i className="bi bi-circle" />
-                  <span>View reports</span>
+                  <span>Pending Reports</span>
                 </Link>
               </li>
-              <li>
-                <Link to='/UserTable' className="nav-link">
+              {/* <li>
+                <Link to='/report/View_myreport' className="nav-link">
                   <i className="bi bi-circle" />
-                  <span>Add report</span>
+                  <span>View My Report</span>
                 </Link>
               </li>
+
               <li>
-                <Link to='/UserForm' className="nav-link">
+                <Link to='/report/CeoViewDeclinedReport' className="nav-link">
+                  <i className="bi bi-eye" />
+                  <span>Declined Report</span>
+                </Link>
+              </li> */}
+
+
+
+              <li>
+                <Link to='/report/ViewOrgReport' className="nav-link">
                   <i className="bi bi-circle" />
-                  <span>Edit report</span>
+                  <span>Approved Report</span>
                 </Link>
               </li>
             </ul>

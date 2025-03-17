@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
-function ServiceheadSidebar() {
+function ServiceHeadSidebar() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   // Toggle function for sidebar visibility
@@ -71,10 +71,10 @@ function ServiceheadSidebar() {
           /* Sidebar Toggle Button */
           .toggle-sidebar-btn {
             cursor: pointer;
-            font-size: 1.5rem;
+            font-size: 2.5rem;
             position: fixed;
             top: 15px;
-            left: 15px;
+            left: 170px;
             z-index: 1050;
             color: #007bff;
             transition: color 0.3s ease;
@@ -133,19 +133,35 @@ function ServiceheadSidebar() {
               <li>
                 <Link to='/plan/view' className="nav-link">
                   <i className="bi bi-circle" />
-                  <span>View Submited Plan</span>
+                  <span>Submitted Plan</span>
+                </Link>
+              </li>
+
+              <li>
+                <Link to='/plan/View_myplan' className="nav-link">
+                  <i className="bi bi-circle" />
+                  <span>View My Plan</span>
                 </Link>
               </li>
               <li>
-                <Link to='/plan/add' className="nav-link">
+                <Link to='/plan/PlanSteps/Add' className="nav-link">
                   <i className="bi bi-circle" />
                   <span>Add Plan</span>
                 </Link>
               </li>
+
+    <li>
+                <Link to='/plan/ServiceHeadViewDeclinedPlan' className="nav-link">
+                  <i className="bi bi-eye" />
+                  <span>Declined Plan</span>
+                </Link>
+              </li>
+
+
               <li>
-                <Link to='/UserForm' className="nav-link">
+                <Link to='/plan/ViewOrgPlan' className="nav-link">
                   <i className="bi bi-circle" />
-                  <span>Edit Plan</span>
+                  <span>Orginazation Plans</span>
                 </Link>
               </li>
             </ul>
@@ -170,21 +186,31 @@ function ServiceheadSidebar() {
             </a>
             <ul id="components-nav" className="nav-content collapse" data-bs-parent="#sidebar-nav">
               <li>
-                <Link to='/report/view' className="nav-link">
+                <Link to='/report/Viewapprovedreport' className="nav-link">
                   <i className="bi bi-circle" />
-                  <span>View reports</span>
+                  <span>Submitted Report</span>
                 </Link>
               </li>
               <li>
-                <Link to='/report/add' className="nav-link">
+                <Link to='/report/View_myreport' className="nav-link">
                   <i className="bi bi-circle" />
-                  <span>Add report</span>
+                  <span>View My Report</span>
                 </Link>
               </li>
+
               <li>
-                <Link to='/UserForm' className="nav-link">
+                <Link to='/report/ServiceHeadViewDeclinedReport' className="nav-link">
+                  <i className="bi bi-eye" />
+                  <span>Declined Report</span>
+                </Link>
+              </li>
+
+
+
+              <li>
+                <Link to='/report/ViewOrgReport' className="nav-link">
                   <i className="bi bi-circle" />
-                  <span>Edit report</span>
+                  <span>Orginazation Report</span>
                 </Link>
               </li>
             </ul>
@@ -241,4 +267,5 @@ function ServiceheadSidebar() {
     </>
   );
 }
-export default ServiceheadSidebar;
+
+export default ServiceHeadSidebar;

@@ -156,7 +156,7 @@ const deleteUser = (req, res) => {
 
 const changeStatus = async (status, user_id) => {
   try {
-    const response = await fetch(`http://localhost:5000/api/users/${user_id}/status`, {
+    const response = await fetch(`http://192.168.56.1:5000/api/users/${user_id}/status`, {
       method: "PUT",
       headers: { "Content-type": "application/json" },
       body: JSON.stringify({ status }),

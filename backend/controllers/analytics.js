@@ -1,6 +1,5 @@
 const con = require("../models/db");
-
-// Centralized error handling function for database errors
+// Handles database errors by responding with HTTP 500 and logging the error
 const handleDatabaseError = (err, res, operation) => {
   console.error(`Error during ${operation}:`, err);
   return res.status(500).json({
@@ -9,6 +8,27 @@ const handleDatabaseError = (err, res, operation) => {
     code: err.code
   });
 };
+
+// Handles cases when the query returns empty results, respond with a 404
+//Middleware to handle empty results
+const handleEmptyResults = (results, res, defaultValues) => {
+  if (!results || results.length === 0) {
+    res.json(defaultValues);
+    return true;
+  }
+  return false;
+};
+// Builds the join clause based on the request parameters
+const getJoinClause = (req) => {
+  let joinClause = BASE_JOIN;
+  if (req.query.department) {
+    joinClause += "\nJOIN plans p ON g.plan_id = p.plan_id";
+  }
+  return joinClause;
+};
+
+
+
 
 // Validate period parameters from the query
 const validatePeriodParams = (req, res) => {
@@ -22,60 +42,62 @@ const validatePeriodParams = (req, res) => {
   return true;
 };
 
-// Handle empty results by sending an appropriate response
-const handleEmptyResults = (results, res, defaultValue = null) => {
-  if (!results || results.length === 0) {
-    return res.status(404).json({
-      message: "No data found for the specified criteria",
-      data: defaultValue
-    });
-  }
-  return false;
-};
+// const handleEmptyResults = (results, res, defaultValue = null) => {
+//   if (!results || results.length === 0) {
+//     return res.status(404).json({
+//       message: "No data found for the specified criteria",
+//       data: defaultValue
+//     });
+//   }
+//   return false;
+// };
 
 // Base JOIN clause for proper table relationships (always included joins)
 const BASE_JOIN = `
   FROM specific_objective_details sod
   JOIN specific_objectives so ON sod.specific_objective_id = so.specific_objective_id
   JOIN objectives o ON so.objective_id = o.objective_id
-  JOIN goals g ON o.goal_id = g.goal_id
-`;
+  JOIN goals g ON o.goal_id = g.goal_id`;
 
-// Function to build additional JOIN clauses based on filters.
-// If department filter is provided, join the plans table.
-const getJoinClause = (req) => {
-  let joinClause = BASE_JOIN;
-  if (req.query.department) {
-    joinClause += "\nJOIN plans p ON g.plan_id = p.plan_id";
-  }
-  return joinClause;
-};
-
-// Function to build dynamic WHERE condition string from request query parameters.
-// Base condition ("sod.plan_type = 'cost'") must be already provided in the query.
-// Additional filters will be appended with the AND operator.
-const getFilterConditions = (req) => {
-  const conditions = [];
-  if (req.query.year) {
-    conditions.push(`g.year = '${req.query.year}'`);
-  }
-  if (req.query.quarter) {
-    conditions.push(`g.quarter = '${req.query.quarter}'`);
-  }
-  if (req.query.department) {
-    conditions.push(`p.department = '${req.query.department}'`);
-  }
-  if (req.query.created_by) {
-    conditions.push(`sod.created_by = '${req.query.created_by}'`);
-  }
-  if (req.query.view) {
-    conditions.push(`so.view = '${req.query.view}'`);
-  }
-  if (req.query.specific_objective) {
-    conditions.push(`so.specific_objective_id = '${req.query.specific_objective}'`);
-  }
-  return conditions.length > 0 ? " AND " + conditions.join(" AND ") : "";
-};
+  const getFilterConditions = (req) => {
+    const conditions = [];
+  
+    if (req.query.year) {
+      conditions.push(`g.year = '${req.query.year}'`);
+    }
+  
+    // Fix: Check for specific_objective_name to make it consistent with the query value sent by the client.
+    if (req.query.specific_objective_name) {
+      conditions.push(`so.specific_objective_name = '${req.query.specific_objective_name}'`);
+    }
+  
+    // Check for a valid year_range format (e.g., "2020-2023")
+    if (req.query.year_range) {
+      const years = req.query.year_range.split('-');
+      if (years.length === 2) {
+        conditions.push(`g.year BETWEEN '${years[0]}' AND '${years[1]}'`);
+      }
+    }
+  
+    if (req.query.quarter) {
+      conditions.push(`g.quarter = '${req.query.quarter}'`);
+    }
+  
+    if (req.query.department) {
+      conditions.push(`d.department = '${req.query.department}'`);
+    }
+  
+    if (req.query.created_by) {
+      conditions.push(`sod.created_by = '${req.query.created_by}'`);
+    }
+  
+    if (req.query.view) {
+      conditions.push(`so.view = '${req.query.view}'`);
+    }
+  
+    return conditions.length > 0 ? " AND " + conditions.join(" AND ") : "";
+  };
+  
 
 // Display Total Cost (summing CIoutcome) with additional filters
 const displayTotalCost = async (req, res) => {
@@ -143,6 +165,178 @@ const compareCostPlanOutcome = async (req, res) => {
     res.status(500).json({ message: "Internal server error", error: error.message });
   }
 };
+
+
+
+
+// compareIncomePlanOutcomeTotal_capital
+
+
+
+// costPlan_Outcome_difference_regular_budget
+
+const costPlanOutcomeDifferenceRegularBudget = async (req, res) => {
+  try {
+    // Retrieve joinClause and extraFilters from the request.
+    // Using getJoinClause which returns the BASE_JOIN already.
+    let joinClause = getJoinClause(req);
+    const extraFilters = getFilterConditions(req) || "";
+
+    // If joinClause is missing a FROM clause, fallback to the BASE_JOIN.
+    if (!joinClause || !/FROM\s+/i.test(joinClause)) {
+      joinClause = BASE_JOIN;
+      console.warn("joinClause not provided or missing FROM clause; using default BASE_JOIN");
+    }
+
+    // Build the SQL query string. This groups rows by costName.
+    // No extra join is appended here.
+    const query = `
+      SELECT 
+        sod.costName,
+        COALESCE(SUM(CASE WHEN sod.plan_type = 'cost' THEN sod.CIplan END), 0) AS plan,
+        COALESCE(SUM(CASE WHEN sod.plan_type = 'cost' THEN sod.CIoutcome END), 0) AS outcome,
+        COALESCE(SUM(CASE WHEN sod.plan_type = 'cost' THEN sod.CIplan END), 0) - COALESCE(SUM(CASE WHEN sod.plan_type = 'cost' THEN sod.CIoutcome END), 0) AS difference
+      ${joinClause}
+      WHERE 
+        sod.plan_type = 'cost' AND 
+        sod.cost_type = 'regular_budget' ${extraFilters}
+      GROUP BY sod.costName
+    `;
+    
+    console.log("Constructed Query:", query);
+
+    con.query(query, (err, results) => {
+      if (err) {
+        console.error("Database error occurred:", err);
+        return handleDatabaseError(err, res, "comparing cost plan and outcome total_regular");
+      }
+      
+      // Check if the results are empty. If so, return default structured response.
+      if (handleEmptyResults(results, res, { data: [], totals: { plan: 0, outcome: 0, difference: 0 } })) {
+        return;
+      }
+      
+      // Log the raw SQL results for debugging purposes.
+      console.log("SQL Query Results:", results);
+      
+      // Compute overall totals by iterating over the grouped results.
+      let totalPlan = 0;
+      let totalOutcome = 0;
+      results.forEach(row => {
+        totalPlan += Number(row.plan);
+        totalOutcome += Number(row.outcome);
+      });
+      const totalDifference = totalPlan - totalOutcome;
+      
+      // Build the final response object.
+      const responseData = {
+        data: results, // array of { costName, plan, outcome, difference }
+        totals: {
+          plan: totalPlan,
+          outcome: totalOutcome,
+          difference: totalDifference
+        }
+      };
+      
+      // Log computed totals.
+      console.log("Computed Totals - Total Plan:", totalPlan, "Total Outcome:", totalOutcome, "Total Difference:", totalDifference);
+      
+      // Send the computed data to the frontend.
+      res.json(responseData);
+    });
+    
+  } catch (error) {
+    console.error("Unexpected error in costPlanOutcomeDifferenceRegularBudget:", error);
+    res.status(500).json({ message: "Internal server error", error: error.message });
+  }
+};
+
+
+const costPlanOutcomeDifferenceCapitalBudget = async (req, res) => {
+  try {
+    // Retrieve joinClause and extraFilters from the request.
+    // Using getJoinClause which returns the BASE_JOIN already.
+    let joinClause = getJoinClause(req);
+    const extraFilters = getFilterConditions(req) || "";
+
+    // If joinClause is missing a FROM clause, fallback to the BASE_JOIN.
+    if (!joinClause || !/FROM\s+/i.test(joinClause)) {
+      joinClause = BASE_JOIN;
+      console.warn("joinClause not provided or missing FROM clause; using default BASE_JOIN");
+    }
+
+    // Build the SQL query string. This groups rows by costName.
+    // No extra join is appended here.
+    const query = `
+      SELECT 
+        sod.costName,
+        COALESCE(SUM(CASE WHEN sod.plan_type = 'cost' THEN sod.CIplan END), 0) AS plan,
+        COALESCE(SUM(CASE WHEN sod.plan_type = 'cost' THEN sod.CIoutcome END), 0) AS outcome,
+        COALESCE(SUM(CASE WHEN sod.plan_type = 'cost' THEN sod.CIplan END), 0) - COALESCE(SUM(CASE WHEN sod.plan_type = 'cost' THEN sod.CIoutcome END), 0) AS difference
+      ${joinClause}
+      WHERE 
+        sod.plan_type = 'cost' AND 
+        sod.cost_type = 'capital_project_budget' ${extraFilters}
+      GROUP BY sod.costName
+    `;
+    
+    console.log("Constructed Query:", query);
+
+    con.query(query, (err, results) => {
+      if (err) {
+        console.error("Database error occurred:", err);
+        return handleDatabaseError(err, res, "comparing cost plan and outcome total_capital");
+      }
+      
+      // Check if the results are empty. If so, return default structured response.
+      if (handleEmptyResults(results, res, { data: [], totals: { plan: 0, outcome: 0, difference: 0 } })) {
+        return;
+      }
+      
+      // Log the raw SQL results for debugging purposes.
+      console.log("SQL Query Results:", results);
+      
+      // Compute overall totals by iterating over the grouped results.
+      let totalPlan = 0;
+      let totalOutcome = 0;
+      results.forEach(row => {
+        totalPlan += Number(row.plan);
+        totalOutcome += Number(row.outcome);
+      });
+      const totalDifference = totalPlan - totalOutcome;
+      
+      // Build the final response object.
+      const responseData = {
+        data: results, // array of { costName, plan, outcome, difference }
+        totals: {
+          plan: totalPlan,
+          outcome: totalOutcome,
+          difference: totalDifference
+        }
+      };
+      
+      // Log computed totals.
+      console.log("Computed Totals - Total Plan:", totalPlan, "Total Outcome:", totalOutcome, "Total Difference:", totalDifference);
+      
+      // Send the computed data to the frontend.
+      res.json(responseData);
+    });
+    
+  } catch (error) {
+    console.error("Unexpected error in costPlanOutcomeDifferenceCapitalBudget:", error);
+    res.status(500).json({ message: "Internal server error", error: error.message });
+  }
+};
+
+
+
+
+
+
+
+
+
+
 
 // Display execution_percentage of Cost
 const displayTotalCostExcutionPercentage = async (req, res) => {
@@ -623,6 +817,36 @@ const displayTotalHR = async (req, res) => {
 //   }
 // };
 
+  
+
+
+
+
+
+const compareIncomePlanOutcomeTotal_capital = async (req, res) => {
+  try {
+    const joinClause = getJoinClause(req);
+    const extraFilters = getFilterConditions(req);
+    const query = `
+      SELECT 
+        COALESCE(SUM(CASE WHEN sod.plan_type = 'cost' THEN sod.CIplan END), 0) as total_cost_plan_capital,
+        COALESCE(SUM(CASE WHEN sod.plan_type = 'cost' THEN sod.CIoutcome END), 0) as total_cost_outcome_capital
+      ${joinClause}
+      WHERE sod.plan_type = 'cost' AND sod.cost_type = 'capital_project_budget' ${extraFilters}
+    `;
+    con.query(query, (err, results) => {
+      if (err) return handleDatabaseError(err, res, 'comparing cost plan and outcome total_capital');
+      if (handleEmptyResults(results, res, { total_cost_plan_capital: 0, total_cost_outcome_capital: 0 })) return;
+      const { total_cost_plan_capital, total_cost_outcome_capital } = results[0];
+      const difference = total_cost_plan_capital - total_cost_outcome_capital;
+   res.json({ total_cost_plan_capital, total_cost_outcome_capital, difference });
+    });
+  } catch (error) {
+    console.error('Unexpected error in compareIncomePlanOutcomeTotal_capital:', error);
+    res.status(500).json({ message: "Internal server error", error: error.message });
+  }
+};
+
 module.exports = {
   displayTotalCost,
   displayTotalCostPlan,
@@ -634,7 +858,10 @@ module.exports = {
   displayTotalIncomePlanUSD,
   compareIncomePlanOutcomeETB,
   compareIncomePlanOutcomeUSD,
-  compareIncomePlanOutcomeTotal
+  compareIncomePlanOutcomeTotal,
+  costPlanOutcomeDifferenceRegularBudget,
+  costPlanOutcomeDifferenceCapitalBudget,
+  
 //   compareCostCIplanAndCIoutcome,
 //   compareCostCIexecutionPercentage,
 //   displayTotalIncome,

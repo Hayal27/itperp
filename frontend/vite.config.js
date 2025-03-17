@@ -19,4 +19,9 @@ export default defineConfig({
       },
     },
   },
+  server: {
+    host: '0.0.0.0', // Allows access from other devices on the same network
+    port: 5173, // Default Vite port
+    strictPort: true, // Ensures Vite doesn't switch ports if 5173 is in use
+  },
 });

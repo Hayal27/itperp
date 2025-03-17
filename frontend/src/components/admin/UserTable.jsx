@@ -14,7 +14,7 @@ const UserTable = () => {
   const changeStatus = async (status, user_id) => {
     try {
       // Call the API to change the user's status
-      await fetch(`http://localhost:5000/api/users/${user_id}/status`, {
+      await fetch(`http://192.168.56.1:5000/api/users/${user_id}/status`, {
         method: "PUT",
         headers: { "Content-type": "application/json" },
         body: JSON.stringify({ status }), // Use "status" for the body
@@ -28,13 +28,13 @@ const UserTable = () => {
 
   // Fetch users and roles
   const fetchUsers = () => {
-    Axios.get("http://localhost:5000/api/users")
+    Axios.get("http://192.168.56.1:5000/api/users")
       .then((res) => setUsers(res.data))
       .catch((err) => console.log("Error fetching users:", err));
   };
 
   const fetchRoles = () => {
-    Axios.get("http://localhost:5000/api/roles")
+    Axios.get("http://192.168.56.1:5000/api/roles")
       .then((res) => setRoles(res.data))
       .catch((err) => console.log("Error fetching roles:", err));
   };

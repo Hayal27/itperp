@@ -1,221 +1,314 @@
+
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Axios from "axios";
 import Swal from "sweetalert2";
 import sad from "../../../../assets/img/sad.gif";
 import happy from "../../../../assets/img/happy.gif";
+import "../../../../assets/css/planform.css";
+
+// Utility function to calculate execution percentage.
+// Standard formula: ((outcome - baseline) / (plan - baseline)) * 100, rounded.
+const calculateExecutionPercentage = (baseline, plan, outcome) => {
+  const base = parseFloat(baseline);
+  const p = parseFloat(plan);
+  const o = parseFloat(outcome);
+  if (isNaN(base) || isNaN(p) || isNaN(o) || (p - base) === 0) return 0;
+  return Math.round(((o - base) / (p - base)) * 100);
+};
+
+// Utility function for CI execution percentage.
+const CIcalculateExecutionPercentage = (CIbaseline, CIplan, CIoutcome) => {
+  const cibase = parseFloat(CIbaseline);
+  const cip = parseFloat(CIplan);
+  const cio = parseFloat(CIoutcome);
+  if (isNaN(cibase) || isNaN(cip) || isNaN(cio) || (cip - cibase) === 0) return 0;
+  return Math.round(((cio - cibase) / (cip - cibase)) * 100);
+};
 
 const UpdatePlan = () => {
   const { planId } = useParams();
   const navigate = useNavigate();
 
-  // State for plan details and form fields
+  // State for the filtered plan details and form data.
   const [plan, setPlan] = useState(null);
   const [formData, setFormData] = useState({
+    // Mapped read-only fields from backend.
     goal: "",
     objective: "",
     specObjective: "",
     specific_objective_detailname: "",
     measurement: "",
+    // Editable fields:
     baseline: "",
     plan: "",
     description: "",
-    deadline: "",
+    year: "",
     Quarter: "",
-    progress: "on going",
-    // Extended field for plan category; allowed values: "default", "cost", "income", "hr"
-    plan_type: "default",
-    // Cost-related fields
+    progress: "",
+    plan_type: "",
     cost_type: "",
-    custom_cost_type: "",
     costName: "",
-    attribute: "",
-    // Income-related field
     income_exchange: "",
     incomeName: "",
-    // HR-related field
-    employment_type: "default",
-    // Common CI fields (for cost, income & now hr details)
-    CIbasiline: "",
-    CIplan: ""
+    employment_type: "",
+    // CI fields for cost/income/hr: also editable
+    CIbaseline: "",
+    CIplan: "",
+    // Editable outcome fields.
+    outcome: "",
+    execution_percentage: "",
+    CIoutcome: "",
+    CIexecution_percentage: ""
   });
-  const [responseMessage, setResponseMessage] = useState("");
-  const [popupType, setPopupType] = useState("");
-  const [showPopup, setShowPopup] = useState(false);
-  const [showPreview, setShowPreview] = useState(false);
   const [errors, setErrors] = useState({});
+  const [previewVisible, setPreviewVisible] = useState(false);
 
-  // Fetch plan details on mount
+  // Fetch plan details on mount.
   useEffect(() => {
     if (!planId) {
-      setResponseMessage("Invalid Plan ID");
-      setPopupType("error");
-      setShowPopup(true);
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Invalid Plan ID"
+      });
       return;
     }
     const token = localStorage.getItem("token");
-    Axios.get(`http://localhost:5000/api/pland/${planId}`, {
+    Axios.get(`http://192.168.56.1:5000/api/pland/${planId}`, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then((res) => {
         const p = res.data.plan;
         setPlan(p);
-        // Initialize the form with fetched plan details
-        setFormData({
-          goal: p.Goal_Name || "",
-          objective: p.Objective_Name || "",
-          specObjective: p.Specific_Objective_Name || "",
-          specific_objective_detailname: p.Specific_Objective_NameDetail || "",
-          measurement: p.Measurement || "",
-          baseline: p.Baseline || "",
-          plan: p.Plan || "",
-          description: p.Description || "",
-          deadline: p.deadline || "",
-          Quarter: p.Quarter || "",
-          progress: p.Progress || "on going",
-          // Extended fields: fetched and displayed but not modifiable for plan_type
-          plan_type: p.plan_type || "default",
-          cost_type: p.cost_type || "default",
-          custom_cost_type: "",
+        // Map backend fields to local state with proper type conversion.
+        setFormData((prev) => ({
+          ...prev,
+          goal: p.goal_name || "",
+          objective: p.objective_name || "",
+          specObjective: p.specific_objective_name || "",
+          specific_objective_detailname: p.specific_objective_detailname || "",
+          measurement: p.measurement || "",
+          baseline: p.baseline || "",
+          plan: p.plan || "",
+          description: p.details || "",
+          year: (p.year || p.year === 0) ? p.year.toString() : "",
+          Quarter: p.month || "",
+          progress: p.progress || "",
+          plan_type: p.plan_type || "",
+          cost_type: p.cost_type || "",
           costName: p.costName || "",
-          attribute: p.attribute || "",
-          income_exchange: p.income_exchange || "default",
+          income_exchange: p.income_exchange || "",
           incomeName: p.incomeName || "",
-          employment_type: p.employment_type || "default",
-          CIbasiline: p.CIbasiline || "",
-          CIplan: p.CIplan || ""
-        });
+          employment_type: p.employment_type || "",
+          CIbaseline: (p.CIbaseline || p.CIbaseline === 0) ? p.CIbaseline.toString() : "",
+          CIplan: (p.CIplan || p.CIplan === 0) ? p.CIplan.toString() : "",
+          outcome: (p.outcome || p.outcome === 0) ? p.outcome.toString() : "",
+          execution_percentage: (p.execution_percentage || p.execution_percentage === 0) ? p.execution_percentage.toString() : ""
+        }));
       })
       .catch((err) => {
         console.error("Error fetching plan details:", err.response || err.message);
-        setResponseMessage("Failed to fetch plan details.");
-        setPopupType("error");
-        setShowPopup(true);
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "Failed to fetch plan details."
+        });
       });
   }, [planId]);
 
-  // Handle changes for input fields (both modifiable and for updating fetched data view)
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+  // Event handlers for outcome changes.
+  const handleOutcomeChange = (e) => {
+    const updatedOutcome = e.target.value;
+    const computedPercentage = calculateExecutionPercentage(
+      formData.baseline,
+      formData.plan,
+      updatedOutcome
+    );
+    setFormData((prev) => ({
+      ...prev,
+      outcome: updatedOutcome,
+      execution_percentage: computedPercentage.toString()
+    }));
   };
 
-  // Validate form fields (only modifiable fields need validation)
-  const validateForm = () => {
-    let formErrors = {};
-    let isValid = true;
-    // Validate required modifiable fields.
-    const requiredFields = [
-      "specific_objective_detailname",
-      "measurement",
-      "baseline",
-      "plan",
-      "deadline",
-      "progress"
-    ];
-    requiredFields.forEach((key) => {
-      if (!formData[key] || formData[key].trim() === "") {
-        formErrors[key] = `${key} is required`;
-        isValid = false;
-      }
-    });
-    if (formData.plan_type === "cost") {
-      if (!formData.cost_type || formData.cost_type.trim() === "") {
-        formErrors.cost_type = "Cost Type is required";
-        isValid = false;
-      }
-    }
-    if (formData.plan_type === "income") {
-      if (formData.income_exchange === "default") {
-        formErrors.income_exchange = "Select a valid Income Exchange";
-        isValid = false;
-      }
-    }
-    // Additional validations can be added here.
-    setErrors(formErrors);
-    return isValid;
+  const handleCIOutcomeChange = (e) => {
+    const updatedCIOutcome = e.target.value;
+    const computedCIPercentage = CIcalculateExecutionPercentage(
+      formData.CIbaseline,
+      formData.CIplan,
+      updatedCIOutcome
+    );
+    setFormData((prev) => ({
+      ...prev,
+      CIoutcome: updatedCIOutcome,
+      CIexecution_percentage: computedCIPercentage.toString()
+    }));
   };
 
-  // Form submission handler
+  // Change handlers for editable fields in the main section.
+  const handleBaselineChange = (e) => {
+    const newBaseline = e.target.value;
+    const computedPercentage = calculateExecutionPercentage(
+      newBaseline,
+      formData.plan,
+      formData.outcome
+    );
+    setFormData((prev) => ({
+      ...prev,
+      baseline: newBaseline,
+      execution_percentage: computedPercentage.toString()
+    }));
+  };
+
+  const handlePlanFieldChange = (e) => {
+    const newPlan = e.target.value;
+    const computedPercentage = calculateExecutionPercentage(
+      formData.baseline,
+      newPlan,
+      formData.outcome
+    );
+    setFormData((prev) => ({
+      ...prev,
+      plan: newPlan,
+      execution_percentage: computedPercentage.toString()
+    }));
+  };
+
+  const handleYearChange = (e) => {
+    setFormData((prev) => ({
+      ...prev,
+      year: e.target.value
+    }));
+  };
+
+  // Change handlers for CI baseline and CI plan.
+  const handleCIbaselineChange = (e) => {
+    const newCIbaseline = e.target.value;
+    const computedCIPercentage = CIcalculateExecutionPercentage(
+      newCIbaseline,
+      formData.CIplan,
+      formData.CIoutcome
+    );
+    setFormData((prev) => ({
+      ...prev,
+      CIbaseline: newCIbaseline,
+      CIexecution_percentage: computedCIPercentage.toString()
+    }));
+  };
+
+  const handleCIplanChange = (e) => {
+    const newCIplan = e.target.value;
+    const computedCIPercentage = CIcalculateExecutionPercentage(
+      formData.CIbaseline,
+      newCIplan,
+      formData.CIoutcome
+    );
+    setFormData((prev) => ({
+      ...prev,
+      CIplan: newCIplan,
+      CIexecution_percentage: computedCIPercentage.toString()
+    }));
+  };
+
+  // Submit handler: updating outcome (and CI outcome if applicable) along with new editable fields.
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!validateForm()) {
-      setResponseMessage("እባክዎ ባዶ ቦታዎችን ይሙሉ");
-      setPopupType("error");
-      setShowPopup(true);
+    console.log("handleSubmit triggered", formData);
+    let localErrors = {};
+
+    // Validate main editable fields: baseline, plan, and year.
+    if (!formData.baseline) {
+      localErrors.baseline = "መነሻ is required";
+    } else if (isNaN(parseFloat(formData.baseline))) {
+      localErrors.baseline = "መነሻ must be a valid number";
+    }
+
+    if (!formData.plan) {
+      localErrors.plan = "እቅድ is required";
+    } else if (isNaN(parseFloat(formData.plan))) {
+      localErrors.plan = "እቅድ must be a valid number";
+    }
+
+    if (!formData.year) {
+      localErrors.year = "የትግበራ አመት is required";
+    } else if (isNaN(parseFloat(formData.year))) {
+      localErrors.year = "የትግበራ አመት must be a valid number";
+    }
+
+    // If plan type is not default, validate CI fields.
+    if (formData.plan_type !== "default") {
+      if (!formData.CIbaseline) {
+        localErrors.CIbaseline = "CI መነሻ is required";
+      } else if (isNaN(parseFloat(formData.CIbaseline))) {
+        localErrors.CIbaseline = "CI መነሻ must be a valid number";
+      }
+      if (!formData.CIplan) {
+        localErrors.CIplan = "CI እቅድ is required";
+      } else if (isNaN(parseFloat(formData.CIplan))) {
+        localErrors.CIplan = "CI እቅድ must be a valid number";
+      }
+    }
+
+    if (Object.keys(localErrors).length > 0) {
+      const firstError = Object.values(localErrors)[0];
+      console.log("Validation errors found:", localErrors);
+      Swal.fire({
+        icon: "error",
+        title: "Validation Error",
+        text: firstError
+      });
+      setErrors(localErrors);
       return;
     }
-    // Prepare update payload. Note: goal, objective, specObjective (and related) are read-only.
-    const updatedData = {
-      goal: formData.goal,
-      objective: formData.objective,
-      specific_objective: formData.specObjective,
-      Specific_Objective_NameDetail: formData.specific_objective_detailname,
-      measurement: formData.measurement,
-      baseline: formData.baseline,
-      plan: formData.plan,
-      description: formData.description,
-      deadline: formData.deadline,
-      Quarter: formData.Quarter,
-      progress: formData.progress,
-      plan_type: formData.plan_type,
-      // Extended fields based on plan_type
-      ...(formData.plan_type === "cost" && {
-        cost_type: formData.cost_type === "custom" ? formData.custom_cost_type : formData.cost_type,
-        costName: formData.costName,
-        attribute: formData.attribute,
-        CIbasiline: formData.CIbasiline,
-        CIplan: formData.CIplan
-      }),
-      ...(formData.plan_type === "income" && {
-        income_exchange: formData.income_exchange,
-        incomeName: formData.incomeName,
-        CIbasiline: formData.CIbasiline,
-        CIplan: formData.CIplan
-      }),
-      ...(formData.plan_type === "hr" && {
-        employment_type: formData.employment_type,
-        // For HR plans, also include CI fields
-        CIbasiline: formData.CIbasiline,
-        CIplan: formData.CIplan
-      })
-    };
 
+    // Build payload based on plan_type.
+    const updatedData =
+      formData.plan_type === "default"
+        ? {
+            baseline: formData.baseline,
+            plan: formData.plan,
+            year: formData.year,
+            outcome: formData.outcome,
+            execution_percentage: formData.execution_percentage
+          }
+        : {
+            baseline: formData.baseline,
+            plan: formData.plan,
+            year: formData.year,
+            outcome: formData.outcome,
+            execution_percentage: formData.execution_percentage,
+            CIbaseline: formData.CIbaseline,
+            CIplan: formData.CIplan,
+            CIoutcome: formData.CIoutcome,
+            CIexecution_percentage: formData.CIexecution_percentage
+          };
+
+    console.log("Payload to be submitted:", updatedData);
     const token = localStorage.getItem("token");
-    Axios.put(`http://localhost:5000/api/planupdate/${planId}`, updatedData, {
+
+    Axios.put(`http://192.168.56.1:5000/api/planupdate/${planId}`, updatedData, {
       headers: { Authorization: `Bearer ${token}` }
     })
-      .then(() => {
-        setResponseMessage("በተገቢው ዘምኗል!");
-        setPopupType("success");
-        setShowPopup(true);
+      .then((response) => {
+        console.log("Update success response:", response.data);
+        Swal.fire({
+          icon: "success",
+          title: "Success",
+          text: "Report updated successfully!"
+        });
       })
       .catch((err) => {
         console.error("Update error:", err.response || err.message);
-        if (
-          err.response &&
-          err.response.data &&
-          err.response.data.error_code === "SUPERVISOR_REQUIRED"
-        ) {
-          setResponseMessage(
-            "እዲያዘምኑት አልተፈቀደሎትም! እባክዎ ሱፐርቫይዘሮን ያግኙ።"
-          );
-        } else {
-          setResponseMessage("Error updating the plan. Please try again.");
-        }
-        setPopupType("error");
-        setShowPopup(true);
+        Swal.fire({
+          icon: "error",
+          title: "Update Error",
+          text: "Error updating the report. Please try again."
+        });
+      })
+      .finally(() => {
+        console.log("Axios PUT request completed");
       });
-  };
-
-  // Toggle preview visibility
-  const togglePreview = () => {
-    setShowPreview(!showPreview);
-  };
-
-  // Close the popup message
-  const closePopup = () => {
-    setShowPopup(false);
   };
 
   return (
@@ -226,315 +319,290 @@ const UpdatePlan = () => {
       {plan ? (
         <>
           <form onSubmit={handleSubmit}>
-            {/* Default Read-Only Fields */}
-            <div className="mb-6">
-              <label className="block mb-2 font-semibold text-gray-700">ግብ</label>
-              <input
-                type="text"
-                name="goal"
-                value={formData.goal}
-                readOnly
-                className="form-control w-full border border-gray-300 rounded-lg p-3 bg-gray-100 cursor-not-allowed"
-              />
-            </div>
-            <div className="mb-6">
-              <label className="block mb-2 font-semibold text-gray-700">አላማ</label>
-              <input
-                type="text"
-                name="objective"
-                value={formData.objective}
-                readOnly
-                className="form-control w-full border border-gray-300 rounded-lg p-3 bg-gray-100 cursor-not-allowed"
-              />
-            </div>
-            <div className="mb-6">
-              <label className="block mb-2 font-semibold text-gray-700">ውጤት</label>
-              <input
-                type="text"
-                name="specObjective"
-                value={formData.specObjective}
-                readOnly
-                className="form-control w-full border border-gray-300 rounded-lg p-3 bg-gray-100 cursor-not-allowed"
-              />
-            </div>
+            {formData.goal && (
+              <div className="mb-6">
+                <label className="block mb-2 font-semibold text-gray-700">ግብ</label>
+                <input
+                  type="text"
+                  name="goal"
+                  value={formData.goal}
+                  readOnly
+                  className="form-control w-full border border-gray-300 rounded-lg p-3 bg-gray-100 cursor-not-allowed"
+                />
+              </div>
+            )}
+            {formData.objective && (
+              <div className="mb-6">
+                <label className="block mb-2 font-semibold text-gray-700">አላማ</label>
+                <input
+                  type="text"
+                  name="objective"
+                  value={formData.objective}
+                  readOnly
+                  className="form-control w-full border border-gray-300 rounded-lg p-3 bg-gray-100 cursor-not-allowed"
+                />
+              </div>
+            )}
+            {formData.specObjective && (
+              <div className="mb-6">
+                <label className="block mb-2 font-semibold text-gray-700">ውጤት</label>
+                <input
+                  type="text"
+                  name="specObjective"
+                  value={formData.specObjective}
+                  readOnly
+                  className="form-control w-full border border-gray-300 rounded-lg p-3 bg-gray-100 cursor-not-allowed"
+                />
+              </div>
+            )}
+            {formData.specific_objective_detailname && (
+              <div className="mb-6">
+                <label className="block mb-2 font-semibold text-gray-700">
+                  የ ውጤቱ ሚከናወን ዝርዝር ሥራ
+                </label>
+                <input
+                  type="text"
+                  name="specific_objective_detailname"
+                  value={formData.specific_objective_detailname}
+                  readOnly
+                  className="form-control w-full border border-gray-300 rounded-lg p-3 bg-gray-100 cursor-not-allowed"
+                />
+              </div>
+            )}
+            {formData.measurement && (
+              <div className="mb-6">
+                <label className="block mb-2 font-semibold text-gray-700">መለኪያ</label>
+                <input
+                  type="text"
+                  name="measurement"
+                  value={formData.measurement}
+                  readOnly
+                  className="form-control w-full border border-gray-300 rounded-lg p-3 bg-gray-100 cursor-not-allowed"
+                />
+              </div>
+            )}
 
-            {/* Modifiable Field: Specific Objective Detail */}
-            <div className="mb-6">
-              <label className="block mb-2 font-semibold text-gray-700">
-                የውጤቱ ሚከናወን ዝርዝር ሥራ
-              </label>
-              <input
-                type="text"
-                name="specific_objective_detailname"
-                value={formData.specific_objective_detailname}
-                onChange={handleInputChange}
-                className="form-control w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
-              />
-              {errors.specific_objective_detailname && <small className="text-red-500">{errors.specific_objective_detailname}</small>}
-            </div>
-
-            {/* Other Default Modifiable Fields */}
-            <div className="mb-6">
-              <label className="block mb-2 font-semibold text-gray-700">መለኪያ</label>
-              <select
-                name="measurement"
-                value={formData.measurement}
-                onChange={handleInputChange}
-                className="form-control w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
-                required
-              >
-                <option value="" disabled style={{ backgroundColor: "#f3f4f6", fontWeight: "bold" }}>
-                  ⬇️ Select Measurement
-                </option>
-                <option value="present">Present</option>
-                <option value="USD">USD</option>
-                <option value="ETB">ETB</option>
-                <option value="performance">Performance</option>
-                <option value="number">Number</option>
-              </select>
-              {errors.measurement && <small className="text-red-500">{errors.measurement}</small>}
-            </div>
+            {/* Editable Main Fields */}
             <div className="mb-6">
               <label className="block mb-2 font-semibold text-gray-700">መነሻ</label>
               <input
-                type="text"
+                type="number"
                 name="baseline"
                 value={formData.baseline}
-                onChange={handleInputChange}
-                className="form-control w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
-                required
+                onChange={handleBaselineChange}
+                className="form-control w-full border border-gray-300 rounded-lg p-3"
               />
-              {errors.baseline && <small className="text-red-500">{errors.baseline}</small>}
             </div>
             <div className="mb-6">
               <label className="block mb-2 font-semibold text-gray-700">እቅድ</label>
               <input
-                type="text"
+                type="number"
                 name="plan"
                 value={formData.plan}
-                onChange={handleInputChange}
-                className="form-control w-full border border-gray-300 rounded-lg p-3 bg-gray-100"
-                required
+                onChange={handlePlanFieldChange}
+                className="form-control w-full border border-gray-300 rounded-lg p-3"
               />
             </div>
             <div className="mb-6">
-              <label className="block mb-2 font-semibold text-gray-700">መግለጫ</label>
-              <textarea
-                name="description"
-                value={formData.description}
-                onChange={handleInputChange}
-                className="form-control w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
-                rows="3"
-              ></textarea>
-            </div>
-
-            {/* Deadline field with calendar picker */}
-            <div className="mb-6">
-              <label className="block mb-2 font-semibold text-gray-700">ሚጠናቀቅበት አመት</label>
+              <label className="block mb-2 font-semibold text-gray-700">የትግበራ አመት</label>
               <input
-                type="date"
-                name="deadline"
-                value={formData.deadline}
-                onChange={handleInputChange}
-                className="form-control w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
-                required
-              />
-              {errors.deadline && <small className="text-red-500">{errors.deadline}</small>}
-            </div>
-            <div className="mb-6">
-              <label className="block mb-2 font-semibold text-gray-700">ሂደት</label>
-              <select
-                name="progress"
-                value={formData.progress}
-                onChange={handleInputChange}
-                className="form-control w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
-                required
-              >
-                <option value="started">started</option>
-                <option value="on going">በሂደት ላይ</option>
-                <option value="completed">የተጠናቀቀ</option>
-              </select>
-              {errors.progress && <small className="text-red-500">{errors.progress}</small>}
-            </div>
-
-            {/* Extended Fields Section */}
-            <h3 className="text-2xl font-semibold mt-10 mb-6 text-center text-gray-800">
-              የፋርናንስ እና አስተዳደር ብቻ⬇️
-            </h3>
-            {/* Plan Category (read-only) */}
-            <div className="mb-6">
-              <label className="block mb-2 font-semibold text-gray-700">Plan Category</label>
-              <input
-                type="text"
-                name="plan_type"
-                value={formData.plan_type}
-                readOnly
-                className="form-control w-full border border-gray-300 rounded-lg p-3 bg-gray-100 cursor-not-allowed"
+                type="number"
+                name="year"
+                value={formData.year}
+                onChange={handleYearChange}
+                className="form-control w-full border border-gray-300 rounded-lg p-3"
               />
             </div>
 
-            {/* Conditional Rendering based on Plan Category */}
-            {formData.plan_type === "cost" && (
-              <div className="space-y-6">
+            {formData.description && (
+              <div className="mb-6">
+                <label className="block mb-2 font-semibold text-gray-700">መግለጫ</label>
+                <textarea
+                  name="description"
+                  value={formData.description}
+                  readOnly
+                  className="form-control w-full border border-gray-300 rounded-lg p-3 bg-gray-100 cursor-not-allowed"
+                  rows="3"
+                ></textarea>
+              </div>
+            )}
+            {formData.Quarter && (
+              <div className="mb-6">
+                <label className="block mb-2 font-semibold text-gray-700">ሩብ አመት</label>
+                <input
+                  type="text"
+                  name="Quarter"
+                  value={formData.Quarter}
+                  readOnly
+                  className="form-control w-full border border-gray-300 rounded-lg p-3 bg-gray-100 cursor-not-allowed"
+                />
+              </div>
+            )}
+            {formData.progress && (
+              <div className="mb-6">
+                <label className="block mb-2 font-semibold text-gray-700">ሂደት</label>
+                <input
+                  type="text"
+                  name="progress"
+                  value={formData.progress}
+                  readOnly
+                  className="form-control w-full border border-gray-300 rounded-lg p-3 bg-gray-100 cursor-not-allowed"
+                />
+              </div>
+            )}
+
+            {/* Extended Read-only Fields Section */}
+            {formData.plan_type && (
+              <>
+                <h3 className="text-2xl font-semibold mt-10 mb-6 text-center text-gray-800">
+                  የወጪ አና ገቢ 
+                </h3>
                 <div className="mb-6">
-                  <label className="block mb-2 font-semibold text-gray-700">Cost Type</label>
-                  <select
-                    name="cost_type"
-                    value={formData.cost_type}
-                    onChange={handleInputChange}
-                    className="form-control w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-green-400 transition"
-                  >
-                    <option value="regular_budget">መደበኛ ወጪ</option>
-                    <option value="capital_project_budget">የካፒታል በጀት ወጪ</option>
-                    <option value="custom">Custom</option>
-                  </select>
-                  {errors.cost_type && <small className="text-red-500">{errors.cost_type}</small>}
+                  <label className="block mb-2 font-semibold text-gray-700">የ እቅዱ አይነት</label>
+                  <input
+                    type="text"
+                    name="plan_type"
+                    value={formData.plan_type}
+                    readOnly
+                    className="form-control w-full border border-gray-300 rounded-lg p-3 bg-gray-100 cursor-not-allowed"
+                  />
                 </div>
-                {formData.cost_type === "custom" && (
-                  <div className="mb-6">
-                    <label className="block mb-2 font-semibold text-gray-700">Custom Cost Type</label>
-                    <input
-                      type="text"
-                      name="custom_cost_type"
-                      value={formData.custom_cost_type}
-                      onChange={handleInputChange}
-                      placeholder="Enter custom cost type"
-                      className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-green-400 transition"
-                    />
-                    {errors.custom_cost_type && <small className="text-red-500">{errors.custom_cost_type}</small>}
+                {formData.plan_type === "cost" && (
+                  <div className="space-y-6">
+                    {formData.cost_type && (
+                      <div className="mb-6">
+                        <label className="block mb-2 font-semibold text-gray-700">የወጪው አይነት</label>
+                        <input
+                          type="text"
+                          name="cost_type"
+                          value={formData.cost_type}
+                          readOnly
+                          className="form-control w-full border border-gray-300 rounded-lg p-3 bg-gray-100 cursor-not-allowed"
+                        />
+                      </div>
+                    )}
+                    {formData.costName && (
+                      <div className="mb-6">
+                        <label className="block mb-2 text-gray-700">የወጪ ስም</label>
+                        <input
+                          type="text"
+                          name="costName"
+                          value={formData.costName}
+                          readOnly
+                          className="form-control w-full border border-gray-300 rounded-lg p-3 bg-gray-100 cursor-not-allowed"
+                        />
+                      </div>
+                    )}
+                    {/* Always render CI baseline and CI plan fields */}
+                    <div className="mb-6">
+                      <label className="block mb-2 font-semibold text-gray-700">መነሻ</label>
+                      <input
+                        type="number"
+                        name="CIbaseline"
+                        value={formData.CIbaseline}
+                        onChange={handleCIbaselineChange}
+                        className="form-control w-full border border-gray-300 rounded-lg p-3"
+                      />
+                    </div>
+                    <div className="mb-6">
+                      <label className="block mb-2 font-semibold text-gray-700">እቅድ</label>
+                      <input
+                        type="number"
+                        name="CIplan"
+                        value={formData.CIplan}
+                        onChange={handleCIplanChange}
+                        className="form-control w-full border border-gray-300 rounded-lg p-3"
+                      />
+                    </div>
                   </div>
                 )}
-                <div className="mb-6">
-                  <label className="block mb-2 font-semibold text-gray-700">Cost Name</label>
-                  <input
-                    type="text"
-                    name="costName"
-                    value={formData.costName}
-                    onChange={handleInputChange}
-                    placeholder="Enter cost name"
-                    className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-orange-400 transition"
-                  />
-                </div>
-                {/* CI Related Fields for Cost */}
-                <div className="mb-6">
-                  <label className="block mb-2 font-semibold text-gray-700">CI Baseline</label>
-                  <input
-                    type="text"
-                    name="CIbasiline"
-                    value={formData.CIbasiline}
-                    onChange={handleInputChange}
-                    placeholder="Enter CI Baseline"
-                    className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-red-400 transition"
-                  />
-                </div>
-                <div className="mb-6">
-                  <label className="block mb-2 font-semibold text-gray-700">CI Plan</label>
-                  <input
-                    type="text"
-                    name="CIplan"
-                    value={formData.CIplan}
-                    onChange={handleInputChange}
-                    placeholder="Enter CI Plan"
-                    className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-red-400 transition"
-                  />
-                </div>
-              </div>
-            )}
-
-            {formData.plan_type === "income" && (
-              <div className="space-y-6">
-                <div className="mb-6">
-                  <label className="block mb-2 font-semibold text-gray-700">Income Exchange</label>
-                  <select
-                    name="income_exchange"
-                    value={formData.income_exchange}
-                    onChange={handleInputChange}
-                    className="form-control w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-green-400 transition"
-                  >
-                    <option value="default">Default</option>
-                    <option value="ETB">ETB</option>
-                    <option value="USD">USD</option>
-                  </select>
-                  {errors.income_exchange && <small className="text-red-500">{errors.income_exchange}</small>}
-                </div>
-                <div className="mb-6">
-                  <label className="block mb-2 font-semibold text-gray-700">Income Name</label>
-                  <input
-                    type="text"
-                    name="incomeName"
-                    value={formData.incomeName}
-                    onChange={handleInputChange}
-                    placeholder="Enter income name"
-                    className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-orange-400 transition"
-                  />
-                  {errors.incomeName && <small className="text-red-500">{errors.incomeName}</small>}
-                </div>
-                {/* CI Fields for Income */}
-                <div className="mb-6">
-                  <label className="block mb-2 font-semibold text-gray-700">CI Baseline</label>
-                  <input
-                    type="text"
-                    name="CIbasiline"
-                    value={formData.CIbasiline}
-                    onChange={handleInputChange}
-                    placeholder="Enter CI Baseline"
-                    className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-red-400 transition"
-                  />
-                </div>
-                <div className="mb-6">
-                  <label className="block mb-2 font-semibold text-gray-700">CI Plan</label>
-                  <input
-                    type="text"
-                    name="CIplan"
-                    value={formData.CIplan}
-                    onChange={handleInputChange}
-                    placeholder="Enter CI Plan"
-                    className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-red-400 transition"
-                  />
-                </div>
-              </div>
-            )}
-
-            {formData.plan_type === "hr" && (
-              <div className="space-y-6">
-                <div className="mb-6">
-                  <label className="block mb-2 font-semibold text-gray-700">Employment Type</label>
-                  <select
-                    name="employment_type"
-                    value={formData.employment_type}
-                    onChange={handleInputChange}
-                    className="form-control w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-orange-400 transition"
-                  >
-                    <option value="default">Default</option>
-                    <option value="full_time">Full Time</option>
-                    <option value="contract">Contract</option>
-                  </select>
-                  {errors.employment_type && <small className="text-red-500">{errors.employment_type}</small>}
-                </div>
-                {/* Updated HR section to also include CI Baseline and CI Plan like other plan types */}
-                <div className="mb-6">
-                  <label className="block mb-2 font-semibold text-gray-700">CI Baseline</label>
-                  <input
-                    type="text"
-                    name="CIbasiline"
-                    value={formData.CIbasiline}
-                    onChange={handleInputChange}
-                    placeholder="Enter CI Baseline"
-                    className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-red-400 transition"
-                  />
-                </div>
-                <div className="mb-6">
-                  <label className="block mb-2 font-semibold text-gray-700">CI Plan</label>
-                  <input
-                    type="text"
-                    name="CIplan"
-                    value={formData.CIplan}
-                    onChange={handleInputChange}
-                    placeholder="Enter CI Plan"
-                    className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-red-400 transition"
-                  />
-                </div>
-              </div>
+                {formData.plan_type === "income" && (
+                  <div className="space-y-6">
+                    {formData.income_exchange && (
+                      <div className="mb-6">
+                        <label className="block mb-2 font-semibold text-gray-700">ምንዛሬ</label>
+                        <input
+                          type="text"
+                          name="income_exchange"
+                          value={formData.income_exchange}
+                          readOnly
+                          className="form-control w-full border border-gray-300 rounded-lg p-3 bg-gray-100 cursor-not-allowed"
+                        />
+                      </div>
+                    )}
+                    {formData.incomeName && (
+                      <div className="mb-6">
+                        <label className="block mb-2 font-semibold text-gray-700">የገቢው ስም</label>
+                        <input
+                          type="text"
+                          name="incomeName"
+                          value={formData.incomeName}
+                          readOnly
+                          className="form-control w-full border border-gray-300 rounded-lg p-3 bg-gray-100 cursor-not-allowed"
+                        />
+                      </div>
+                    )}
+                    {/* Always render CI baseline and CI plan fields */}
+                    <div className="mb-6">
+                      <label className="block mb-2 font-semibold text-gray-700">መነሻ</label>
+                      <input
+                        type="number"
+                        name="CIbaseline"
+                        value={formData.CIbaseline}
+                        onChange={handleCIbaselineChange}
+                        className="form-control w-full border border-gray-300 rounded-lg p-3"
+                      />
+                    </div>
+                    <div className="mb-6">
+                      <label className="block mb-2 font-semibold text-gray-700">እቅድ</label>
+                      <input
+                        type="number"
+                        name="CIplan"
+                        value={formData.CIplan}
+                        onChange={handleCIplanChange}
+                        className="form-control w-full border border-gray-300 rounded-lg p-3"
+                      />
+                    </div>
+                  </div>
+                )}
+                {formData.plan_type === "hr" && (
+                  <div className="space-y-6">
+                    {formData.employment_type && (
+                      <div className="mb-6">
+                        <label className="block mb-2 font-semibold text-gray-700">Employment Type</label>
+                        <input
+                          type="text"
+                          name="employment_type"
+                          value={formData.employment_type}
+                          readOnly
+                          className="form-control w-full border border-gray-300 rounded-lg p-3 bg-gray-100 cursor-not-allowed"
+                        />
+                      </div>
+                    )}
+                    {/* Always render CI baseline and CI plan fields */}
+                    <div className="mb-6">
+                      <label className="block mb-2 font-semibold text-gray-700">መነሻ</label>
+                      <input
+                        type="number"
+                        name="CIbaseline"
+                        value={formData.CIbaseline}
+                        onChange={handleCIbaselineChange}
+                        className="form-control w-full border border-gray-300 rounded-lg p-3"
+                      />
+                    </div>
+                    <div className="mb-6">
+                      <label className="block mb-2 font-semibold text-gray-700">እቅድ</label>
+                      <input
+                        type="number"
+                        name="CIplan"
+                        value={formData.CIplan}
+                        onChange={handleCIplanChange}
+                        className="form-control w-full border border-gray-300 rounded-lg p-3"
+                      />
+                    </div>
+                  </div>
+                )}
+              </>
             )}
 
             <button
@@ -548,51 +616,51 @@ const UpdatePlan = () => {
           {/* Preview Section */}
           <div className="mt-10 text-center">
             <button
-              className="btn btn-secondary py-2 px-6 rounded-lg bg-gray-300 hover:bg-gray-400 text-gray-800 font-medium transition transform hover:scale-105"
-              onClick={togglePreview}
+              className="btn-position btn btn-secondary py-2 px-6 rounded-lg bg-gray-300 hover:bg-gray-400 text-gray-800 font-medium transition transform hover:scale-105"
+              onClick={() => setPreviewVisible((prev) => !prev)}
             >
-              {showPreview ? "ክለሳውን አንሳ" : "ክለሳውን አሳይ"}
+              {previewVisible ? "ክለሳውን አንሳ" : "ክለሳውን አሳይ"}
             </button>
           </div>
-          {showPreview && (
+          {previewVisible && (
             <div className="preview-container mt-8 p-8 bg-white rounded-lg shadow-2xl">
-              <h3 className="text-2xl font-semibold mb-4">የ እቅዶ ክለሳ</h3>
-              <p><strong>ግብ:</strong> {formData.goal}</p>
-              <p><strong>አላማ:</strong> {formData.objective}</p>
-              <p><strong>ውጤት:</strong> {formData.specObjective}</p>
-              <p><strong>የውጤቱ ዝርዝር:</strong> {formData.specific_objective_detailname}</p>
-              <p><strong>መለኪያ:</strong> {formData.measurement}</p>
+              <h3 className="text-2xl font-semibold mb-4">የእቅዶ ክለሳ</h3>
+              {formData.goal && <p><strong>ግብ:</strong> {formData.goal}</p>}
+              {formData.objective && <p><strong>አላማ:</strong> {formData.objective}</p>}
+              {formData.specObjective && <p><strong>ውጤት:</strong> {formData.specObjective}</p>}
+              {formData.specific_objective_detailname && <p><strong>የ ውጤቱ ሚከናወን ዝርዝር ሥራ:</strong> {formData.specific_objective_detailname}</p>}
+              {formData.measurement && <p><strong>መለኪያ:</strong> {formData.measurement}</p>}
               <p><strong>መነሻ:</strong> {formData.baseline}</p>
               <p><strong>እቅድ:</strong> {formData.plan}</p>
-              <p><strong>መግለጫ:</strong> {formData.description}</p>
-              <p><strong>የሚጠናቀቅበት አመት (Deadline):</strong> {formData.deadline}</p>
-              <p><strong>Quarter:</strong> {formData.Quarter}</p>
-              <p><strong>ሂደት:</strong> {formData.progress}</p>
+              {formData.outcome !== "" && <p><strong>ክንውን:</strong> {formData.outcome}</p>}
+              {formData.execution_percentage !== "" && <p><strong>ክንውን በ%:</strong> {formData.execution_percentage}%</p>}
+              {formData.description && <p><strong>መግለጫ:</strong> {formData.description}</p>}
+              <p><strong>የትግበራ አመት:</strong> {formData.year}</p>
+              {formData.Quarter && <p><strong>ሩብ አመት:</strong> {formData.Quarter}</p>}
+              {formData.progress && <p><strong>ሂደት:</strong> {formData.progress}</p>}
               <hr className="my-4" />
-              <p><strong>Plan Category:</strong> {formData.plan_type}</p>
+              {formData.plan_type && <p><strong>የ እቅዱ አይነት:</strong> {formData.plan_type}</p>}
               {formData.plan_type === "cost" && (
                 <>
-                  <p>
-                    <strong>Cost Type:</strong> {formData.cost_type === "custom" ? formData.custom_cost_type : formData.cost_type}
-                  </p>
-                  <p><strong>Cost Name:</strong> {formData.costName}</p>
-                  <p><strong>CI Baseline:</strong> {formData.CIbasiline}</p>
-                  <p><strong>CI Plan:</strong> {formData.CIplan}</p>
+                  {formData.cost_type && <p><strong>የወጪው አይነት:</strong> {formData.cost_type}</p>}
+                  {formData.costName && <p><strong>የወጪው ስም:</strong> {formData.costName}</p>}
+                  <p><strong>መነሻ:</strong> {formData.CIbaseline}</p>
+                  <p><strong>እቅድ:</strong> {formData.CIplan}</p>
                 </>
               )}
               {formData.plan_type === "income" && (
                 <>
-                  <p><strong>Income Exchange:</strong> {formData.income_exchange}</p>
-                  <p><strong>Income Name:</strong> {formData.incomeName}</p>
-                  <p><strong>CI Baseline:</strong> {formData.CIbasiline}</p>
-                  <p><strong>CI Plan:</strong> {formData.CIplan}</p>
+                  {formData.income_exchange && <p><strong>ምንዛሬ:</strong> {formData.income_exchange}</p>}
+                  {formData.incomeName && <p><strong>የገቢው ስም:</strong> {formData.incomeName}</p>}
+                  <p><strong>መነሻ:</strong> {formData.CIbaseline}</p>
+                  <p><strong>እቅድ:</strong> {formData.CIplan}</p>
                 </>
               )}
               {formData.plan_type === "hr" && (
                 <>
-                  <p><strong>Employment Type:</strong> {formData.employment_type}</p>
-                  <p><strong>CI Baseline:</strong> {formData.CIbasiline}</p>
-                  <p><strong>CI Plan:</strong> {formData.CIplan}</p>
+                  {formData.employment_type && <p><strong>የቅጥር አይነት:</strong> {formData.employment_type}</p>}
+                  <p><strong>መነሻ:</strong> {formData.CIbaseline}</p>
+                  <p><strong>እቅድ:</strong> {formData.CIplan}</p>
                 </>
               )}
             </div>
@@ -600,24 +668,6 @@ const UpdatePlan = () => {
         </>
       ) : (
         <p className="text-center text-gray-600">Loading plan details...</p>
-      )}
-
-      {/* Popup Message */}
-      {showPopup && (
-        <div className="popup fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="popup-content bg-white p-8 rounded-lg shadow-lg text-center max-w-sm mx-auto">
-            <img
-              src={popupType === "success" ? happy : sad}
-              alt={popupType === "success" ? "Success" : "Error"}
-              className="emoji mx-auto mb-4"
-              style={{ width: "100px", height: "100px" }}
-            />
-            <p className="mb-4">{responseMessage}</p>
-            <button className="py-2 px-4 bg-blue-500 hover:bg-blue-600 text-white rounded transition" onClick={closePopup}>
-              Close
-            </button>
-          </div>
-        </div>
       )}
     </div>
   );

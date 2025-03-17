@@ -20,13 +20,13 @@ export const Header = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   useEffect(() => {
-    Axios.get("http://localhost:5000/getRole")
+    Axios.get("http://192.168.56.1:5000/getRole")
       .then((res) => setRole(res.data))
       .catch((err) => console.log(err));
   }, []);
 
   useEffect(() => {
-    Axios.get("http://localhost:5000/getUser")
+    Axios.get("http://192.168.56.1:5000/getUser")
       .then((res) => setUser(res.data))
       .catch((err) => console.log(err));
   }, []);
@@ -34,7 +34,7 @@ export const Header = () => {
   useEffect(() => {
     const fetchUnreadPlans = async () => {
       try {
-        const response = await Axios.get(`http://localhost:5000/api/plan/${state.user}/unread-count`);
+        const response = await Axios.get(`http://192.168.56.1:5000/api/plan/${state.user}/unread-count`);
         setUnreadPlans(response.data.results);
       } catch (error) {
         console.error("Error fetching unread plans:", error);
@@ -52,7 +52,7 @@ export const Header = () => {
   const handleLogout = async () => {
     dispatch({ type: 'LOGOUT' });
     try {
-      await fetch(`http://localhost:5000/logout/${state.user}`, { method: "PUT", headers: { "Content-type": "application/json" } });
+      await fetch(`http://192.168.56.1:5000/logout/${state.user}`, { method: "PUT", headers: { "Content-type": "application/json" } });
     } catch (error) {
       console.log(error);
     }
@@ -60,14 +60,14 @@ export const Header = () => {
 
   const markAllAsRead = () => {
     const planIds = unreadPlans.map(plan => plan.plan_id);
-    Axios.put("http://localhost:5000/api/plan/update-read", { plan_ids: planIds, read_status: "1" })
+    Axios.put("http://192.168.56.1:5000/api/plan/update-read", { plan_ids: planIds, read_status: "1" })
       .then(() => setUnreadPlans([]))
       .catch((err) => console.log(err));
   };
 
   const handleNotificationClick = (e, plan_id) => {
     e.preventDefault();
-    Axios.put(`http://localhost:5000/api/plan/${plan_id}/update-read`, { uid: userId, value: "1" })
+    Axios.put(`http://192.168.56.1:5000/api/plan/${plan_id}/update-read`, { uid: userId, value: "1" })
       .then(() => navigate(`/details/${plan_id}`))
       .catch((err) => console.log('Error updating read status:', err));
   };

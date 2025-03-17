@@ -130,7 +130,7 @@ const addReport = (req, res) => {
 //     }
 
 //     // Input validation for progress
-//     if (updates.progress && !["planned", "progress", "completed"].includes(updates.progress)) {
+//     if (updates.progress && !["planned", "የ እቅዱ ሂደት", "completed"].includes(updates.progress)) {
 //       console.error("Invalid progress value:", updates.progress);
 //       return res.status(400).json({
 //         success: false,
@@ -143,7 +143,7 @@ const addReport = (req, res) => {
 //     const allowedUpdates = [
 //       "details", "measurement", "baseline",
 //       "plan", "Description", "year", "quarter",
-//       "progress", "outcome", "execution_percentage",
+//       "የ እቅዱ ሂደት", "outcome", "execution_percentage",
 //     ];
 
 //     // Filter out invalid fields
