@@ -1,48 +1,66 @@
-import { useEffect, useState } from "react";
-import React from 'react';
+
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import axios from "axios";
 import logo from "../../assets/img/android-chrome-512x512-1.png";
-import avatar from "../../assets/img/user.png";
+import defaultAvatar from "../../assets/img/user.png";
 import { useAuth } from "../Auths/AuthContex";
-import Axios from "axios";
-import { Link, useNavigate } from 'react-router-dom';
-// const [isSidebarOpen, setIsSidebarOpen] = useState(false); // Sidebar open state
+import ProfilePictureUpload from "../header/profile/ProfilePictureUpload";
 
-export const Header = () => {
+const BACKEND_URL = "http://192.168.56.1:5000";  // Base URL for backend
+
+const Header = () => {
   const { state, dispatch } = useAuth();
-  const userId = state.user;
-  const navigate = useNavigate();
+  const token = localStorage.getItem("token");
 
+  const [profilePic, setProfilePic] = useState(defaultAvatar);
+  const [role, setRole] = useState("");
+  const [user, setUser] = useState({});
   const [unreadPlans, setUnreadPlans] = useState([]);
-  const [role, setRole] = useState([]);
-  const [user, setUser] = useState([]);
   const [online, setOnline] = useState(0);
   const [currentTime, setCurrentTime] = useState(new Date());
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [showProfileUpload, setShowProfileUpload] = useState(false);
 
   useEffect(() => {
-    Axios.get("http://192.168.56.1:5000/getRole")
-      .then((res) => setRole(res.data))
-      .catch((err) => console.log(err));
-  }, []);
+    console.log("Fetching user role...");
+    axios
+      .get(`${BACKEND_URL}/api/userrole`, {
+        headers: { Authorization: `Bearer ${token}` }
+      })
+      .then((res) => {
+        console.log("User role response:", res.data);
+        // Ensure role is set if response exists.
+        if (res.data && res.data.role_name) {
+          setRole(res.data.role_name);
+        }
+      })
+      .catch((err) =>
+        console.error("Error fetching role:", err.response ? err.response.data : err.message)
+      );
+  }, [token]);
 
   useEffect(() => {
-    Axios.get("http://192.168.56.1:5000/getUser")
-      .then((res) => setUser(res.data))
-      .catch((err) => console.log(err));
-  }, []);
-
-  useEffect(() => {
-    const fetchUnreadPlans = async () => {
-      try {
-        const response = await Axios.get(`http://192.168.56.1:5000/api/plan/${state.user}/unread-count`);
-        setUnreadPlans(response.data.results);
-      } catch (error) {
-        console.error("Error fetching unread plans:", error);
-      }
-    };
-
-    fetchUnreadPlans();
-  }, [state.user]);
+    console.log("Fetching profile picture...");
+    axios
+      .get(`${BACKEND_URL}/api/getprofile`, {
+        headers: { Authorization: `Bearer ${token}` }
+      })
+      .then((res) => {
+        console.log("Profile response:", res.data);
+        setUser(res.data);
+        if (res.data.avatar) {
+          // If the avatar URL is relative, prefix it with the backend base url.
+          const avatarUrl = res.data.avatar.startsWith("http")
+            ? res.data.avatar
+            : `${BACKEND_URL}${res.data.avatar}`;
+          setProfilePic(avatarUrl);
+        }
+      })
+      .catch((err) =>
+        console.error("Error fetching profile:", err.response ? err.response.data : err.message)
+      );
+  }, [token]);
 
   useEffect(() => {
     const timer = setInterval(() => setCurrentTime(new Date()), 1000);
@@ -50,117 +68,108 @@ export const Header = () => {
   }, []);
 
   const handleLogout = async () => {
-    dispatch({ type: 'LOGOUT' });
+    dispatch({ type: "LOGOUT" });
     try {
-      await fetch(`http://192.168.56.1:5000/logout/${state.user}`, { method: "PUT", headers: { "Content-type": "application/json" } });
+      await fetch(`${BACKEND_URL}/logout/${state.user}`, {
+        method: "PUT",
+        headers: {
+          "Content-type": "application/json",
+          Authorization: `Bearer ${token}`
+        }
+      });
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
-  const markAllAsRead = () => {
-    const planIds = unreadPlans.map(plan => plan.plan_id);
-    Axios.put("http://192.168.56.1:5000/api/plan/update-read", { plan_ids: planIds, read_status: "1" })
-      .then(() => setUnreadPlans([]))
-      .catch((err) => console.log(err));
+  const markAllAsRead = async () => {
+    const planIds = unreadPlans.map((plan) => plan.plan_id);
+    try {
+      await axios.put(
+        `${BACKEND_URL}/api/plan/update-read`, 
+        { plan_ids: planIds, read_status: "1" },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      setUnreadPlans([]);
+    } catch (err) {
+      console.error(err);
+    }
   };
 
-  const handleNotificationClick = (e, plan_id) => {
+  const handleNotificationClick = async (e, plan_id) => {
     e.preventDefault();
-    Axios.put(`http://192.168.56.1:5000/api/plan/${plan_id}/update-read`, { uid: userId, value: "1" })
-      .then(() => navigate(`/details/${plan_id}`))
-      .catch((err) => console.log('Error updating read status:', err));
+    try {
+      await axios.put(
+        `${BACKEND_URL}/api/plan/${plan_id}/update-read`, 
+        { uid: state.user, value: "1" },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+    } catch (err) {
+      console.error("Error updating read status:", err);
+    }
   };
 
-  const unreadCount = unreadPlans.length;
+  const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
 
-  const toggleSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen);
+  const handleProfileUploadSuccess = (newImageUrl) => {
+    // If newImageUrl is relative, prefix the backend's URL.
+    const finalImageUrl = newImageUrl.startsWith("http")
+      ? newImageUrl
+      : `${BACKEND_URL}${newImageUrl}`;
+    setProfilePic(finalImageUrl);
+    setShowProfileUpload(false);
   };
 
   return (
     <>
-       <style>
-      {`
-        /* Sidebar and main content styling with transition effects */
-        .sidebar {
-          transition: transform 0.3s ease;
-          transform: ${isSidebarOpen ? 'translateX(0)' : 'translateX(-250px)'};
-          width: 250px;
-          position: fixed;
-          left: 0;
-          top: 0;
-          bottom: 0;
-          background-color: #f8f9fa;
-          z-index: 1000;
-          box-shadow: ${isSidebarOpen ? '2px 0 5px rgba(0,0,0,0.1)' : 'none'};
-        }
-
-        .main-content {
-          margin-left: ${isSidebarOpen ? '250px' : '0'};
-          transition: margin-left 0.3s ease;
-        }
-      `}
-    </style>
-
       <header id="header" className="header fixed-top d-flex align-items-center">
         <div className="d-flex align-items-center justify-content-between">
           <a href="#" className="logo d-flex align-items-center">
             <img src={logo} alt="Logo" />
-            <span className="d-none d-lg-block" style={{ animation: "fadeIn 1.5s" }}>
-              {role.map(roles => (roles.role_id === state.role_id ? roles.role_name : ""))}
+            <span className="d-none d-lg-flex" style={{ animation: "fadeIn 3.5s" }}>
+              {role || "Loading Role..."}
             </span>
           </a>
-          
         </div>
-
-
-
-        
-        {/* <CeoSidebar isOpen={isSidebarOpen} /> Passing the isSidebarOpen state as a prop */}
-
-
-
-        {/* Real-time Clock */}
         <div className="header-time ms-auto me-3">
-          <span style={{ fontSize: '14px', color: '#888', fontWeight: 'bold' }}>
+          <span style={{ fontSize: "14px", color: "#888", fontWeight: "bold" }}>
             {currentTime.toLocaleTimeString()}
           </span>
         </div>
-
         <nav className="header-nav ms-auto">
           <ul className="d-flex align-items-center">
-            {/* Notifications dropdown */}
             <li className="nav-item dropdown">
               <a className="nav-link nav-icon" href="#" data-bs-toggle="dropdown" title="Notifications">
                 <i className="bi bi-bell" />
-                {unreadCount > 0 && (
+                {unreadPlans.length > 0 && (
                   <span className="badge bg-primary badge-number animate__animated animate__pulse">
-                    {unreadCount}
+                    {unreadPlans.length}
                   </span>
                 )}
               </a>
               <ul className="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications">
                 <li className="dropdown-header">
-                  {unreadCount > 0 ? (
+                  {unreadPlans.length > 0 ? (
                     <>
-                      You have {unreadCount} new notifications
+                      You have {unreadPlans.length} new notifications
                       <Link to="/manageplan">
                         <span className="badge rounded-pill bg-primary p-2 ms-2">View all</span>
                       </Link>
                     </>
                   ) : (
-                    <>You have no new notifications</>
+                    "You have no new notifications"
                   )}
                 </li>
-                <li><hr className="dropdown-divider" /></li>
+                <li>
+                  <hr className="dropdown-divider" />
+                </li>
                 {unreadPlans.map((plan, index) => (
                   <React.Fragment key={plan.plan_id}>
                     <li className="notification-item">
                       <i className="bi bi-exclamation-circle text-warning" />
                       <div>
                         <h4>
-                          <a href={`/details/${plan.plan_id}`} onClick={(e) => handleNotificationClick(e, plan.plan_id)}>
+                          <a href="#" onClick={(e) => handleNotificationClick(e, plan.plan_id)}>
                             {plan.plan_subject}
                           </a>
                         </h4>
@@ -168,39 +177,42 @@ export const Header = () => {
                         <p>{new Date(plan.created_at).toLocaleString()}</p>
                       </div>
                     </li>
-                    {index < unreadCount - 1 && <li><hr className="dropdown-divider" /></li>}
+                    {index < unreadPlans.length - 1 && <li><hr className="dropdown-divider" /></li>}
                   </React.Fragment>
                 ))}
                 <li className="dropdown-footer">
-                  <a href="#" onClick={markAllAsRead} title="Mark all as read">Mark all as read</a>
+                  <a href="#" onClick={markAllAsRead} title="Mark all as read">
+                    Mark all as read
+                  </a>
                 </li>
               </ul>
             </li>
-
-{/* Chat icon */}
-<li className="nav-item">
-      <a className="nav-link nav-icon" href="/chat" title="Chat">
-        <i className="bi bi-chat-dots" />
-        <span className="badge bg-success badge-number">3</span> {/* Example badge */}
-      </a>
-    </li>
-
-
-            {/* Profile dropdown */}
+            <li className="nav-item">
+              <a className="nav-link nav-icon" href="/chat" title="Chat">
+                <i className="bi bi-chat-dots" />
+                <span className="badge bg-success badge-number">3</span>
+              </a>
+            </li>
             <li className="nav-item dropdown pe-3">
               <a className="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown" title="Profile">
-                <img src={avatar} alt="Profile" className="rounded-circle" style={{ width: '40px', height: '40px' }} />
+                <img src={profilePic} alt="Profile" className="rounded-circle" style={{ width: "80px", height: "40px" }} />
                 <span className="d-none d-md-block dropdown-toggle ps-2">
-                  <h4>Welcome, {state.fname}</h4>
+                  <h4>Welcome, {state.fname || "User"}</h4>
                 </span>
               </a>
               <ul className="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
                 <li className="dropdown-header">
-                  <h6>{`${state.fname} ${state.lname}`}</h6>
-                  <span>{state.user_name}</span>
+                  <h6>{`${state.fname || ""} ${state.lname || ""}`}</h6>
+                  <span>{state.user_name || ""}</span>
                 </li>
                 <li>
-                  <a className="dropdown-item d-flex align-items-center" href="/change-profile-picture">
+                  <a 
+                    className="dropdown-item d-flex align-items-center" 
+                    href="#"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setShowProfileUpload(true);
+                    }}>
                     <i className="bi bi-image" />
                     <span>Change Profile Picture</span>
                   </a>
@@ -212,7 +224,7 @@ export const Header = () => {
                   </a>
                 </li>
                 <li>
-                  <a className="dropdown-item d-flex align-items-center" onClick={handleLogout}>
+                  <a className="dropdown-item d-flex align-items-center" href="#" onClick={handleLogout}>
                     <i className="bi bi-box-arrow-right" />
                     <span>Sign Out</span>
                   </a>
@@ -222,16 +234,20 @@ export const Header = () => {
           </ul>
         </nav>
       </header>
-
-      {/* Sidebar */}
-      <div className={`sidebar ${isSidebarOpen ? "open" : ""}`}>
-        {/* Sidebar content here */}
-      </div>
-
-      {/* Main content */}
-      <div className="main-content">
-        {/* Main content of the app here */}
-      </div>
+      <aside className={`sidebar ${isSidebarOpen ? "open" : ""}`}>
+        {/* Sidebar content */}
+      </aside>
+      <main className="main-content">
+        {showProfileUpload && (
+          <ProfilePictureUpload 
+            token={token}
+            onUploadSuccess={handleProfileUploadSuccess}
+            onCancel={() => setShowProfileUpload(false)}
+          />
+        )}
+      </main>
     </>
   );
 };
+
+export default Header;

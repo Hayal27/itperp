@@ -478,8 +478,8 @@ const Step4SpecificObjectiveDetails = ({ specificObjectiveId, token, onBack, onN
               className="w-full p-3 border border-gray-300 rounded-md text-black bg-transparent focus:outline-none focus:ring-2 focus:ring-teal-500"
             >
               <option value="">⬇️ Select Income Name</option>
-              <option value="income1">ከህንጻ ኪራይ</option>
-              <option value="income2">ከመሬት ንዑስ ሊዝ</option>
+              <option value="ከህንጻ ኪራይ">ከህንጻ ኪራይ</option>
+              <option value="ከመሬት ንኡስ ሊዝ">ከመሬት ንዑስ ሊዝ</option>
               <option value="other">Other</option>
             </select>
 

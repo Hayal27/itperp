@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Swal from "sweetalert2"; // Import SweetAlert2 for popups
@@ -27,9 +28,10 @@ const Step4SpecificObjectiveDetails = ({ specificObjectiveId, token, onBack, onN
     CIbaseline: "",
     CIplan: "",
     xzx: "",
-    CItotalBaseline: 0,
-    CItotalPlan: 0,
-    CItotalExpectedOutcome: 0
+    CItotalBaseline: "",
+    CItotalPlan: "",
+    CItotalExpectedOutcome: "",
+    priority: ""  // New priority attribute
   });
   
   const defaultDetailValues = {
@@ -48,6 +50,7 @@ const Step4SpecificObjectiveDetails = ({ specificObjectiveId, token, onBack, onN
     incomeExchange: "",
     hrType: "",
     employmentType: "",
+    priority: ""  // Default value for priority
   };
 
   const [error, setError] = useState(null);
@@ -80,7 +83,7 @@ const Step4SpecificObjectiveDetails = ({ specificObjectiveId, token, onBack, onN
       incomeType: "",
       hrType: "",
       costName: "", // Reset when changing plan type
-      incomeName: "" // Reset when changing plan type
+      incomeName: ""
     }));
   };
 
@@ -200,7 +203,8 @@ const Step4SpecificObjectiveDetails = ({ specificObjectiveId, token, onBack, onN
             incomeName: newDetail.incomeName,
             CIbaseline: newDetail.CIbaseline.toString(),
             CIplan: newDetail.CIplan,
-            xzx: newDetail.xzx.toString()
+            xzx: newDetail.xzx.toString(),
+            priority: newDetail.priority  // Send priority in payload
           },
         ],
       };
@@ -472,14 +476,14 @@ const Step4SpecificObjectiveDetails = ({ specificObjectiveId, token, onBack, onN
             </label>
             <select
               id="incomeName"
-              name="incomeName"
+              name="incomeType"
               value={newDetail.incomeType}
               onChange={handleIncomeTypeChange}
               className="w-full p-3 border border-gray-300 rounded-md text-black bg-transparent focus:outline-none focus:ring-2 focus:ring-teal-500"
             >
               <option value="">⬇️ Select Income Name</option>
-              <option value="income1">ከህንጻ ኪራይ</option>
-              <option value="income2">ከመሬት ንዑስ ሊዝ</option>
+              <option value="ከህንጻ ኪራይ">ከህንጻ ኪራይ</option>
+              <option value="ከመሬት ንኡስ ሊዝ">ከመሬት ንዑስ ሊዝ</option>
               <option value="other">Other</option>
             </select>
 
@@ -723,6 +727,23 @@ const Step4SpecificObjectiveDetails = ({ specificObjectiveId, token, onBack, onN
               onChange={handleInputChange}
               className="w-full p-3 border border-gray-300 rounded-md text-black bg-transparent focus:outline-none focus:ring-2 focus:ring-teal-500"
             />
+          </div>
+
+          {/* New Priority field */}
+          <div>
+            <label htmlFor="priority" className="block text-sm font-semibold mb-2">Priority</label>
+            <select
+              id="priority"
+              name="priority"
+              value={newDetail.priority}
+              onChange={handleInputChange}
+              className="w-full p-3 border border-gray-300 rounded-md text-black bg-transparent focus:outline-none focus:ring-2 focus:ring-teal-500"
+            >
+              <option value="">⬇️ Select Priority</option>
+              <option value="low">Low</option>
+              <option value="medium">Medium</option>
+              <option value="high">High</option>
+            </select>
           </div>
         </div>
   

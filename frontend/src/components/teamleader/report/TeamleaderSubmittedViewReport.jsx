@@ -14,7 +14,7 @@ const TeamleaderSubmittedViewPlan = () => {
 
   const fetchPlans = async () => {
     try {
-      const response = await axios.get("http://192.168.56.1:5000/api/supervisor/plans", {
+      const response = await axios.get("http://192.168.56.1:5000/api/submitted_reports", {
         headers: { Authorization: `Bearer ${token}` }
       });
 
@@ -113,7 +113,7 @@ const TeamleaderSubmittedViewPlan = () => {
           <p><strong>Baseline:</strong> {selectedPlan.baseline}</p>
           <p><strong>Plan:</strong> {selectedPlan.plan}</p>
           <p><strong>Measurement:</strong> {selectedPlan.measurement}</p>
-          <p><strong>Description:</strong> {selectedPlan.Description}</p>
+          <p><strong>Description:</strong> {selectedPlan.description}</p>
 
           <p><strong>Status:</strong> {selectedPlan.specific_objective_detail_status}</p>
           <p><strong>Priority:</strong> {selectedPlan.priority}</p>

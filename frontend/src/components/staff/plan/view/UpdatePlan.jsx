@@ -237,19 +237,6 @@ const UpdatePlan = () => {
     }
 
     // If plan type is not default, validate CI fields.
-    if (formData.plan_type !== "default") {
-      if (!formData.CIbaseline) {
-        localErrors.CIbaseline = "CI መነሻ is required";
-      } else if (isNaN(parseFloat(formData.CIbaseline))) {
-        localErrors.CIbaseline = "CI መነሻ must be a valid number";
-      }
-      if (!formData.CIplan) {
-        localErrors.CIplan = "CI እቅድ is required";
-      } else if (isNaN(parseFloat(formData.CIplan))) {
-        localErrors.CIplan = "CI እቅድ must be a valid number";
-      }
-    }
-
     if (Object.keys(localErrors).length > 0) {
       const firstError = Object.values(localErrors)[0];
       console.log("Validation errors found:", localErrors);
@@ -295,7 +282,7 @@ const UpdatePlan = () => {
         Swal.fire({
           icon: "success",
           title: "Success",
-          text: "Report updated successfully!"
+          text: "በተገቢው ሪፖርት አድርገዋል"
         });
       })
       .catch((err) => {

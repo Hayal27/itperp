@@ -648,7 +648,7 @@
         return _;
       }(_self);
       if (typeof module !== 'undefined' && module.exports) {
-        module.exports = Prism;
+        export default Prism;
       }
       if (typeof global !== 'undefined') {
         global.Prism = Prism;

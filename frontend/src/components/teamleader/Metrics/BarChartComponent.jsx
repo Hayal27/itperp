@@ -1,29 +1,7 @@
 import React, { useRef, useEffect } from "react";
 import { Chart } from "chart.js/auto";
 
-/**
- * Dynamic Bar Chart Component.
- *
- * This component supports rendering a Bar Chart dynamically.
- * It accepts either a full Chart.js configuration in the prop `chartConfig`
- * OR accepts a `chartData` prop (with labels and datasets) to automatically build a basic chart configuration.
- *
- * The component will update/refresh the chart when new data is received.
- *
- * Props:
- *  - chartConfig: A complete Chart.js configuration object.
- *  - chartData: An object containing the data for the bar chart.
- *      Expected format:
- *      {
- *        labels: ["Label1", "Label2", ...],
- *        datasets: [{
- *          label: "Dataset Label",
- *          data: [val1, val2, ...],
- *          backgroundColor: "rgba(75, 192, 192, 0.6)"
- *        }, ...] // You can add more datasets as needed (for two candles or more).
- *      }
- *  - options: Optional Chart.js options (if using chartData).
- */
+
 const BarChartComponent = ({ chartConfig, chartData, options }) => {
   const barChartRef = useRef(null);
   const chartInstance = useRef(null);

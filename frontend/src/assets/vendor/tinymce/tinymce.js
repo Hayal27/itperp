@@ -31498,7 +31498,7 @@
     const exportToModuleLoaders = tinymce => {
       if (typeof module === 'object') {
         try {
-          module.exports = tinymce;
+          export default tinymce;
         } catch (_) {
         }
       }

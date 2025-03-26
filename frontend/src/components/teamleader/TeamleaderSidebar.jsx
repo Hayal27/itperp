@@ -71,12 +71,12 @@ function TeamleaderSidebar() {
           /* Sidebar Toggle Button */
           .toggle-sidebar-btn {
             cursor: pointer;
-            font-size: 2.5rem;
+            font-size: 2.0rem;
             position: fixed;
-            top: 15px;
-            left: 170px;
+            top: 28px;
+            left: 250px;
             z-index: 1050;
-            color: #007bff;
+            color:rgb(97, 43, 43);
             transition: color 0.3s ease;
           }
 

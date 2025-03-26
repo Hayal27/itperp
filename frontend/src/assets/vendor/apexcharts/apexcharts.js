@@ -4,7 +4,7 @@
  * Released under the MIT License.
  */
 (function (global, factory) {
-  typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
+  typeof exports === 'object' && typeof module !== 'undefined' ? export default factory() :
   typeof define === 'function' && define.amd ? define(factory) :
   (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.ApexCharts = factory());
 })(this, (function () { 'use strict';
@@ -26824,7 +26824,7 @@
       });
       /* below check fixes #412 */
     } else if ((typeof exports === "undefined" ? "undefined" : _typeof(exports)) === 'object' && typeof module !== 'undefined') {
-      module.exports = root.document ? factory(root, root.document) : function (w) {
+      export default root.document ? factory(root, root.document) : function (w) {
         return factory(w, w.document);
       };
     } else {

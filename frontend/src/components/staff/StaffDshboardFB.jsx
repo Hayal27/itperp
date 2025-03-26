@@ -399,7 +399,7 @@ const compareTotalHRCIplanAndCIoutcome = (hrExchange, startYear, endYear, startQ
 
 
 
-module.exports = {
+export default {
     displayTotalCost,
     compareCostCIplanAndCIoutcome,
     compareCostCIexecutionPercentage,
@@ -438,4 +438,4 @@ router.get("/compareCostAndIncome", verifyToken, compareCostAndIncome);
 router.get("/displayTotalHR", verifyToken, displayTotalHR);
 router.get("/compareTotalHRCIplanAndCIoutcome", verifyToken, compareTotalHRCIplanAndCIoutcome);
 
-module.exports = router;
+export default router;

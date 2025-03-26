@@ -1,11 +1,10 @@
-
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Axios from "axios";
 import Swal from "sweetalert2";
 import sad from "../../../../assets/img/sad.gif";
 import happy from "../../../../assets/img/happy.gif"; 
-import '../../../../assets/css/planform.css';
+import "../../../../assets/css/planform.css";
 
 // Utility function to calculate execution percentage.
 // Standard formula: ((outcome - baseline) / (plan - baseline)) * 100, rounded.
@@ -31,34 +30,33 @@ const AddReport = () => {
   const navigate = useNavigate();
 
   // State for the filtered plan details and form data.
-  // Only fields with values will be rendered as read-only,
-  // while outcome (and CI outcome for non-default plans) are editable.
+  // Only non-null fields will be rendered as read-only.
   const [plan, setPlan] = useState(null);
   const [formData, setFormData] = useState({
     // Mapped read-only fields from backend.
-    goal: "",
-    objective: "",
-    specObjective: "",
-    specific_objective_detailname: "",
-    measurement: "",
-    baseline: "",
-    plan: "",
-    description: "",
-    year: "",
-    Quarter: "",
-    progress: "",
-    plan_type: "",
-    cost_type: "",
-    costName: "",
-    income_exchange: "",
-    incomeName: "",
-    employment_type: "",
-    CIbaseline: "",
-    CIplan: "",
+    goal: null,
+    objective: null,
+    specObjective: null,
+    specific_objective_detailname: null,
+    measurement: null,
+    baseline: null,
+    plan: null,
+    description: null,
+    year: null,
+    Quarter: null,
+    progress: null,
+    plan_type: null,
+    cost_type: null,
+    costName: null,
+    income_exchange: null,
+    incomeName: null,
+    employment_type: null,
+    CIbaseline: null,
+    CIplan: null,
     // Editable outcome fields.
     outcome: "",
     execution_percentage: "",
-    CIoutcome: "",
+    CIoutcome: null, // Set to null by default based on backend response
     CIexecution_percentage: ""
   });
   const [responseMessage, setResponseMessage] = useState("");
@@ -80,37 +78,34 @@ const AddReport = () => {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then((res) => {
-        // The backend returns a filtered plan with no null keys.
+        // The backend returns a filtered plan with null keys when data is missing.
         const p = res.data.plan;
         setPlan(p);
-        // Map backend fields to local state. Adjust mapping as needed.
+        // Map backend fields to local state using explicit null if missing.
         setFormData((prev) => ({
           ...prev,
-          // Map goal, objective and specific objective name:
-          goal: p.goal_name || "",
-          objective: p.objective_name || "",
-          specObjective: p.specific_objective_name || "",
-          // Specific Objective Detail (name)
-          specific_objective_detailname: p.specific_objective_detailname || "",
-          measurement: p.measurement || "",
-          baseline: p.baseline || "",
-          plan: p.plan || "",
-          description: p.details || "",
-          year: p.year || "",
-          // Use month as Quarter if available.
-          Quarter: p.month || "",
-          progress: p.progress || "",
-          plan_type: p.plan_type || "",
-          cost_type: p.cost_type || "",
-          costName: p.costName || "",
-          income_exchange: p.income_exchange || "",
-          incomeName: p.incomeName || "",
-          employment_type: p.employment_type || "",
-          CIbaseline: (p.CIbaseline || p.CIbaseline === 0) ? p.CIbaseline.toString() : "",
-          CIplan: (p.CIplan || p.CIplan === 0) ? p.CIplan.toString() : "",
-          // Outcome fields: if provided by backend, use them (converted to strings) otherwise let user edit.
-          outcome: (p.outcome || p.outcome === 0) ? p.outcome.toString() : "",
-          execution_percentage: (p.execution_percentage || p.execution_percentage === 0) ? p.execution_percentage.toString() : ""
+          goal: p.goal_name !== undefined ? p.goal_name : null,
+          objective: p.objective_name !== undefined ? p.objective_name : null,
+          specObjective: p.specific_objective_name !== undefined ? p.specific_objective_name : null,
+          specific_objective_detailname: p.specific_objective_detailname !== undefined ? p.specific_objective_detailname : null,
+          measurement: p.measurement !== undefined ? p.measurement : null,
+          baseline: p.baseline !== undefined ? p.baseline : null,
+          plan: p.plan !== undefined ? p.plan : null,
+          description: p.details !== undefined ? p.details : null,
+          year: p.year !== undefined ? p.year : null,
+          Quarter: p.month !== undefined ? p.month : null,
+          progress: p.progress !== undefined ? p.progress : null,
+          plan_type: p.plan_type !== undefined ? p.plan_type : null,
+          cost_type: p.cost_type !== undefined ? p.cost_type : null,
+          costName: p.costName !== undefined ? p.costName : null,
+          income_exchange: p.income_exchange !== undefined ? p.income_exchange : null,
+          incomeName: p.incomeName !== undefined ? p.incomeName : null,
+          employment_type: p.employment_type !== undefined ? p.employment_type : null,
+          CIbaseline: (p.CIbaseline !== undefined && p.CIbaseline !== null) ? p.CIbaseline.toString() : null,
+          CIplan: (p.CIplan !== undefined && p.CIplan !== null) ? p.CIplan.toString() : null,
+          outcome: (p.outcome !== undefined && p.outcome !== null) ? p.outcome.toString() : "",
+          execution_percentage: (p.execution_percentage !== undefined && p.execution_percentage !== null) ? p.execution_percentage.toString() : "",
+          CIoutcome: (p.CIoutcome !== undefined && p.CIoutcome !== null) ? p.CIoutcome.toString() : null
         }));
       })
       .catch((err) => {
@@ -186,7 +181,7 @@ const AddReport = () => {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(() => {
-        setResponseMessage("Report updated successfully!");
+        setResponseMessage("በተገቢው ሪፖርት አድርገዋል");
         setPopupType("success");
         setShowPopup(true);
       })
@@ -214,12 +209,10 @@ const AddReport = () => {
       {plan ? (
         <>
           <form onSubmit={handleSubmit}>
-            {/* Conditionally render each field only if it has a value */}
-            {formData.goal && (
+            {/* Conditionally render read-only fields only when their value is not null */}
+            {formData.goal !== null && (
               <div className="mb-6">
-                <label className="block mb-2 font-semibold text-gray-700">
-                  ግብ
-                </label>
+                <label className="block mb-2 font-semibold text-gray-700">ግብ</label>
                 <input
                   type="text"
                   name="goal"
@@ -229,11 +222,9 @@ const AddReport = () => {
                 />
               </div>
             )}
-            {formData.objective && (
+            {formData.objective !== null && (
               <div className="mb-6">
-                <label className="block mb-2 font-semibold text-gray-700">
-                  አላማ
-                </label>
+                <label className="block mb-2 font-semibold text-gray-700">አላማ</label>
                 <input
                   type="text"
                   name="objective"
@@ -243,11 +234,9 @@ const AddReport = () => {
                 />
               </div>
             )}
-            {formData.specObjective && (
+            {formData.specObjective !== null && (
               <div className="mb-6">
-                <label className="block mb-2 font-semibold text-gray-700">
-                  ውጤት
-                </label>
+                <label className="block mb-2 font-semibold text-gray-700">ውጤት</label>
                 <input
                   type="text"
                   name="specObjective"
@@ -257,7 +246,7 @@ const AddReport = () => {
                 />
               </div>
             )}
-            {formData.specific_objective_detailname && (
+            {formData.specific_objective_detailname !== null && (
               <div className="mb-6">
                 <label className="block mb-2 font-semibold text-gray-700">
                   የ ውጤቱ ሚከናወን ዝርዝር ሥራ
@@ -271,11 +260,9 @@ const AddReport = () => {
                 />
               </div>
             )}
-            {formData.measurement && (
+            {formData.measurement !== null && (
               <div className="mb-6">
-                <label className="block mb-2 font-semibold text-gray-700">
-                  መለኪያ
-                </label>
+                <label className="block mb-2 font-semibold text-gray-700">መለኪያ</label>
                 <input
                   type="text"
                   name="measurement"
@@ -285,11 +272,9 @@ const AddReport = () => {
                 />
               </div>
             )}
-            {formData.baseline && (
+            {formData.baseline !== null && (
               <div className="mb-6">
-                <label className="block mb-2 font-semibold text-gray-700">
-                  መነሻ
-                </label>
+                <label className="block mb-2 font-semibold text-gray-700">መነሻ</label>
                 <input
                   type="text"
                   name="baseline"
@@ -299,11 +284,9 @@ const AddReport = () => {
                 />
               </div>
             )}
-            {formData.plan && (
+            {formData.plan !== null && (
               <div className="mb-6">
-                <label className="block mb-2 font-semibold text-gray-700">
-                  እቅድ
-                </label>
+                <label className="block mb-2 font-semibold text-gray-700">እቅድ</label>
                 <input
                   type="text"
                   name="plan"
@@ -315,9 +298,7 @@ const AddReport = () => {
             )}
             {/* Editable Outcome field */}
             <div className="mb-6">
-              <label className="block mb-2 font-semibold text-gray-700">
-                ክንውን
-              </label>
+              <label className="block mb-2 font-semibold text-gray-700">ክንውን</label>
               <input
                 type="number"
                 name="outcome"
@@ -331,9 +312,7 @@ const AddReport = () => {
               )}
             </div>
             <div className="mb-6">
-              <label className="block mb-2 font-semibold text-gray-700">
-                ክንውን በ%
-              </label>
+              <label className="block mb-2 font-semibold text-gray-700">ክንውን በ%</label>
               <input
                 type="text"
                 name="execution_percentage"
@@ -343,11 +322,9 @@ const AddReport = () => {
                 placeholder="Auto-calculated"
               />
             </div>
-            {formData.description && (
+            {formData.description !== null && (
               <div className="mb-6">
-                <label className="block mb-2 font-semibold text-gray-700">
-                  መግለጫ
-                </label>
+                <label className="block mb-2 font-semibold text-gray-700">መግለጫ</label>
                 <textarea
                   name="description"
                   value={formData.description}
@@ -357,11 +334,9 @@ const AddReport = () => {
                 ></textarea>
               </div>
             )}
-            {formData.year && (
+            {formData.year !== null && (
               <div className="mb-6">
-                <label className="block mb-2 font-semibold text-gray-700">
-                  የትግበራ አመት
-                </label>
+                <label className="block mb-2 font-semibold text-gray-700">የትግበራ አመት</label>
                 <input
                   type="text"
                   name="year"
@@ -371,11 +346,9 @@ const AddReport = () => {
                 />
               </div>
             )}
-            {formData.Quarter && (
+            {formData.Quarter !== null && (
               <div className="mb-6">
-                <label className="block mb-2 font-semibold text-gray-700">
-               ሩብ አመት
-                </label>
+                <label className="block mb-2 font-semibold text-gray-700">ሩብ አመት</label>
                 <input
                   type="text"
                   name="Quarter"
@@ -385,11 +358,9 @@ const AddReport = () => {
                 />
               </div>
             )}
-            {formData.progress && (
+            {formData.progress !== null && (
               <div className="mb-6">
-                <label className="block mb-2 font-semibold text-gray-700">
-                  ሂደት
-                </label>
+                <label className="block mb-2 font-semibold text-gray-700">ሂደት</label>
                 <input
                   type="text"
                   name="progress"
@@ -401,15 +372,13 @@ const AddReport = () => {
             )}
 
             {/* Extended Read-only Fields Section */}
-            {formData.plan_type && (
+            {formData.plan_type !== null && (
               <>
                 <h3 className="text-2xl font-semibold mt-10 mb-6 text-center text-gray-800">
-                   የወጪ አና ገቢ 
+                  የወጪ አና ገቢ 
                 </h3>
                 <div className="mb-6">
-                  <label className="block mb-2 font-semibold text-gray-700">
-               የ እቅዱ አይነት
-                  </label>
+                  <label className="block mb-2 font-semibold text-gray-700">የ እቅዱ አይነት</label>
                   <input
                     type="text"
                     name="plan_type"
@@ -420,11 +389,9 @@ const AddReport = () => {
                 </div>
                 {formData.plan_type === "cost" && (
                   <div className="space-y-6">
-                    {formData.cost_type && (
+                    {formData.cost_type !== null && (
                       <div className="mb-6">
-                        <label className="block mb-2 font-semibold text-gray-700">
-                          የወጪው አይነት
-                        </label>
+                        <label className="block mb-2 font-semibold text-gray-700">የወጪው አይነት</label>
                         <input
                           type="text"
                           name="cost_type"
@@ -434,11 +401,9 @@ const AddReport = () => {
                         />
                       </div>
                     )}
-                    {formData.costName && (
+                    {formData.costName !== null && (
                       <div className="mb-6">
-                        <label className="block mb-2 text-gray-700">
-               የወጪ ስም
-                        </label>
+                        <label className="block mb-2 text-gray-700">የወጪ ስም</label>
                         <input
                           type="text"
                           name="costName"
@@ -448,11 +413,9 @@ const AddReport = () => {
                         />
                       </div>
                     )}
-                    {formData.CIbaseline && (
+                    {formData.CIbaseline !== null && (
                       <div className="mb-6">
-                        <label className="block mb-2 font-semibold text-gray-700">
-                          መነሻ
-                        </label>
+                        <label className="block mb-2 font-semibold text-gray-700">መነሻ</label>
                         <input
                           type="text"
                           name="CIbaseline"
@@ -462,11 +425,9 @@ const AddReport = () => {
                         />
                       </div>
                     )}
-                    {formData.CIplan && (
+                    {formData.CIplan !== null && (
                       <div className="mb-6">
-                        <label className="block mb-2 font-semibold text-gray-700">
-                          እቅድ
-                        </label>
+                        <label className="block mb-2 font-semibold text-gray-700">እቅድ</label>
                         <input
                           type="text"
                           name="CIplan"
@@ -480,11 +441,9 @@ const AddReport = () => {
                 )}
                 {formData.plan_type === "income" && (
                   <div className="space-y-6">
-                    {formData.income_exchange && (
+                    {formData.income_exchange !== null && (
                       <div className="mb-6">
-                        <label className="block mb-2 font-semibold text-gray-700">
-                          ምንዛሬ
-                        </label>
+                        <label className="block mb-2 font-semibold text-gray-700">ምንዛሬ</label>
                         <input
                           type="text"
                           name="income_exchange"
@@ -494,11 +453,9 @@ const AddReport = () => {
                         />
                       </div>
                     )}
-                    {formData.incomeName && (
+                    {formData.incomeName !== null && (
                       <div className="mb-6">
-                        <label className="block mb-2 font-semibold text-gray-700">
-                          የወጪው ስም
-                        </label>
+                        <label className="block mb-2 font-semibold text-gray-700">የገቢው ስም</label>
                         <input
                           type="text"
                           name="incomeName"
@@ -508,11 +465,9 @@ const AddReport = () => {
                         />
                       </div>
                     )}
-                    {formData.CIbaseline && (
+                    {formData.CIbaseline !== null && (
                       <div className="mb-6">
-                        <label className="block mb-2 font-semibold text-gray-700">
-                          መነሻ
-                        </label>
+                        <label className="block mb-2 font-semibold text-gray-700">መነሻ</label>
                         <input
                           type="text"
                           name="CIbaseline"
@@ -522,11 +477,9 @@ const AddReport = () => {
                         />
                       </div>
                     )}
-                    {formData.CIplan && (
+                    {formData.CIplan !== null && (
                       <div className="mb-6">
-                        <label className="block mb-2 font-semibold text-gray-700">
-                          እቅድ
-                        </label>
+                        <label className="block mb-2 font-semibold text-gray-700">እቅድ</label>
                         <input
                           type="text"
                           name="CIplan"
@@ -540,11 +493,9 @@ const AddReport = () => {
                 )}
                 {formData.plan_type === "hr" && (
                   <div className="space-y-6">
-                    {formData.employment_type && (
+                    {formData.employment_type !== null && (
                       <div className="mb-6">
-                        <label className="block mb-2 font-semibold text-gray-700">
-                          Employment Type
-                        </label>
+                        <label className="block mb-2 font-semibold text-gray-700">Employment Type</label>
                         <input
                           type="text"
                           name="employment_type"
@@ -554,11 +505,9 @@ const AddReport = () => {
                         />
                       </div>
                     )}
-                    {formData.CIbaseline && (
+                    {formData.CIbaseline !== null && (
                       <div className="mb-6">
-                        <label className="block mb-2 font-semibold text-gray-700">
-                          መነሻ
-                        </label>
+                        <label className="block mb-2 font-semibold text-gray-700">መነሻ</label>
                         <input
                           type="text"
                           name="CIbaseline"
@@ -568,11 +517,9 @@ const AddReport = () => {
                         />
                       </div>
                     )}
-                    {formData.CIplan && (
+                    {formData.CIplan !== null && (
                       <div className="mb-6">
-                        <label className="block mb-2 font-semibold text-gray-700">
-                          እቅድ
-                        </label>
+                        <label className="block mb-2 font-semibold text-gray-700">እቅድ</label>
                         <input
                           type="text"
                           name="CIplan"
@@ -586,13 +533,11 @@ const AddReport = () => {
                 )}
               </>
             )}
-            {/* For non-default plan types, render editable CI Outcome fields */}
-            {formData.plan_type !== "default" && (
+            {/* For non-default plan types, render editable CI Outcome fields only if CIoutcome is not null */}
+            {formData.plan_type !== "default" && formData.CIoutcome !== null && (
               <>
                 <div className="mb-6">
-                  <label className="block mb-2 font-semibold text-gray-700">
-                    ክንውን
-                  </label>
+                  <label className="block mb-2 font-semibold text-gray-700">ክንውን (CI)</label>
                   <input
                     type="number"
                     name="CIoutcome"
@@ -603,9 +548,7 @@ const AddReport = () => {
                   />
                 </div>
                 <div className="mb-6">
-                  <label className="block mb-2 font-semibold text-gray-700">
-                    CI Execution Percentage
-                  </label>
+                  <label className="block mb-2 font-semibold text-gray-700">CI Execution Percentage</label>
                   <input
                     type="text"
                     name="CIexecution_percentage"
@@ -637,48 +580,49 @@ const AddReport = () => {
           {showPreview && (
             <div className="preview-container mt-8 p-8 bg-white rounded-lg shadow-2xl">
               <h3 className="text-2xl font-semibold mb-4">የእቅዶ ክለሳ</h3>
-              {formData.goal && <p><strong>ግብ:</strong> {formData.goal}</p>}
-              {formData.objective && <p><strong>አላማ:</strong> {formData.objective}</p>}
-              {formData.specObjective && <p><strong>ውጤት:</strong> {formData.specObjective}</p>}
-              {formData.specific_objective_detailname && <p><strong>የ ውጤቱ ሚከናወን ዝርዝር ሥራ:</strong> {formData.specific_objective_detailname}</p>}
-              {formData.measurement && <p><strong>መለኪያ:</strong> {formData.measurement}</p>}
-              {formData.baseline && <p><strong>መነሻ:</strong> {formData.baseline}</p>}
-              {formData.plan && <p><strong>እቅድ:</strong> {formData.plan}</p>}
-              <p><strong>ክንውን:</strong>   {formData.outcome}</p>
+              {formData.goal !== null && <p><strong>ግብ:</strong> {formData.goal}</p>}
+              {formData.objective !== null && <p><strong>አላማ:</strong> {formData.objective}</p>}
+              {formData.specObjective !== null && <p><strong>ውጤት:</strong> {formData.specObjective}</p>}
+              {formData.specific_objective_detailname !== null && <p><strong>የ ውጤቱ ሚከናወን ዝርዝር ሥራ:</strong> {formData.specific_objective_detailname}</p>}
+              {formData.measurement !== null && <p><strong>መለኪያ:</strong> {formData.measurement}</p>}
+              {formData.baseline !== null && <p><strong>መነሻ:</strong> {formData.baseline}</p>}
+              {formData.plan !== null && <p><strong>እቅድ:</strong> {formData.plan}</p>}
+              <p><strong>ክንውን:</strong> {formData.outcome}</p>
               <p><strong>ክንውን በ%:</strong> {formData.execution_percentage}%</p>
-              {/* {formData.plan_type !== "default" && (
-                <>
-                  <p><strong>CI Outcome:</strong> {formData.CIoutcome}</p>
-                  <p><strong>CI Execution Percentage:</strong> {formData.CIexecution_percentage}%</p>
-                </>
-              )} */}
-              {formData.description && <p><strong>መግለጫ:</strong> {formData.description}</p>}
-              {formData.year && <p><strong>አመት:</strong> {formData.year}</p>}
-              {formData.Quarter && <p><strong>ሩብ አመት:</strong> {formData.Quarter}</p>}
-              {formData.progress && <p><strong>ሂደት:</strong> {formData.progress}</p>}
+              {formData.description !== null && <p><strong>መግለጫ:</strong> {formData.description}</p>}
+              {formData.year !== null && <p><strong>አመት:</strong> {formData.year}</p>}
+              {formData.Quarter !== null && <p><strong>ሩብ አመት:</strong> {formData.Quarter}</p>}
+              {formData.progress !== null && <p><strong>ሂደት:</strong> {formData.progress}</p>}
               <hr className="my-4" />
-              {formData.plan_type && <p><strong>የ እቅዱ አይነት:</strong> {formData.plan_type}</p>}
+              {formData.plan_type !== null && <p><strong>የ እቅዱ አይነት:</strong> {formData.plan_type}</p>}
               {formData.plan_type === "cost" && (
                 <>
-                  {formData.cost_type && <p><strong>የ ወጪው አይነት:</strong> {formData.cost_type}</p>}
-                  {formData.costName && <p><strong>የ ወጪው ስም:</strong> {formData.costName}</p>}
-                  {formData.CIbaseline && <p><strong>መነሻ:</strong> {formData.CIbaseline}</p>}
-                  {formData.CIplan && <p><strong>እቅድ:</strong> {formData.CIplan}</p>}
+                  {formData.cost_type !== null && <p><strong>የወጪው አይነት:</strong> {formData.cost_type}</p>}
+                  {formData.costName !== null && <p><strong>የወጪው ስም:</strong> {formData.costName}</p>}
+                  {formData.CIbaseline !== null && <p><strong>መነሻ:</strong> {formData.CIbaseline}</p>}
+                  {formData.CIplan !== null && <p><strong>እቅድ:</strong> {formData.CIplan}</p>}
                 </>
               )}
               {formData.plan_type === "income" && (
                 <>
-                  {formData.income_exchange && <p><strong>ምንዛሬ:</strong> {formData.income_exchange}</p>}
-                  {formData.incomeName && <p><strong>የገቢው ስም:</strong> {formData.incomeName}</p>}
-                  {formData.CIbaseline && <p><strong>መነሻ:</strong> {formData.CIbaseline}</p>}
-                  {formData.CIplan && <p><strong>እቅድ:</strong> {formData.CIplan}</p>}
+                  {formData.income_exchange !== null && <p><strong>ምንዛሬ:</strong> {formData.income_exchange}</p>}
+                  {formData.incomeName !== null && <p><strong>የገቢው ስም:</strong> {formData.incomeName}</p>}
+                  {formData.CIbaseline !== null && <p><strong>መነሻ:</strong> {formData.CIbaseline}</p>}
+                  {formData.CIplan !== null && <p><strong>እቅድ:</strong> {formData.CIplan}</p>}
                 </>
               )}
               {formData.plan_type === "hr" && (
                 <>
-                  {formData.employment_type && <p><strong>የቅጥር አይነት:</strong> {formData.employment_type}</p>}
-                  {formData.CIbaseline && <p><strong>መነሻ:</strong> {formData.CIbaseline}</p>}
-                  {formData.CIplan && <p><strong>እቅድ:</strong> {formData.CIplan}</p>}
+                  {formData.employment_type !== null && <p><strong>የቅጥር አይነት:</strong> {formData.employment_type}</p>}
+                  {formData.CIbaseline !== null && <p><strong>መነሻ:</strong> {formData.CIbaseline}</p>}
+                  {formData.CIplan !== null && <p><strong>እቅድ:</strong> {formData.CIplan}</p>}
+                </>
+              )}
+              {/* Preview CI Outcome only if it's not null */}
+              {formData.plan_type !== "default" && formData.CIoutcome !== null && (
+                <>
+                  <p><strong>ክንውን (CI):</strong> {formData.CIoutcome}</p>
+                  <p><strong>CI Execution Percentage:</strong> {formData.CIexecution_percentage}%</p>
                 </>
               )}
             </div>

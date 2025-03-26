@@ -14,7 +14,7 @@ const ServiceHeadSubmittedViewPlan = () => {
 
   const fetchPlans = async () => {
     try {
-      const response = await axios.get("http://192.168.56.1:5000/api/supervisor/plans", {
+      const response = await axios.get("http://192.168.56.1:5000/api/submitted_reports", {
         headers: { Authorization: `Bearer ${token}` }
       });
 

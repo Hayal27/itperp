@@ -295,7 +295,7 @@ const TeamleaderUpdatePlan = () => {
         Swal.fire({
           icon: "success",
           title: "Success",
-          text: "Report updated successfully!"
+          text: "በተገቢው ሪፖርት አድርገዋል"
         });
       })
       .catch((err) => {

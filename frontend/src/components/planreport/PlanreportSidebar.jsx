@@ -144,7 +144,7 @@ function PlanreportSidebar() {
                 </Link>
               </li>
               <li>
-                <Link to='addplan/PPlanSteps' className="nav-link">
+                <Link to='plan/PlanSteps/Add' className="nav-link">
                   <i className="bi bi-circle" />
                   <span>Add Plan</span>
                 </Link>

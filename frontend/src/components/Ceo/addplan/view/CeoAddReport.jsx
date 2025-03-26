@@ -183,7 +183,7 @@ const CeoAddReport = () => {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(() => {
-        setResponseMessage("Report updated successfully!");
+        setResponseMessage("በተገቢው ሪፖርት አድርገዋል");
         setPopupType("success");
         setShowPopup(true);
       })

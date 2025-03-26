@@ -46,20 +46,37 @@ const IncomeMetricsBarchart = ({ data }) => {
         labels: barLabels,
         datasets: [
           {
-            label: "እቅድ በ %" ,
+            label: "እቅድ በ %",
             data: planData,
-            backgroundColor: "#003f5c"
+            backgroundColor: (ctx) => {
+              const gradient = ctx.chart.ctx.createLinearGradient(0, 0, 0, ctx.chart.height);
+              gradient.addColorStop(0, "#00c9ff");  // Bright Cyan
+              gradient.addColorStop(1, "#92fe9d");  // Light Green
+              return gradient;
+            }
           },
           {
             label: "ክንዉን",
             data: outcomeData,
-            backgroundColor: "#58508d"
+            backgroundColor: (ctx) => {
+              const gradient = ctx.chart.ctx.createLinearGradient(0, 0, 0, ctx.chart.height);
+              gradient.addColorStop(0, "#ff9a9e");  // Soft Pink
+              gradient.addColorStop(1, "#fad0c4");  // Peach
+              return gradient;
+            }
           },
           {
             label: "Difference",
             data: differenceData,
-            backgroundColor: "#bc5090"
+            backgroundColor: (ctx) => {
+              const gradient = ctx.chart.ctx.createLinearGradient(0, 0, 0, ctx.chart.height);
+              gradient.addColorStop(0, "#ff0844");  // Bright Red
+              gradient.addColorStop(1, "#ffb199");  // Soft Coral
+              return gradient;
+            }
           }
+          
+          
         ]
       },
       options: {

@@ -44,8 +44,9 @@ const IncomeMetricsPichart = ({ data }) => {
         datasets: [
           {
             data: pieData,
-            backgroundColor: ["#003f5c", "#58508d"]
+            backgroundColor: ["#00c9ff", "#ff9a9e", "#ffb199", "#92fe9d"]
           }
+          
         ]
       },
       options: {

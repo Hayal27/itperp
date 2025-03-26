@@ -7,7 +7,7 @@ const { addPlan} = require("../controllers/planController");
 const {getAllPlansDeclined,getApprovedOrgPlans, getPlanDetail,getAllOrgPlans,getPlanById,getAllPlans, deletePlan, updatePlan,addReport } = require("../controllers/plansFetch");
 // const {getSubmittedPlans, updatePlanStatus, getDetailedPlanForSupervisor,getSubmittedPlanssp,updatePlanApprovalStatus} = require("../controllers/planAproveController");
 const {getGoals,getGoalById,getObjectiveById,getObjectivesByGoals,getspesificObjectivesByGoals,getGoal, getPlansBySpecificGoal} = require("../controllers/planDetailFetchController");
-const {getSpecificGoal,getSpesificObjectives,getdepartment} = require("../controllers/planget");
+const {getProfilePic,getSpecificGoal,getSpesificObjectives,getdepartment,getUserRoles} = require("../controllers/planget");
 const { addGoals, addObjectives, addSpecificObjectives, addspecificObjectiveDetails} =require("../controllers/planDtailedController")
 
 
@@ -54,8 +54,9 @@ router.get('/goalsbyid/:goal_id', verifyToken, getGoalById);
 
 router.get("/specificGoals/:sgoalId",verifyToken, getSpecificGoal);
 router.get("/getSpesificObjectives",verifyToken, getSpesificObjectives);
-router.get("/getdepartment",verifyToken, getdepartment)
-
+router.get("/getdepartment",verifyToken, getdepartment);
+router.get ('/userrole', verifyToken, getUserRoles);
+router.get ('/getprofile', verifyToken, getProfilePic);
 
 
 
