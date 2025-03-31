@@ -28,7 +28,7 @@ const ProfilePictureUpload = ({ token, onUploadSuccess, onCancel }) => {
     setUploading(true);
     try {
       const response = await Axios.post(
-        "http://192.168.56.1:5000/api/uploadProfilePicture",
+        "http://192.168.100.134:5000/api/uploadProfilePicture",
         formData,
         {
           headers: {

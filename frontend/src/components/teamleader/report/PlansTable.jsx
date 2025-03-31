@@ -38,8 +38,8 @@ const PlansTable = ({ plans, handleDelete, handleSorting, sortedPlans, sortConfi
       setLoading(true);
       const endpoint =
         type === "plan"
-          ? `http://192.168.56.1:5000/api/reportd/${planId}`
-          : `http://192.168.56.1:5000/api/report/${planId}`;
+          ? `http://192.168.100.134:5000/api/reportd/${planId}`
+          : `http://192.168.100.134:5000/api/report/${planId}`;
 
       console.log(
         `Fetching ${type} details from: ${endpoint} for plan ID ${planId}`

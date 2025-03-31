@@ -208,7 +208,7 @@ const PlanStep4SpecificObjectiveDetails = ({ specificObjectiveId, token, onBack,
       console.log("Payload:", payload);
   
       const response = await axios.post(
-        "http://192.168.56.1:5000/api/addspecificObjectiveDetail",
+        "http://192.168.100.134:5000/api/addspecificObjectiveDetail",
         payload,
         { headers: { Authorization: `Bearer ${token}` } }
       );

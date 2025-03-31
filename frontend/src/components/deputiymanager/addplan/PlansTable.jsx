@@ -19,7 +19,7 @@ const PlansTable = ({ plans, handleSorting, sortConfig }) => {
   const fetchPlanDetail = async (planId) => {
     try {
       setLoading(true);
-      const response = await Axios.get(`http://192.168.56.1:5000/api/pland/${planId}`, {
+      const response = await Axios.get(`http://192.168.100.134:5000/api/pland/${planId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -58,7 +58,7 @@ const PlansTable = ({ plans, handleSorting, sortConfig }) => {
       if (result.isConfirmed) {
         try {
           setLoading(true);
-          const response = await Axios.delete(`http://192.168.56.1:5000/api/plandelete/${planId}`, {
+          const response = await Axios.delete(`http://192.168.100.134:5000/api/plandelete/${planId}`, {
             headers: {
               Authorization: `Bearer ${token}`,
             },

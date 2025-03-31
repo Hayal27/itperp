@@ -7,7 +7,7 @@ import defaultAvatar from "../../assets/img/user.png";
 import { useAuth } from "../Auths/AuthContex";
 import ProfilePictureUpload from "../header/profile/ProfilePictureUpload";
 
-const BACKEND_URL = "http://192.168.56.1:5000";  // Base URL for backend
+const BACKEND_URL = "http://192.168.100.134:5000";  // Base URL for backend
 
 const Header = () => {
   const { state, dispatch } = useAuth();

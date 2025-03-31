@@ -29,7 +29,7 @@ const TeamleaderUpdateReport = () => {
   // Fetch report details
   useEffect(() => {
     const token = localStorage.getItem("token");
-    Axios.get(`http://192.168.56.1:5000/api/reportget/${reportId}`, {
+    Axios.get(`http://192.168.100.134:5000/api/reportget/${reportId}`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => {
@@ -105,7 +105,7 @@ const TeamleaderUpdateReport = () => {
 
     const token = localStorage.getItem("token");
 
-    Axios.put(`http://192.168.56.1:5000/api/reportupdate/${reportId}`, updatedData, {
+    Axios.put(`http://192.168.100.134:5000/api/reportupdate/${reportId}`, updatedData, {
         headers: { Authorization: `Bearer ${token}` },
     })
         .then(() => {

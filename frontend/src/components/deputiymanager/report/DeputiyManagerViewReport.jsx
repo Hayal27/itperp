@@ -33,7 +33,7 @@ const DeputiymanagerViewReport = () => {
 
     try {
       setLoading(true);
-      const response = await Axios.get("http://192.168.56.1:5000/api/myreport", {
+      const response = await Axios.get("http://192.168.100.134:5000/api/myreport", {
         headers: { Authorization: `Bearer ${token}` },
         params: { ...validFilters, page: currentPage, limit: itemsPerPage },
       });
@@ -81,7 +81,7 @@ const DeputiymanagerViewReport = () => {
   const handleDelete = async (planId) => {
     if (window.confirm("Are you sure you want to delete this plan?")) {
       try {
-        await Axios.delete(`http://192.168.56.1:5000/api/plandelete/${planId}`, {
+        await Axios.delete(`http://192.168.100.134:5000/api/plandelete/${planId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setPlans((prevPlans) => prevPlans.filter((plan) => plan.ID !== planId));

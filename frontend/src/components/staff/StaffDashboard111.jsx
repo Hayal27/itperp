@@ -34,7 +34,7 @@ const ss = () => {
     view: ''
   });
 
-  const API_BASE_URL = 'http://192.168.56.1:5000/api';
+  const API_BASE_URL = 'http://192.168.100.134:5000/api';
 
   // Build query string based on filters
   const buildQueryString = () => {
