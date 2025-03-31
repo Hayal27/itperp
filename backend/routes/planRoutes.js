@@ -2,7 +2,7 @@
 const express = require("express");
 const router = express.Router();
 const verifyToken = require('../middleware/verifyToken');  
-const {getSubmittedPlans, updatePlanStatus, getDetailedPlanForSupervisor,getSubmittedPlanssp,updatePlanApprovalStatus} = require("../controllers/planAproveController");
+const {getSubmittedreports, getSubmittedPlans, updatePlanStatus, getDetailedPlanForSupervisor,getSubmittedPlanssp,updatePlanApprovalStatus} = require("../controllers/planAproveController");
 const { addPlan} = require("../controllers/planController");
 const {getAllPlansDeclined,getApprovedOrgPlans, getPlanDetail,getAllOrgPlans,getPlanById,getAllPlans, deletePlan, updatePlan,addReport } = require("../controllers/plansFetch");
 // const {getSubmittedPlans, updatePlanStatus, getDetailedPlanForSupervisor,getSubmittedPlanssp,updatePlanApprovalStatus} = require("../controllers/planAproveController");
@@ -57,7 +57,7 @@ router.get("/getSpesificObjectives",verifyToken, getSpesificObjectives);
 router.get("/getdepartment",verifyToken, getdepartment);
 router.get ('/userrole', verifyToken, getUserRoles);
 router.get ('/getprofile', verifyToken, getProfilePic);
-
+router.get ('/submitted_reports', verifyToken,getSubmittedreports)
 
 
 

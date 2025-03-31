@@ -276,7 +276,7 @@ function App() {
             <>
 <Route path="/" element={<TeamleaderDashboard />} />
 <Route path="/plan/View" element={<CeoSubmittedViewPlan />} />
-<Route path="/report/Viewapprovedreport" element={<CeoSubmittedViewReport />} />
+<Route path="/report/Viewapprovedreport" element={<TeamleaderSubmittedViewReport />} />
 <Route path="/plan/PlanSteps/Add" element={<PlanSteps/>} />
 <Route path="/plan/View_myplan" element={<StaffViewPlan />} />
 <Route path="/report/View_myreport" element={<CeoViewReport />} />
@@ -300,8 +300,8 @@ function App() {
             </>:state.role_id==9?
             <>
 <Route path="/" element={<TeamleaderDashboard />} />
-<Route path="/plan/View" element={<PlanreportSubmittedViewPlan />} />
-<Route path="/report/Viewapprovedreport" element={<PlanreportSubmittedViewReport />} />
+<Route path="/plan/View" element={<TeamleaderSubmittedViewPlan />} />
+<Route path="/report/Viewapprovedreport" element={<TeamleaderSubmittedViewReport />} />
 {/* <Route path="/addplan/addPlanSteps" element={<addPlanSteps/>} />
  */}
 {/* <Route path="/addplan/PPlanSteps" element={<PPlanSteps/>} /> */}
@@ -384,7 +384,9 @@ function App() {
             <>
            <Route path="/" element={<TeamleaderDashboard />} />
     <Route path="/plan/View" element={<ServiceHeadSubmittedViewPlan />} />
-    <Route path="/report/Viewapprovedreport" element={<ServiceHeadSubmittedViewReport />} />
+    
+    <Route path="/report/Viewapprovedreport" element={<TeamleaderSubmittedViewReport />} />
+    
     <Route path="/plan/PlanSteps/Add" element={<PlanSteps/>} />
     <Route path="/plan/View_myplan" element={<StaffViewPlan />} />
     <Route path="/report/View_myreport" element={<ServiceHeadViewReport />} />

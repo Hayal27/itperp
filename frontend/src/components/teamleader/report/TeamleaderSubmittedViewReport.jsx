@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "../../../assets/css/viewplan.css";
@@ -17,7 +18,6 @@ const TeamleaderSubmittedViewPlan = () => {
       const response = await axios.get("http://192.168.56.1:5000/api/submitted_reports", {
         headers: { Authorization: `Bearer ${token}` }
       });
-
       if (response.data.success && response.data.plans) {
         setPlans(response.data.plans);
       } else {
@@ -30,15 +30,10 @@ const TeamleaderSubmittedViewPlan = () => {
   };
 
   const handleApproveDecline = async (planId, action) => {
-    if (!comment.trim()) {
-      alert("Comment is required for approval or declination.");
-      return;
-    }
-
     try {
       const response = await axios.put(
         "http://192.168.56.1:5000/api/supervisor/plans/approve",
-        { plan_id: planId, status: action, comment }, // Send plan_id along with status and comment
+        { plan_id: planId, status: action, comment },
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
@@ -57,7 +52,50 @@ const TeamleaderSubmittedViewPlan = () => {
   };
 
   const handleReviewClick = (plan) => {
-    setSelectedPlan(plan); // Set the selected plan to be reviewed
+    setSelectedPlan(plan);
+  };
+
+  // Mapping backend attribute keys to display labels.
+  const fieldLabels = {
+    created_by: "አቃጅ",
+    department_name: "የስራ ክፍል",
+    year: "የታቀደበት አመት",
+    month: "ወር",
+    day: "ቀን",
+    deadline: "እስከ",
+    // status: "Status",
+    priority: "Priority",
+    goal_name: "ግብ",
+    objective_name: "አላማ",
+    specific_objective_name: "ውጤት",
+    specific_objective_detailname: "ዝርዝር ተግባር",
+    measurement: "ፐርፎርማንስ መለኪያ",
+    baseline: "መነሻ %",
+    plan: "የታቀደው %",
+    outcome: "ክንውን",
+    plan_type: "የ እቅዱ አይነት",
+    income_exchange: "ምንዛሬ",
+    cost_type: "ወጪ አይነት",
+    employment_type: "የቅጥር ሁኔታ",
+    incomeName: "የገቢ ስም",
+    costName: "የመጪው ስም",
+    CIbaseline: "መነሻ በ ገንዘብ",
+    CIplan: "እቅድ በ ገንዘብ",
+    outcomeCI: "ክንውን በ ገንዘብ",
+  };
+
+  // Filtering fields to only display those that are defined and not null in the plan.
+  const renderPlanDetails = (plan) => {
+    return Object.entries(fieldLabels).map(([key, label]) => {
+      if (plan[key] !== undefined && plan[key] !== null && plan[key] !== "") {
+        return (
+          <p key={key}>
+            <strong>{label}:</strong> {plan[key]}
+          </p>
+        );
+      }
+      return null;
+    });
   };
 
   return (
@@ -70,11 +108,11 @@ const TeamleaderSubmittedViewPlan = () => {
             <thead>
               <tr>
                 <th>Department</th>
-                <th>Pland By</th>
+                <th>Plan By</th>
                 <th>Goal</th>
                 <th>Objective</th>
-                <th>Specific Objecive </th>
-                <th>Specific Objecive detail</th>
+                <th>Specific Objective</th>
+                <th>Specific Objective Detail</th>
                 <th>Status</th>
                 <th>Actions</th>
               </tr>
@@ -84,12 +122,11 @@ const TeamleaderSubmittedViewPlan = () => {
                 <tr key={plan.plan_id}>
                   <td>{plan.department_name}</td>
                   <td>{plan.created_by}</td>
-                 
                   <td>{plan.goal_name}</td>
                   <td>{plan.objective_name}</td>
                   <td>{plan.specific_objective_name}</td>
-                  <td>{plan.specific_obective_detailname}</td>
-                  <td>{plan.approval_status}</td>
+                  <td>{plan.specific_objective_detailname}</td>
+                  <td>{plan.status || "N/A"}</td>
                   <td>
                     <button onClick={() => handleReviewClick(plan)}>Review</button>
                   </td>
@@ -104,34 +141,25 @@ const TeamleaderSubmittedViewPlan = () => {
 
       {selectedPlan && (
         <div className="modal">
-          <h3>Review Plan</h3>
-          <p><strong>ግብ:</strong> {selectedPlan.goal_name}</p>
-          <p><strong>አላማ:</strong> {selectedPlan.objective_name}</p>
-         
-          <p><strong>የ አላማው ውጤት </strong> {selectedPlan.specific_objective_name}</p>
-          <p><strong>የ ውጤቱ ዝርዝር ተግባር :</strong> {selectedPlan.specific_obective_detailname}</p>
-          <p><strong>Baseline:</strong> {selectedPlan.baseline}</p>
-          <p><strong>Plan:</strong> {selectedPlan.plan}</p>
-          <p><strong>Measurement:</strong> {selectedPlan.measurement}</p>
-          <p><strong>Description:</strong> {selectedPlan.description}</p>
-
-          <p><strong>Status:</strong> {selectedPlan.specific_objective_detail_status}</p>
-          <p><strong>Priority:</strong> {selectedPlan.priority}</p>
+          <h3>Review Report</h3>
+          <div className="plan-details">
+            {renderPlanDetails(selectedPlan)}
+          </div>
           <textarea
-            placeholder="Add a comment (required)"
+            placeholder="Add a comment here (optional)"
             value={comment}
             onChange={(e) => setComment(e.target.value)}
           />
-          <div>
-            <button onClick={() => handleApproveDecline(selectedPlan.plan_id, "Approved")} disabled={!comment.trim()}>
+          <div className="modal-actions">
+            <button onClick={() => handleApproveDecline(selectedPlan.plan_id, "Approved")}>
               Approve
             </button>
-            <button onClick={() => handleApproveDecline(selectedPlan.plan_id, "Declined")} disabled={!comment.trim()}>
+            <button onClick={() => handleApproveDecline(selectedPlan.plan_id, "Declined")}>
               Decline
             </button>
-          </div>
-          <div>
-            <button onClick={() => setSelectedPlan(null)}>Cancel</button>
+            <button onClick={() => setSelectedPlan(null)}>
+              Cancel
+            </button>
           </div>
         </div>
       )}

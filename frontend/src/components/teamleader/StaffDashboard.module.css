@@ -126,19 +126,34 @@ p {
   flex-basis: 300px;
   width: 100%;
   padding: 1rem;
+  background-color: transparent;
+  border-radius: 8px;
+  overflow-y: auto;
+  position: relative;
+  left: 0%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Individual Sidebar Container styling - NEW */
+.sidebarContainer {
   background-color: #fff;
-  border-left: 3px solid #1e4e96;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  overflow-y: auto;
+  padding: 1rem;
+  border-left: 3px solid #1e4e96;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
 
-  position: relative;
-  left: 10%;
+.sidebarContainer:hover {
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
 }
 
 /* Sidebar Section styling */
 .sidebarSection {
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
 }
 .sidebarSection h3 {
   margin-bottom: 0.5rem;
@@ -146,17 +161,66 @@ p {
   color: #007bff;
   background: transparent;
   padding-bottom: 0.25rem;
+  border-bottom: 1px solid #eaeaea;
 }
 
-/* Sticky Note styling */
+/* Sticky Note styling - ENHANCED */
 .stickyNote {
-  background: transparent;
-  padding: 0.5rem;
-  margin-bottom: 0.5rem;
+  background: #fffef0;
+  padding: 0.75rem;
+  margin-bottom: 0.75rem;
   border: 1px solid #ffe58f;
   border-radius: 4px;
   font-size: 0.9rem;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  position: relative;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.stickyNote:hover {
+  background: #fff9c4;
+  transform: scale(1.03);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.stickyNote::before {
+  content: '📌';
+  position: absolute;
+  top: -10px;
+  left: 5px;
+  font-size: 16px;
+  opacity: 0;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.stickyNote:hover::before {
+  opacity: 1;
+  transform: translateY(-3px);
+}
+
+.stickyNote::after {
+  content: 'Click to mark as complete';
+  position: absolute;
+  bottom: -25px;
+  left: 50%;
+  transform: translateX(-50%) scale(0);
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  opacity: 0;
+  transition: all 0.3s ease;
+  pointer-events: none;
+  white-space: nowrap;
+  z-index: 10;
+}
+
+.stickyNote:hover::after {
+  opacity: 1;
+  transform: translateX(-50%) scale(1);
+  bottom: -30px;
 }
 
 /* Export Actions styling */
@@ -180,6 +244,149 @@ p {
   color: #555;
 }
 
+/* Info Table styling - ENHANCED */
+.infoTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  position: relative;
+}
+
+.infoTable th, .infoTable td {
+  padding: 0.5rem;
+  border-bottom: 1px solid #eaeaea;
+  text-align: left;
+  position: relative;
+}
+
+.infoTable th {
+  background-color: #f8f9fa;
+  font-weight: 600;
+}
+
+.infoTable tr:last-child td {
+  border-bottom: none;
+}
+
+.infoTable a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.infoTable a:hover {
+  text-decoration: underline;
+}
+
+/* Table row hover effect */
+.infoTable tr:hover {
+  background-color: #f5f9ff;
+}
+
+/* Value cell hover effect */
+.infoTable td:last-child {
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.infoTable td:last-child:hover {
+  background-color: #e6f7ff;
+  color: #0056b3;
+  font-weight: 500;
+}
+
+/* Tooltip for table values */
+.infoTable td:last-child {
+  position: relative;
+}
+
+.infoTable td:last-child::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%) scale(0);
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  opacity: 0;
+  transition: all 0.3s ease;
+  pointer-events: none;
+  white-space: nowrap;
+  z-index: 10;
+}
+
+.infoTable td:last-child:hover::after {
+  opacity: 1;
+  transform: translateX(-50%) scale(1);
+  bottom: calc(100% + 5px);
+}
+
+/* Magical sparkle effect for values */
+@keyframes sparkle {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+.infoTable td:last-child:active {
+  background: linear-gradient(90deg, #f0f8ff, #e6f7ff, #f0f8ff);
+  background-size: 200% 200%;
+  animation: sparkle 1s ease infinite;
+  color: #0056b3;
+  font-weight: bold;
+}
+
+/* Notification item styling - NEW */
+.notificationItem {
+  padding: 0.75rem;
+  margin-bottom: 0.5rem;
+  border-radius: 6px;
+  background-color: #f8f9fa;
+  border-left: 3px solid #6c757d;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  position: relative;
+}
+
+.notificationItem:hover {
+  background-color: #e9ecef;
+  transform: translateX(5px);
+}
+
+.notificationItem.unread {
+  border-left-color: #007bff;
+  background-color: #e6f7ff;
+}
+
+.notificationItem.unread:hover {
+  background-color: #d1e7ff;
+}
+
+.notificationItem::after {
+  content: 'Click to mark as read';
+  position: absolute;
+  bottom: -25px;
+  left: 50%;
+  transform: translateX(-50%) scale(0);
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  opacity: 0;
+  transition: all 0.3s ease;
+  pointer-events: none;
+  white-space: nowrap;
+  z-index: 10;
+}
+
+.notificationItem:hover::after {
+  opacity: 1;
+  transform: translateX(-50%) scale(1);
+  bottom: -30px;
+}
+
 /* Responsive adjustments */
 
 /* For Tablets and Small Desktops */
@@ -192,6 +399,10 @@ p {
   }
   .contentWrapper {
     flex-direction: column;
+  }
+  .rightSidebar {
+    left: 0;
+    width: 100%;
   }
 }
 
@@ -212,6 +423,16 @@ p {
   }
   .groupTitle {
     font-size: 1.5rem;
+  }
+  .rightSidebar {
+    left: 0;
+  }
+  
+  /* Disable some hover effects on mobile */
+  .stickyNote::after,
+  .infoTable td:last-child::after,
+  .notificationItem::after {
+    display: none;
   }
 }
 
@@ -273,4 +494,207 @@ p {
   .selectorLabel {
     margin-bottom: 0.25rem;
   }
+}
+
+
+
+
+.taskForm {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.taskForm input {
+ background: rgb(164, 152, 152);
+}
+
+
+
+.taskSelect {
+  padding: 0.5rem;
+  font-size: 0.9rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: #898989;
+  min-width: 140px;
+  transition: border-color 0.3s ease;
+}
+
+.taskSelect:focus {
+  outline: none;
+  border-color: #007bff;
+}
+
+.taskInput {
+  flex: 1 1 200px;
+  padding: 0.5rem;
+  font-size: 0.9rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  transition: border-color 0.3s ease;
+}
+
+.taskInput:focus {
+  outline: none;
+  border-color: #007bff;
+}
+
+.taskButton {
+  background-color: #007bff;
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.taskButton:hover {
+  background-color: #0056b3;
+  transform: translateY(-1px);
+}
+
+/* Task Category container styling */
+.taskCategory {
+  margin-bottom: 2rem;
+  border-left: 4px solid #ccc;
+  padding-left: 0.75rem;
+}
+
+/* Specific styling based on category type */
+.highPriority {
+  border-left-color: #4fd958; /* Red for high priority tasks */
+}
+
+.pending {
+  border-left-color: #f0ad4e; /* Orange for pending tasks */
+}
+
+.userAdded {
+  border-left-color: #5bc0de; /* Blue for user added tasks */
+}
+
+/* Enhanced Sticky Note styling with magical hover effects */
+.stickyNote {
+  background: #fff;
+  padding: 0.75rem;
+  margin-bottom: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  position: relative;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+  cursor: pointer;
+}
+
+.stickyNote:hover {
+  background: #2481a3;
+  transform: translateX(5px);
+  box-shadow: 0 4px 8px rgba(203, 16, 16, 0.15);
+}
+
+/* Magical sparkles on hover using a pseudo-element */
+.stickyNote::before {
+  content: '✨';
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  opacity: 0;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  font-size: 1rem;
+}
+
+.stickyNote:hover::before {
+  opacity: 1;
+  transform: rotate(20deg) translate(2px, -2px);
+}
+
+/* Tooltip styling for task details */
+.stickyNote::after {
+  content: attr(data-tooltip);
+  position: relative;
+  bottom: 120%;
+  left: -50%;
+  transform: translateX(-50%) scale(0);
+  background: rgba(214, 16, 16, 0.75);
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.stickyNote:hover::after {
+  transform: translateX(-50%) scale(1);
+  opacity: 1;
+}
+
+/* Task category label style */
+.taskCategoryLabel {
+  font-weight: bold;
+  font-size: 0.8rem;
+  margin-left: 0.5rem;
+  color: #555;
+}
+
+/* Dropdown enhancements for select elements */
+.selectDropdown {
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2210%22%20height%3D%225%22%20viewBox%3D%220%200%2010%205%22%20fill%3D%22none%22%20xmlns%3D%22http://www.w3.org/2000/svg%22%3E%3Cpath%20d%3D%22M0%200L5%205L10%200H0Z%22%20fill%3D%22%23007BFF%22/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.7rem top 50%;
+  padding-right: 2.5rem;
+}
+
+/* Apply dropdown enhancements */
+.taskSelect.selectDropdown {
+  background-color: #8f7878;
+}
+
+/* Responsive adjustments */
+@media screen and (max-width: 768px) {
+  .taskForm {
+    flex-direction: column;
+  }
+  
+  .taskInput, .taskSelect {
+    width: 100%;
+  }
+}
+
+
+.animated-icon {
+  transition: transform 0.3s ease, color 0.3s ease;
+  font-size: 1.5rem; /* Adjust size as needed */
+}
+
+.animated-icon:hover {
+  transform: scale(1.2) rotate(10deg); /* Scale and rotate on hover */
+  color: #ff6347; /* Change color on hover */
+}
+
+/* Add colors for specific icons */
+.text-green-500 {
+  color: #28a745; /* Green color */
+}
+
+.text-blue-500 {
+  color: #007bff; /* Blue color */
+}
+
+.text-red-500 {
+  color: #dc3545; /* Red color */
+}
+
+.text-yellow-500 {
+  color: #ffc107; /* Yellow color */
+}
+
+.text-purple-500 {
+  color: #6f42c1; /* Purple color */
 }

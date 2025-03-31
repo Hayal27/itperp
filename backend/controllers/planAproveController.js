@@ -32,6 +32,7 @@ const validateApprovalInput = (status, comment) => {
 
 
 const getSubmittedPlans = async (req, res) => {
+  // Extract token from Authorization header
   const token = req.headers["authorization"]?.split(" ")[1];
   if (!token) {
     console.error("Error: No token provided in the request headers.");
@@ -46,7 +47,7 @@ const getSubmittedPlans = async (req, res) => {
     const user_id = await verifyToken(token); // Get user_id from token
     console.log(`Decoded user_id from token: ${user_id}`);
 
-    // Get employee_id from the users table using user_id
+    // Query to fetch employee_id for the given user_id from the users table
     const getEmployeeQuery = "SELECT employee_id FROM users WHERE user_id = ?";
     con.query(getEmployeeQuery, [user_id], async (err, results) => {
       if (err) {
@@ -71,7 +72,8 @@ const getSubmittedPlans = async (req, res) => {
       const supervisor_id = results[0].employee_id;
       console.log(`Supervisor ID fetched: ${supervisor_id}`);
 
-      // Extended query to fetch additional attributes from sod and related tables.
+      // SQL query to fetch detailed plans, including the filter for reporting set to 'deactivate'.
+      // This filter ensures that if a plan's reporting is 'active', it will not be fetched.
       const query = `
         SELECT 
           p.plan_id,
@@ -93,7 +95,6 @@ const getSubmittedPlans = async (req, res) => {
           sod.priority,
           p.department_id,
           d.name AS department_name,
-         
           sod.count,
           sod.outcome,
           sod.progress,
@@ -105,7 +106,6 @@ const getSubmittedPlans = async (req, res) => {
           sod.employment_type,
           sod.incomeName,
           sod.costName,
-        
           sod.CIbaseline,
           sod.CIplan,
           sod.CIoutcome,
@@ -124,7 +124,8 @@ const getSubmittedPlans = async (req, res) => {
         JOIN specific_objective_details sod ON p.specific_objective_detail_id = sod.specific_objective_detail_id
         WHERE p.supervisor_id = ? 
           AND aw.approver_id = ? 
-          AND aw.status = 'Pending';
+          AND aw.status = 'Pending'
+          AND p.reporting = 'deactivate';  -- Only fetch rows where reporting is 'deactivate'
       `;
 
       con.query(query, [supervisor_id, supervisor_id], (err, results) => {
@@ -147,10 +148,10 @@ const getSubmittedPlans = async (req, res) => {
           });
         }
 
-        // Filter out any columns that have null values from each row.
-        const filteredResults = results.map(row => {
-          return Object.fromEntries(Object.entries(row).filter(([key, value]) => value !== null));
-        });
+        // Filter out any columns with null values from each row
+        const filteredResults = results.map(row =>
+          Object.fromEntries(Object.entries(row).filter(([key, value]) => value !== null))
+        );
 
         console.log(`Plans fetched successfully: ${JSON.stringify(filteredResults, null, 2)}`);
         res.json({ success: true, plans: filteredResults });
@@ -170,20 +171,18 @@ const getSubmittedPlans = async (req, res) => {
 
 
 
-
-const getSubmittedReports = async (req, res) => {
+const getSubmittedreports = async (req, res) => {
   const token = req.headers["authorization"]?.split(" ")[1];
   if (!token) {
-    return res.status(403).json({ 
-      success: false, 
-      message: "No token provided. Authorization token is required to access the plans.", 
-      error_code: "TOKEN_MISSING" 
+    return res.status(403).json({
+      success: false,
+      message: "No token provided. Authorization token is required to access the plans.",
+      error_code: "TOKEN_MISSING",
     });
   }
 
   try {
-    const user_id = await verifyToken(token); // Get user_id from token
-
+    const user_id = await verifyToken(token);
     // Get employee_id from the users table using user_id
     const getEmployeeQuery = "SELECT employee_id FROM users WHERE user_id = ?";
     con.query(getEmployeeQuery, [user_id], async (err, results) => {
@@ -192,7 +191,7 @@ const getSubmittedReports = async (req, res) => {
           success: false,
           message: "Error fetching employee_id from users table.",
           error_code: "DB_ERROR",
-          error: err.message
+          error: err.message,
         });
       }
 
@@ -200,51 +199,102 @@ const getSubmittedReports = async (req, res) => {
         return res.status(404).json({
           success: false,
           message: "Employee not found. Unable to fetch employee details based on the provided user_id.",
-          error_code: "EMPLOYEE_NOT_FOUND"
+          error_code: "EMPLOYEE_NOT_FOUND",
         });
       }
 
       const supervisor_id = results[0].employee_id;
 
-      // Query to get reports awaiting approval
+      // Extended query to fetch additional attributes from sod and related tables.
+      // Fixed the SQL query by removing the semicolon and conflicting condition for aw.status.
       const query = `
-      SELECT r.report_id, r.objective, r.goal, r.details, aw.status
-      FROM reports r
-      JOIN ApprovalWorkflow aw ON r.report_id = aw.report_id
-      WHERE r.supervisor_id = ? AND aw.approver_id = ? AND aw.status = 'Pending'
-    `;
-      
+        SELECT 
+          p.plan_id,
+          p.user_id,
+          sod.specific_objective_detail_id,
+          sod.specific_objective_detailname,
+          sod.details,
+          sod.baseline,
+          sod.plan,
+          sod.measurement,
+          sod.execution_percentage,
+          sod.created_at,
+          sod.updated_at,
+          sod.year,
+          sod.month,
+          sod.day,
+          sod.deadline,
+          sod.status,
+          sod.priority,
+          p.department_id,
+          d.name AS department_name,
+          sod.count,
+          sod.outcome,
+          sod.progress,
+          sod.created_by,
+          sod.specific_objective_id,
+          sod.plan_type,
+          sod.income_exchange,
+          sod.cost_type,
+          sod.employment_type,
+          sod.incomeName,
+          sod.costName,
+          sod.CIbaseline,
+          sod.CIplan,
+          sod.CIoutcome,
+          sod.editing_status,
+          sod.reporting,
+          p.goal_id,
+          o.name AS objective_name,
+          g.name AS goal_name,
+          so.specific_objective_name
+        FROM plans p
+        JOIN ApprovalWorkflow aw ON p.plan_id = aw.plan_id
+        JOIN departments d ON p.department_id = d.department_id
+        JOIN objectives o ON p.objective_id = o.objective_id
+        JOIN specific_objectives so ON p.specific_objective_id = so.specific_objective_id
+        JOIN goals g ON p.goal_id = g.goal_id
+        JOIN specific_objective_details sod ON p.specific_objective_detail_id = sod.specific_objective_detail_id
+        WHERE p.supervisor_id = ? 
+          AND aw.approver_id = ? 
+          AND aw.status = 'Pending'
+          AND aw.report_status = 'pending';
+      `;
+
       con.query(query, [supervisor_id, supervisor_id], (err, results) => {
         if (err) {
           return res.status(500).json({
             success: false,
-            message: "Error fetching reports from database.",
+            message: "Error fetching plans from database.",
             error_code: "DB_ERROR",
-            error: err.message
+            error: err.message,
           });
         }
 
-        if (results.length === 0) {
+        if (!results || results.length === 0) {
           return res.status(404).json({
             success: false,
-            message: "No reports found awaiting approval for this supervisor.",
-            error_code: "NO_PLANS_FOUND"
+            message: "No plans found awaiting approval for this supervisor.",
+            error_code: "NO_PLANS_FOUND",
           });
         }
 
-        res.json({ success: true, reports: results });
+        // Filter out any columns that have null values from each row.
+        const filteredResults = results.map(row =>
+          Object.fromEntries(Object.entries(row).filter(([key, value]) => value !== null))
+        );
+
+        res.json({ success: true, plans: filteredResults });
       });
     });
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: 'Unknown error occurred while fetching submitted reports. Error: ${error.message}',
-      error_code: "UNKNOWN_ERROR"
+      message: `Unknown error occurred while fetching submitted plans. Error: ${error.message}`,
+      error_code: "UNKNOWN_ERROR",
     });
   }
 };
-
-
 
 
 
@@ -879,7 +929,9 @@ const getSubmittedPlanssp = async (req, res) => {
 
 
 
-const updatePlanApprovalStatus = async (req, res) => {
+
+
+const updatePlanApprovalStatus = async (req, res) => { 
   try {
     const token = req.headers["authorization"]?.split(" ")[1];
     if (!token) {
@@ -963,92 +1015,39 @@ const updatePlanApprovalStatus = async (req, res) => {
           }
 
           if (status === "Approved") {
-            // Fetch next supervisor for approval
-            const getNextSupervisorQuery = `
-              SELECT supervisor_id FROM employees WHERE employee_id = ?
+            // Instead of fetching a next supervisor, update the plans table so that
+            // supervisor_id is set to the supervisor of the user (based on users and employees join)
+            const updatePlanQuery = `
+              UPDATE plans p
+              JOIN users u ON p.user_id = u.user_id
+              JOIN employees e ON u.employee_id = e.employee_id
+              SET p.reporting = 'active', 
+                  p.employee_id = e.employee_id,
+                  p.supervisor_id = e.supervisor_id
+              WHERE p.plan_id = ?
             `;
-            con.query(getNextSupervisorQuery, [planDetails.supervisor_id], (err, supervisorResults) => {
+            con.query(updatePlanQuery, [plan_id], (err) => {
               if (err) {
-                console.error("Error fetching next supervisor:", err.message);
+                console.error("Error updating plan supervisor details:", err.message);
                 return res.status(500).json({
                   success: false,
-                  message: "Database error while fetching next supervisor.",
+                  message: "Database error while updating plan details.",
                   error_code: "DB_ERROR",
                 });
               }
-
-              if (supervisorResults.length > 0) {
-                const nextSupervisorId = supervisorResults[0].supervisor_id;
-
-                // Add next supervisor to ApprovalWorkflow
-                const insertApprovalWorkflowQuery = `
-                  INSERT INTO ApprovalWorkflow (plan_id, approver_id, status)
-                  VALUES (?, ?, 'Pending')
-                `;
-                con.query(insertApprovalWorkflowQuery, [plan_id, nextSupervisorId], (err) => {
-                  if (err) {
-                    console.error("Error creating next approval workflow:", err.message);
-                    return res.status(500).json({
-                      success: false,
-                      message: "Database error while creating next approval workflow.",
-                      error_code: "DB_ERROR",
-                    });
-                  }
-
-                  // Update plan with next supervisor and set reporting to active
-                  const updatePlanQuery = `
-                    UPDATE plans
-                    SET employee_id = ?, supervisor_id = ?, reporting = 'active'
-                    WHERE plan_id = ?
-                  `;
-                  con.query(updatePlanQuery, [nextSupervisorId, nextSupervisorId, plan_id], (err) => {
-                    if (err) {
-                      console.error("Error updating plan with next supervisor:", err.message);
-                      return res.status(500).json({
-                        success: false,
-                        message: "Database error while updating plan with next supervisor.",
-                        error_code: "DB_ERROR",
-                      });
-                    }
-
-                    return res.status(200).json({
-                      success: true,
-                      message: "Plan approved and forwarded to the next supervisor.",
-                    });
-                  });
-                });
-              } else {
-                // Finalize the plan and set reporting to active
-                const finalizePlanQuery = `
-                  UPDATE plans
-                  SET status = 'Approved', reporting = 'active'
-                  WHERE plan_id = ?
-                `;
-                con.query(finalizePlanQuery, [plan_id], (err) => {
-                  if (err) {
-                    console.error("Error finalizing plan approval:", err.message);
-                    return res.status(500).json({
-                      success: false,
-                      message: "Database error while finalizing plan approval.",
-                      error_code: "DB_ERROR",
-                    });
-                  }
-
-                  return res.status(200).json({
-                    success: true,
-                    message: "Plan fully approved. No further supervisors required.",
-                  });
-                });
-              }
+              return res.status(200).json({
+                success: true,
+                message: "Plan approved with updated supervisor."
+              });
             });
           } else if (status === "Declined") {
-            // Decline the plan and restore original supervisor
+            // Decline the plan and restore original supervisor details
             const restorePlanQuery = `
               UPDATE plans
               SET employee_id = ?, supervisor_id = ?
               WHERE plan_id = ?
             `;
-            con.query(restorePlanQuery, [planDetails.employee_id, planDetails.supervisor_id, plan_id], (err, result) => {
+            con.query(restorePlanQuery, [planDetails.employee_id, planDetails.supervisor_id, plan_id], (err) => {
               if (err) {
                 console.error("Error restoring plan details:", err.message);
                 return res.status(500).json({
@@ -1057,20 +1056,9 @@ const updatePlanApprovalStatus = async (req, res) => {
                   error_code: "DB_ERROR",
                 });
               }
-
-              if (result.affectedRows === 0) {
-                console.error("No rows were updated, plan might not exist.");
-                return res.status(404).json({
-                  success: false,
-                  message: "Plan not found or could not be declined.",
-                  error_code: "PLAN_NOT_FOUND",
-                });
-              }
-
-              // Successfully declined and reverted the supervisor
               return res.status(200).json({
                 success: true,
-                message: "Plan declined and reverted to original supervisor.",
+                message: "Plan declined and reverted to original supervisor."
               });
             });
           }
@@ -1093,8 +1081,10 @@ const updatePlanApprovalStatus = async (req, res) => {
 
 
 
+
+
 module.exports = {  
-  getSubmittedReports,
+  getSubmittedreports,
   getSubmittedPlans,
   getSubmittedPlanssp,
   updatePlanStatus,

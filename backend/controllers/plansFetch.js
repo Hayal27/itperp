@@ -970,6 +970,7 @@ const updatePlan = async (req, res) => {
 };
   
 
+
 const addReport = async (req, res) => {
   try {
     const user_id = req.user_id; // Get user_id from the request
@@ -1083,10 +1084,10 @@ const addReport = async (req, res) => {
 
           console.log("Specific objective detail updated successfully. Specific Objective Detail ID:", specific_objective_detail_id);
 
-          // Step 4: Automatically update the 'reporting' column on the plans table to 'active'
+          // Step 4: Automatically update the plan's reporting column to 'active' and report_progress column to 'on_progress'
           const updatePlanQuery = `
             UPDATE plans
-            SET reporting = 'active'
+            SET reporting = 'active', report_progress = 'on_progress'
             WHERE plan_id = ? AND user_id = ?
           `;
           con.query(updatePlanQuery, [planId, user_id], (err, planUpdateResult) => {
@@ -1100,59 +1101,106 @@ const addReport = async (req, res) => {
               });
             }
 
-            console.log("Reporting status updated to 'active'. Plan ID:", planId);
+            console.log("Reporting status updated to 'active' and report_progress set to 'on_progress'. Plan ID:", planId);
 
-            // Step 5: Update the related approval workflow status to 'pending'
-            const updateApprovalWorkflowQuery = `
-              UPDATE approvalworkflow
-              SET status = 'pending'
-              WHERE plan_id = ?
+            // New Step: Update supervisor_id in plans table with the supervisor id of the employee associated with the user.
+            const getSupervisorQuery = `
+              SELECT e.supervisor_id FROM employees e
+              JOIN users u ON e.employee_id = u.employee_id
+              WHERE u.user_id = ?
             `;
-            con.query(updateApprovalWorkflowQuery, [planId], (err, approvalResult) => {
+            con.query(getSupervisorQuery, [user_id], (err, supervisorResults) => {
               if (err) {
-                console.error("Error updating approval workflow:", err.stack);
+                console.error("Error fetching supervisor id:", err.stack);
                 return res.status(500).json({
                   success: false,
-                  message: "Database error while updating approval workflow status.",
-                  error_code: "DB_ERROR_APPROVAL_UPDATE",
+                  message: "Database error while fetching supervisor id.",
+                  error_code: "DB_ERROR_SUPERVISOR_FETCH",
                   error: err.message
                 });
               }
 
-              console.log("Approval workflow status updated to 'pending'. Plan ID:", planId);
+              if (supervisorResults.length === 0) {
+                console.error("Supervisor id not found for user, user_id:", user_id);
+                return res.status(404).json({
+                  success: false,
+                  message: "Supervisor id not found for user.",
+                  error_code: "SUPERVISOR_NOT_FOUND"
+                });
+              }
 
-              // Step 6: Fetch the updated specific objective detail for confirmation.
-              const fetchUpdatedDetailQuery = `
-                SELECT * FROM specific_objective_details 
-                WHERE specific_objective_detail_id = ? AND user_id = ?
+              const supervisor_id = supervisorResults[0].supervisor_id;
+              const updateSupervisorQuery = `
+                UPDATE plans
+                SET supervisor_id = ?
+                WHERE plan_id = ? AND user_id = ?
               `;
-              con.query(fetchUpdatedDetailQuery, [specific_objective_detail_id, user_id], (err, updatedDetailResults) => {
+              con.query(updateSupervisorQuery, [supervisor_id, planId, user_id], (err, supervisorUpdateResult) => {
                 if (err) {
-                  console.error("Error fetching updated specific objective detail:", err.stack);
+                  console.error("Error updating supervisor id in plans table:", err.stack);
                   return res.status(500).json({
                     success: false,
-                    message: "Error fetching updated specific objective detail from the database.",
-                    error_code: "DB_ERROR_FETCH_UPDATED",
+                    message: "Database error while updating supervisor id in plans.",
+                    error_code: "DB_ERROR_SUPERVISOR_UPDATE",
                     error: err.message
                   });
                 }
 
-                if (updatedDetailResults.length === 0) {
-                  console.error("Updated specific objective detail not found. Specific Objective Detail ID:", specific_objective_detail_id);
-                  return res.status(404).json({
-                    success: false,
-                    message: "Updated specific objective detail not found. Please try again.",
-                    error_code: "UPDATED_SPECIFIC_OBJECTIVE_DETAIL_NOT_FOUND"
+                console.log("Supervisor id updated in plans table:", supervisor_id);
+
+                // Step 5: Update the related approval workflow status to 'pending'
+                const updateApprovalWorkflowQuery = `
+                  UPDATE approvalworkflow
+                  SET status = 'pending'
+                  WHERE plan_id = ?
+                `;
+                con.query(updateApprovalWorkflowQuery, [planId], (err, approvalResult) => {
+                  if (err) {
+                    console.error("Error updating approval workflow:", err.stack);
+                    return res.status(500).json({
+                      success: false,
+                      message: "Database error while updating approval workflow status.",
+                      error_code: "DB_ERROR_APPROVAL_UPDATE",
+                      error: err.message
+                    });
+                  }
+
+                  console.log("Approval workflow status updated to 'pending'. Plan ID:", planId);
+
+                  // Step 6: Fetch the updated specific objective detail for confirmation.
+                  const fetchUpdatedDetailQuery = `
+                    SELECT * FROM specific_objective_details 
+                    WHERE specific_objective_detail_id = ? AND user_id = ?
+                  `;
+                  con.query(fetchUpdatedDetailQuery, [specific_objective_detail_id, user_id], (err, updatedDetailResults) => {
+                    if (err) {
+                      console.error("Error fetching updated specific objective detail:", err.stack);
+                      return res.status(500).json({
+                        success: false,
+                        message: "Error fetching updated specific objective detail from the database.",
+                        error_code: "DB_ERROR_FETCH_UPDATED",
+                        error: err.message
+                      });
+                    }
+
+                    if (updatedDetailResults.length === 0) {
+                      console.error("Updated specific objective detail not found. Specific Objective Detail ID:", specific_objective_detail_id);
+                      return res.status(404).json({
+                        success: false,
+                        message: "Updated specific objective detail not found. Please try again.",
+                        error_code: "UPDATED_SPECIFIC_OBJECTIVE_DETAIL_NOT_FOUND"
+                      });
+                    }
+
+                    const updatedSpecificObjectiveDetail = updatedDetailResults[0];
+                    console.log("Fetched updated specific objective detail:", updatedSpecificObjectiveDetail);
+
+                    return res.status(200).json({
+                      success: true,
+                      message: "Specific objective detail updated and report submitted successfully. Reporting status set to 'active', report_progress updated to 'on_progress', supervisor updated, and approval workflow updated.",
+                      data: updatedSpecificObjectiveDetail
+                    });
                   });
-                }
-
-                const updatedSpecificObjectiveDetail = updatedDetailResults[0];
-                console.log("Fetched updated specific objective detail:", updatedSpecificObjectiveDetail);
-
-                return res.status(200).json({
-                  success: true,
-                  message: "Specific objective detail updated and report submitted successfully. Reporting status set to 'active', and approval workflow updated.",
-                  data: updatedSpecificObjectiveDetail
                 });
               });
             });
@@ -1169,6 +1217,7 @@ const addReport = async (req, res) => {
     });
   }
 };
+
 
 
 
