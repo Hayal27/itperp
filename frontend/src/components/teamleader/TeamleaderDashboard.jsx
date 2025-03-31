@@ -9,21 +9,15 @@ import CostMetricsDataTable from "./Metrics/CostMetricsDataTable";
 import CostPlanOutcomeDifferenceRegularBudget from "./Metrics/CostPlanOutcomeDifferenceRegularBudget";
 import CostPlan_Outcome_difference_regular_budget_pichart from "./Metrics/CostPlan_Outcome_difference_regular_budget_pichart";
 import CostPlanOutcomeDifferenceRegularBudgetTable from "./Metrics/CostPlanOutcomeDifferenceRegularBudgetTable";
-
-    // capital budget 
 import CostPlanOutcomeDifferenceCapitalBudgetTable from "./Metrics/CostPlanOutcomeDifferenceCapitalBudgetTable";
 import CostPlanOutcomeDifferenceCapitalBudget from "./Metrics/CostPlanOutcomeDifferenceCapitalBudget";
-
 import CostPlanOutcomeDifferenceCapitalBudgetPieChart from "./Metrics/CostPlan_Outcome_difference_capital_budget_pichart";
-
-
 import { fetchDashboardData } from "./services/dashboardService";
 import NotificationDisplay from "./NotificationDisplay";
 import ExportSelection from "./ExportSelection";
 import DashboardViewSelector from "./DashboardViewSelector";
 import styles from "./StaffDashboard.module.css";
-
-
+import TaskManagement from './TaskManagement';
 
 /**
  * Helper function to decide if a chart/table type should be rendered
@@ -50,7 +44,7 @@ const IncomeMetricsSection = ({ data, viewFilter, incomeVisible, toggleVisibilit
         onClick={toggleVisibility}
         style={{ cursor: "pointer" }}
       >
-        {incomeVisible ? "⬆️" : "⬇️"} ገቢ
+        {incomeVisible ? "⬆️" : "⬇️"} <i className="fas fa-chart-line animated-icon"></i> ገቢ
       </h3>
       {incomeVisible && (
         <>
@@ -58,13 +52,13 @@ const IncomeMetricsSection = ({ data, viewFilter, incomeVisible, toggleVisibilit
           <div className={styles.chartsRow}>
             {shouldRender(viewFilter, "bar") && (
               <div className={styles.chartContainer}>
-                <h3>Total Income Summation (ETB & USD)</h3>
+                <h3><i className="fas fa-chart-bar animated-icon"></i> Total Income Summation (ETB & USD)</h3>
                 <IncomeMetricsBarchart data={data.extra.filteredIncomeMetrics || data} />
               </div>
             )}
             {shouldRender(viewFilter, "pi") && (
               <div className={styles.chartContainer}>
-                <h3>Income Breakdown</h3>
+                <h3><i className="fas fa-pie-chart animated-icon"></i> Income Breakdown</h3>
                 <IncomeMetricsPichart data={data.extra.filteredIncomeMetrics || data} />
               </div>
             )}
@@ -72,7 +66,7 @@ const IncomeMetricsSection = ({ data, viewFilter, incomeVisible, toggleVisibilit
           {/* Income Table */}
           {shouldRender(viewFilter, "tables") && (
             <div className={styles.dataTableContainer}>
-              <h2>የታቀደው/የተገኘው ገቢ በ ETB እና USD </h2>
+              <h2><i className="fas fa-table animated-icon"></i> የታቀደው/የተገኘው ገቢ በ ETB እና USD </h2>
               <IncomeMetricsDataTable data={data.extra.filteredIncomeMetrics || data} />
             </div>
           )}
@@ -103,7 +97,7 @@ const CostMetricsSection = ({ data, viewFilter, costVisible, toggleVisibility, a
         onClick={toggleVisibility}
         style={{ cursor: "pointer" }}
       >
-        {costVisible ? "⬆️" : "⬇️"} ወጪ
+        {costVisible ? "⬆️" : "⬇️"} <i className="fas fa-chart-line animated-icon"></i> ወጪ
       </h3>
       {costVisible && (
         <>
@@ -112,7 +106,7 @@ const CostMetricsSection = ({ data, viewFilter, costVisible, toggleVisibility, a
             {shouldRender(viewFilter, "bar") && (
               <>
                 <div className={styles.costChart}>
-                  <h4>Total Cost in ETB (millions birr)</h4>
+                  <h4><i className="fas fa-chart-bar animated-icon"></i> Total Cost in ETB (millions birr)</h4>
                   <CostMetricsBarchart
                     data={{
                       total_cost: data.extra.filteredTotalCost || data.extra.displayTotalCost
@@ -121,7 +115,7 @@ const CostMetricsSection = ({ data, viewFilter, costVisible, toggleVisibility, a
                   />
                 </div>
                 <div className={styles.costChart}>
-                  <h4>Total Cost Plan</h4>
+                  <h4><i className="fas fa-chart-bar animated-icon"></i> Total Cost Plan</h4>
                   <CostMetricsBarchart
                     data={{
                       total_cost_plan: data.extra.filteredTotalCostPlan || data.extra.displayTotalCostPlan
@@ -130,15 +124,15 @@ const CostMetricsSection = ({ data, viewFilter, costVisible, toggleVisibility, a
                   />
                 </div>
                 <div className={styles.costChart}>
-                  <h4>Compare Cost Plan vs Outcome</h4>
-                  <CostMetricsBarchart 
+                  <h4><i className="fas fa-chart-bar animated-icon"></i> Compare Cost Plan vs Outcome</h4>
+                  <CostMetricsBarchart
                     data={data.extra.filteredCompareCostPlanOutcome || data.extra.compareCostPlanOutcome}
                     type="compareCostPlanOutcome"
                   />
                 </div>
                 <div className={styles.costChart}>
-                  <h4>Total Cost Execution Percentage</h4>
-                  <CostMetricsBarchart 
+                  <h4><i className="fas fa-chart-bar animated-icon"></i> Total Cost Execution Percentage</h4>
+                  <CostMetricsBarchart
                     data={{
                       averageCostCIExecutionPercentage:
                         data.extra.filteredExecutionPercentage?.averageCostCIExecutionPercentage ||
@@ -152,7 +146,7 @@ const CostMetricsSection = ({ data, viewFilter, costVisible, toggleVisibility, a
             {shouldRender(viewFilter, "pi") && (
               <>
                 <div className={styles.costChart}>
-                  <h4>Total Cost in ETB (millions birr)</h4>
+                  <h4><i className="fas fa-pie-chart animated-icon"></i> Total Cost in ETB (millions birr)</h4>
                   <CostMetricsPichart
                     data={{
                       total_cost: data.extra.filteredTotalCost || data.extra.displayTotalCost
@@ -161,7 +155,7 @@ const CostMetricsSection = ({ data, viewFilter, costVisible, toggleVisibility, a
                   />
                 </div>
                 <div className={styles.costChart}>
-                  <h4>Total Cost Plan</h4>
+                  <h4><i className="fas fa-pie-chart animated-icon"></i> Total Cost Plan</h4>
                   <CostMetricsPichart
                     data={{
                       total_cost_plan: data.extra.filteredTotalCostPlan || data.extra.displayTotalCostPlan
@@ -170,15 +164,15 @@ const CostMetricsSection = ({ data, viewFilter, costVisible, toggleVisibility, a
                   />
                 </div>
                 <div className={styles.costChart}>
-                  <h4>Compare Cost Plan vs Outcome</h4>
-                  <CostMetricsPichart 
+                  <h4><i className="fas fa-pie-chart animated-icon"></i> Compare Cost Plan vs Outcome</h4>
+                  <CostMetricsPichart
                     data={data.extra.filteredCompareCostPlanOutcome || data.extra.compareCostPlanOutcome}
                     type="compareCostPlanOutcome"
                   />
                 </div>
                 <div className={styles.costChart}>
-                  <h4>Total Cost Execution Percentage</h4>
-                  <CostMetricsPichart 
+                  <h4><i className="fas fa-pie-chart animated-icon"></i> Total Cost Execution Percentage</h4>
+                  <CostMetricsPichart
                     data={{
                       averageCostCIExecutionPercentage:
                         data.extra.filteredExecutionPercentage?.averageCostCIExecutionPercentage ||
@@ -194,81 +188,51 @@ const CostMetricsSection = ({ data, viewFilter, costVisible, toggleVisibility, a
           {/* Cost Metrics Data Table */}
           {shouldRender(viewFilter, "tables") && (
             <div className={styles.dataTableContainer}>
-              <h2>ጠቅላላ የ ወጪ እቅድ</h2>
+              <h2><i className="fas fa-table animated-icon"></i> ጠቅላላ የ ወጪ እቅድ</h2>
               <CostMetricsDataTable data={data} type="totalCostPlan" />
             </div>
           )}
 
-
           {/* Regular Budget Section */}
           <div className={styles.chartsRow}>
-
             {shouldRender(viewFilter, "bar") && (
               <div className={styles.chartContainer}>
-                
-                {/* Pass the appliedFilters to ensure filtering functionality */}
                 <CostPlanOutcomeDifferenceRegularBudget filters={appliedFilters} />
               </div>
             )}
-
-             {shouldRender(viewFilter, "pi") && (
+            {shouldRender(viewFilter, "pi") && (
               <div className={styles.chartContainer}>
-                
-                {/* Pass the appliedFilters to ensure filtering functionality */}
                 <CostPlan_Outcome_difference_regular_budget_pichart filters={appliedFilters} />
               </div>
             )}
-
             {shouldRender(viewFilter, "tables") && (
               <div className={styles.chartContainer}>
-                
-                {/* Pass the appliedFilters to ensure filtering functionality */}
-                <CostPlanOutcomeDifferenceRegularBudgetTable
-                 filters={appliedFilters} />
+                <CostPlanOutcomeDifferenceRegularBudgetTable filters={appliedFilters} />
               </div>
             )}
-   </div>
+          </div>
 
-
-
-
-
-          {/* capital Budget Section */}
+          {/* Capital Budget Section */}
           <div className={styles.chartsRow}>
-
             {shouldRender(viewFilter, "bar") && (
               <div className={styles.chartContainer}>
-                
-                {/* Pass the appliedFilters to ensure filtering functionality */}
                 <CostPlanOutcomeDifferenceCapitalBudget filters={appliedFilters} />
               </div>
             )}
-
-             {shouldRender(viewFilter, "pi") && (
+            {shouldRender(viewFilter, "pi") && (
               <div className={styles.chartContainer}>
-                
-                {/* Pass the appliedFilters to ensure filtering functionality */}
                 <CostPlanOutcomeDifferenceCapitalBudgetPieChart filters={appliedFilters} />
               </div>
             )}
-
             {shouldRender(viewFilter, "tables") && (
               <div className={styles.chartContainer}>
-                
-                {/* Pass the appliedFilters to ensure filtering functionality */}
-                <CostPlanOutcomeDifferenceCapitalBudgetTable
-                 filters={appliedFilters} />
+                <CostPlanOutcomeDifferenceCapitalBudgetTable filters={appliedFilters} />
               </div>
             )}
           </div>
         </>
       )}
     </div>
-
-
-
-
-
   );
 };
 
@@ -333,9 +297,9 @@ const TeamleaderDashboard = () => {
     <div className={styles.dashboardContainer}>
       {/* Header: Filter Row */}
       <header className={styles.header}>
-        <FilterForm 
-          filters={formFilters} 
-          onSubmit={handleFilterSubmit} 
+        <FilterForm
+          filters={formFilters}
+          onSubmit={handleFilterSubmit}
         />
       </header>
 
@@ -363,71 +327,77 @@ const TeamleaderDashboard = () => {
             />
           </section>
 
-          {/* Sidebar: Notifications and Additional Info */}
+          {/* Sidebar: Separated into independent container boxes */}
           <aside className={styles.rightSidebar}>
-            <NotificationDisplay />
-            <div className={styles.sidebarSection}>
-              <h3>Daily Sticky Notes</h3>
-              <div className={styles.stickyNote}>Review dashboard KPIs.</div>
-              <div className={styles.stickyNote}>Call supplier for update.</div>
-              <div className={styles.stickyNote}>Prepare presentation slides.</div>
+            {/* Notifications Container */}
+            <div className={styles.sidebarContainer}>
+              <NotificationDisplay />
             </div>
-            <div className={styles.sidebarSection}>
-              <h3>Ethiopian IT Park Info</h3>
-              <table className={styles.infoTable}>
-                <thead>
-                  <tr>
-                    <th>Parameter</th>
-                    <th>Value</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>Name</td>
-                    <td>Ethiopian IT Park</td>
-                  </tr>
-                  <tr>
-                    <td>Location</td>
-                    <td>Addis Ababa</td>
-                  </tr>
-                  <tr>
-                    <td>Contact</td>
-                    <td>+251-11-1234567</td>
-                  </tr>
-                  <tr>
-                    <td>Website</td>
-                    <td>
-                      <a href="https://ethiopianitpark.et/" target="_blank" rel="noopener noreferrer">
-                        Visit
-                      </a>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>Area (hec)</td>
-                    <td>200</td>
-                  </tr>
-                  <tr>
-                    <td>Buildings No</td>
-                    <td>25</td>
-                  </tr>
-                  <tr>
-                    <td>Rented Units</td>
-                    <td>15</td>
-                  </tr>
-                  <tr>
-                    <td>Non-Rented Units</td>
-                    <td>10</td>
-                  </tr>
-                  <tr>
-                    <td>Residents Company No</td>
-                    <td>100</td>
-                  </tr>
-                  <tr>
-                    <td>Additional Info</td>
-                    <td>State-of-the-art facilities with modern infrastructure</td>
-                  </tr>
-                </tbody>
-              </table>
+
+            {/* Task Management Container */}
+            <div className={styles.sidebarContainer}>
+              <TaskManagement />
+            </div>
+
+            {/* Ethiopian IT Park Info Container */}
+            <div className={styles.sidebarContainer}>
+              <div className={styles.sidebarSection}>
+                <h3><i className="fas fa-info-circle animated-icon"></i> Ethiopian IT Park Info</h3>
+                <table className={styles.infoTable}>
+                  <thead>
+                    <tr>
+                      <th>Parameter</th>
+                      <th>Value</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Name</td>
+                      <td>Ethiopian IT Park</td>
+                    </tr>
+                    <tr>
+                      <td>Location</td>
+                      <td>Addis Ababa</td>
+                    </tr>
+                    <tr>
+                      <td>Contact</td>
+                      <td>+251-11-1234567</td>
+                    </tr>
+                    <tr>
+                      <td>Website</td>
+                      <td>
+                        <a href="https://ethiopianitpark.et/" target="_blank" rel="noopener noreferrer">
+                          Visit
+                        </a>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Area (hec)</td>
+                      <td>200</td>
+                    </tr>
+                    <tr>
+                      <td>Buildings No</td>
+                      <td>25</td>
+                    </tr>
+                    <tr>
+                      <td>Rented Units</td>
+                      <td>15</td>
+                    </tr>
+                    <tr>
+                      <td>Non-Rented Units</td>
+                      <td>10</td>
+                    </tr>
+                    <tr>
+                      <td>Residents Company No</td>
+                      <td>100</td>
+                    </tr>
+                    <tr>
+                      <td>Additional Info</td>
+                      <td>State-of-the-art facilities with modern infrastructure</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
           </aside>
         </div>

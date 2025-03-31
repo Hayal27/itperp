@@ -366,12 +366,62 @@ const StaffDashboard = () => {
           {/* Sidebar: Notifications and Additional Info */}
           <aside className={styles.rightSidebar}>
             <NotificationDisplay />
-            <div className={styles.sidebarSection}>
-              <h3>Daily Sticky Notes</h3>
-              <div className={styles.stickyNote}>Review dashboard KPIs.</div>
-              <div className={styles.stickyNote}>Call supplier for update.</div>
-              <div className={styles.stickyNote}>Prepare presentation slides.</div>
-            </div>
+<div className={styles.sidebarContainer}>
+  <div className={styles.sidebarSection}>
+    <h3>Task Management</h3>
+    
+    {/* High Priority Tasks */}
+    <div className={`${styles.taskCategory} ${styles.highPriority}`}>
+      <h4>High Priority</h4>
+      <div className={`${styles.stickyNote} ${styles.urgent}`} data-tooltip="Due today">Review Q3 financial reports</div>
+      <div className={`${styles.stickyNote} ${styles.urgent}`} data-tooltip="Overdue by 1 day">Submit budget proposal to finance</div>
+    </div>
+    
+    {/* Daily Tasks */}
+    <div className={styles.taskCategory}>
+      <h4>Daily Tasks</h4>
+      <div className={styles.stickyNote} data-tooltip="Recurring daily">Morning team check-in meeting</div>
+      <div className={styles.stickyNote} data-tooltip="Today at 2:00 PM">Call IT vendor about system upgrade</div>
+      <div className={styles.stickyNote} data-tooltip="End of day">Update project tracking dashboard</div>
+    </div>
+    
+    {/* Weekly Tasks */}
+    <div className={styles.taskCategory}>
+      <h4>Weekly Tasks</h4>
+      <div className={styles.stickyNote} data-tooltip="Every Monday">Team progress review meeting</div>
+      <div className={styles.stickyNote} data-tooltip="Friday deadline">Prepare weekly performance report</div>
+    </div>
+    
+    {/* Monthly Tasks */}
+    <div className={styles.taskCategory}>
+      <h4>Monthly Tasks</h4>
+      <div className={styles.stickyNote} data-tooltip="Due on the 25th">Budget reconciliation</div>
+      <div className={styles.stickyNote} data-tooltip="First Monday of month">Strategic planning session</div>
+    </div>
+    
+    {/* Quarterly Tasks */}
+    <div className={styles.taskCategory}>
+      <h4>Quarterly Tasks</h4>
+      <div className={styles.stickyNote} data-tooltip="Next quarter preparation">Prepare quarterly business review</div>
+      <div className={styles.stickyNote} data-tooltip="End of quarter">Facility maintenance assessment</div>
+    </div>
+    
+    {/* Yearly Tasks */}
+    <div className={styles.taskCategory}>
+      <h4>Yearly Tasks</h4>
+      <div className={styles.stickyNote} data-tooltip="Annual planning">Annual budget planning</div>
+      <div className={styles.stickyNote} data-tooltip="December">Year-end performance reviews</div>
+    </div>
+    
+    {/* Pending Tasks */}
+    <div className={`${styles.taskCategory} ${styles.pending}`}>
+      <h4>Pending Tasks</h4>
+      <div className={styles.stickyNote} data-tooltip="Awaiting approval">IT Park expansion proposal</div>
+      <div className={styles.stickyNote} data-tooltip="Waiting for resources">Update tenant onboarding process</div>
+      <div className={styles.stickyNote} data-tooltip="On hold">Facility security assessment</div>
+    </div>
+  </div>
+</div>
             <div className={styles.sidebarSection}>
               <h3>Ethiopian IT Park Info</h3>
               <table className={styles.infoTable}>

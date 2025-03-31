@@ -1,241 +1,134 @@
-const con = require("../models/db");
-
-// Utility function to format database rows to camelCase
-const formatResponse = (row) => {
-  return {
-    id: row.id || null,
-    description: row.description || null,
-    objectiveId: row.objective_id || null,
-    specificGoalsName: row.specific_goals_name || null,
-    details: row.details || null,
-    baseline: row.baseline || null,
-    plan: row.plan || null,
-    measurement: row.measurement || null,
-    deadline: row.deadline || null,
-    priority: row.priority || null,
-    year: row.year || null,
-    month: row.month || null,
-    day: row.day || null,
-  };
-};
-
-// Function to fetch an objective by ID
-const getObjective = (req, res) => {
-  console.log("Fetching objective with request params:", req.params, "and user data:", req.user);
-
-  const { user_id } = req.user || {}; // Ensure user is authenticated
-  if (!user_id) {
-    console.error("User authentication failed: user_id is missing.");
-    return res.status(401).json({ message: "User not authenticated." });
-  }
-
-  const { objectiveId } = req.params;
-  if (!objectiveId) {
-    console.error("Objective ID is required but not provided.");
-    return res.status(400).json({ message: "Objective ID is required." });
-  }
-
-  const query = "SELECT objective_id AS objective_id, description FROM objectives WHERE objective_id = ? AND user_id = ?";
-  console.log("Executing query:", query, "with parameters:", [objectiveId, user_id]);
-
-  if (!con) {
-    console.error("Database connection is not initialized.");
-    return res.status(500).json({ message: "Database connection error." });
-  }
-
-  con.query(query, [objectiveId, user_id], (err, result) => {
-    if (err) {
-      console.error("Database error while fetching objective:", err.message);
-      return res.status(500).json({ message: "Error fetching objective. Please try again." });
-    }
-
-    if (result.length === 0) {
-      console.warn("Objective not found for ID:", objectiveId);
-      return res.status(404).json({ message: "Objective not found." });
-    }
-
-    console.log("Objective fetched successfully:", result[0]);
-    res.status(200).json(formatResponse(result[0]));
-  });
-};
-
-// Function to fetch a goal by ID
-const getGoals = (req, res) => {
-  console.log("Fetching goal with request params:", req.params);
-
-  const { goalId } = req.params;
-  if (!goalId) {
-    console.error("Goal ID is required but not provided.");
-    return res.status(400).json({ message: "Goal ID is required." });
-  }
-
-  const query = "SELECT id, description FROM goals WHERE id = ?";
-  console.log("Executing query:", query, "with parameters:", [goalId]);
-
-  if (!con) {
-    console.error("Database connection is not initialized.");
-    return res.status(500).json({ message: "Database connection error." });
-  }
-
-  con.query(query, [goalId], (err, result) => {
-    if (err) {
-      console.error("Database error while fetching goal:", err.message);
-      return res.status(500).json({ message: "Error fetching goal. Please try again." });
-    }
-
-    if (result.length === 0) {
-      console.warn("Goal not found for ID:", goalId);
-      return res.status(404).json({ message: "Goal not found." });
-    }
-
-    console.log("Goal fetched successfully:", result[0]);
-    res.status(200).json(formatResponse(result[0]));
-  });
-};
-
-// Function to fetch a specific goal by ID
-const getSpecificGoal = (req, res) => {
-  console.log("Fetching specific goal with request params:", req.params);
-
-  const { specificGoalId } = req.params;
-  if (!specificGoalId) {
-    console.error("Specific Goal ID is required but not provided.");
-    return res.status(400).json({ message: "Specific Goal ID is required." });
-  }
-
-  const query = "SELECT id,specific_goals_name,details,baseline,plan,measurement, specific_goalsFROM specific_goals WHERE id = ?";
-  console.log("Executing query:", query, "with parameters:", [specificGoalId]);
-
-  if (!con) {
-    console.error("Database connection is not initialized.");
-    return res.status(500).json({ message: "Database connection error." });
-  }
-
-  con.query(query, [specificGoalId], (err, result) => {
-    if (err) {
-      console.error("Database error while fetching specific goal:", err.message);
-      return res.status(500).json({ message: "Error fetching specific goal. Please try again." });
-    }
-
-    if (result.length === 0) {
-      console.warn("Specific goal not found for ID:", specificGoalId);
-      return res.status(404).json({ message: "Specific Goal not found." });
-    }
-
-    console.log("Specific goal fetched successfully:", result[0]);
-    res.status(200).json(formatResponse(result[0]));
-  });
-};
-
-// get spesific objectives function
-const getSpesificObjectives = async (req, res) => {
-  try {
-    const sql = "SELECT specific_objective_name FROM specific_objectives";
-    con.query(sql, (err, results) => {
-      if (err) {
-        console.error("Database query error:", err);
-        return res.status(500).json({ error: "Internal server error" });
-      }
-      // Send result as JSON.
-      res.json(results);
+const getSubmittedPlans = async (req, res) => {
+  const token = req.headers["authorization"]?.split(" ")[1];
+  if (!token) {
+    console.error("Error: No token provided in the request headers.");
+    return res.status(403).json({
+      success: false,
+      message: "No token provided. Authorization token is required to access the plans.",
+      error_code: "TOKEN_MISSING",
     });
-  } catch (error) {
-    console.error("Error in getSpesificObjectives:", error);
-    res.status(500).json({ error: "Internal server error" });
   }
-};
 
-// get department
-
-const getdepartment = async (req, res) => {
   try {
-    const sql = "SELECT name FROM departmens";
-    con.query(sql, (err, results) => {
-      if (err) {
-        console.error("Database query error:", err);
-        return res.status(500).json({ error: "Internal server error" });
-      }
-      // Send result as JSON.
-      res.json(results);
-    });
-  } catch (error) {
-    console.error("Error in getdepartment:", error);
-    res.status(500).json({ error: "Internal server error" });
-  }
-};
+    const user_id = await verifyToken(token); // Get user_id from token
+    console.log(`Decoded user_id from token: ${user_id}`);
 
-
-const getUserRoles = async (req, res) => {
-  try {
-    // Assuming that the current user's ID is available in req.user_id from verifyToken middleware
-    const user_id = req.user_id;
-    if (!user_id) {
-      return res.status(400).json({ error: "User ID not provided" });
-    }
-    const sql = `
-      SELECT r.role_name
-      FROM roles r
-      INNER JOIN users u ON u.role_id = r.role_id
-      WHERE u.user_id = ?
-    `;
-    con.query(sql, [user_id], (err, results) => {
+    // Get employee_id from the users table using user_id
+    const getEmployeeQuery = "SELECT employee_id FROM users WHERE user_id = ?";
+    con.query(getEmployeeQuery, [user_id], async (err, results) => {
       if (err) {
-        console.error("Database query error:", err);
-        return res.status(500).json({ error: "Internal server error" });
+        console.error("Database Error (fetching employee_id):", err.message);
+        return res.status(500).json({
+          success: false,
+          message: "Error fetching employee_id from users table.",
+          error_code: "DB_ERROR",
+          error: err.message,
+        });
       }
+
       if (results.length === 0) {
-        return res.status(404).json({ error: "User role not found" });
+        console.error(`No employee found for user_id: ${user_id}`);
+        return res.status(404).json({
+          success: false,
+          message: "Employee not found. Unable to fetch employee details based on the provided user_id.",
+          error_code: "EMPLOYEE_NOT_FOUND",
+        });
       }
-      res.json(results[0]);
+
+      const supervisor_id = results[0].employee_id;
+      console.log(`Supervisor ID fetched: ${supervisor_id}`);
+
+      // Extended query to fetch additional attributes from sod and related tables.
+      const query = `
+        SELECT 
+          p.plan_id,
+          p.user_id,
+          sod.specific_objective_detail_id,
+          sod.specific_objective_detailname,
+          sod.details,
+          sod.baseline,
+          sod.plan,
+          sod.measurement,
+          sod.execution_percentage,
+          sod.created_at,
+          sod.updated_at,
+          sod.year,
+          sod.month,
+          sod.day,
+          sod.deadline,
+          sod.status,
+          sod.priority,
+          p.department_id,
+          d.name AS department_name,
+         
+          sod.count,
+          sod.outcome,
+          sod.progress,
+          sod.created_by,
+          sod.specific_objective_id,
+          sod.plan_type,
+          sod.income_exchange,
+          sod.cost_type,
+          sod.employment_type,
+          sod.incomeName,
+          sod.costName,
+        
+          sod.CIbaseline,
+          sod.CIplan,
+          sod.CIoutcome,
+          sod.editing_status,
+          sod.reporting,
+          p.goal_id,
+          o.name AS objective_name,
+          g.name AS goal_name,
+          so.specific_objective_name
+        FROM plans p
+        JOIN ApprovalWorkflow aw ON p.plan_id = aw.plan_id
+        JOIN departments d ON p.department_id = d.department_id
+        JOIN objectives o ON p.objective_id = o.objective_id
+        JOIN specific_objectives so ON p.specific_objective_id = so.specific_objective_id
+        JOIN goals g ON p.goal_id = g.goal_id
+        JOIN specific_objective_details sod ON p.specific_objective_detail_id = sod.specific_objective_detail_id
+        WHERE p.supervisor_id = ? 
+          AND aw.approver_id = ? 
+          AND aw.status = 'Pending';
+      `;
+
+      con.query(query, [supervisor_id, supervisor_id], (err, results) => {
+        if (err) {
+          console.error("Database Error (fetching plans):", err.message);
+          return res.status(500).json({
+            success: false,
+            message: "Error fetching plans from database.",
+            error_code: "DB_ERROR",
+            error: err.message,
+          });
+        }
+
+        if (!results || results.length === 0) {
+          console.warn(`No plans found awaiting approval for supervisor_id: ${supervisor_id}`);
+          return res.status(404).json({
+            success: false,
+            message: "No plans found awaiting approval for this supervisor.",
+            error_code: "NO_PLANS_FOUND",
+          });
+        }
+
+        // Filter out any columns that have null values from each row.
+        const filteredResults = results.map(row => {
+          return Object.fromEntries(Object.entries(row).filter(([key, value]) => value !== null));
+        });
+
+        console.log(`Plans fetched successfully: ${JSON.stringify(filteredResults, null, 2)}`);
+        res.json({ success: true, plans: filteredResults });
+      });
     });
   } catch (error) {
-    console.error("Error in getUserRole:", error.message);
-    res.status(500).json({ error: "Internal server error" });
-  }
-};
-
-
-
-const getProfilePic = async (req, res) => {
-  try {
-    // Assuming that the current user's ID is available in req.user_id from verifyToken middleware
-    const user_id = req.user_id;
-    if (!user_id) {
-      return res.status(400).json({ error: "User ID not provided" });
-    }
-    const sql = `
-      SELECT avatar
-      FROM users
-      WHERE user_id = ?
-    `;
-    con.query(sql, [user_id], (err, results) => {
-      if (err) {
-        console.error("Database query error:", err);
-        return res.status(500).json({ error: "Internal server error" });
-      }
-      if (results.length === 0) {
-        return res.status(404).json({ error: "User not found" });
-      }
-      res.json(results[0]);
+    console.error("Unknown Error:", error.message);
+    res.status(500).json({
+      success: false,
+      message: `Unknown error occurred while fetching submitted plans. Error: ${error.message}`,
+      error_code: "UNKNOWN_ERROR",
     });
-  } catch (error) {
-    console.error("Error in getProfilePic:", error.message);
-    res.status(500).json({ error: "Internal server error" });
   }
 };
-
-
-
-
-
-// Exporting all functions
-export default {
-  getProfilePic,
-  getUserRoles,
-  getObjective,
-  getGoals,
-  getSpecificGoal,
-  getSpesificObjectives,
-  getdepartment
-};
-
