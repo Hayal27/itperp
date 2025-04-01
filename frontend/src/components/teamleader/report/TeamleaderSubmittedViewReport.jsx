@@ -1,7 +1,8 @@
-
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { Tooltip as ReactTooltip } from "react-tooltip"; // Using react-tooltip v5 named import
 import "../../../assets/css/viewplan.css";
+import "../../../assets/css/magic-tooltip.css";
 
 const TeamleaderSubmittedViewPlan = () => {
   const [plans, setPlans] = useState([]);
@@ -73,6 +74,7 @@ const TeamleaderSubmittedViewPlan = () => {
     baseline: "መነሻ %",
     plan: "የታቀደው %",
     outcome: "ክንውን",
+    execution_percentage: "ክንውን በ %",
     plan_type: "የ እቅዱ አይነት",
     income_exchange: "ምንዛሬ",
     cost_type: "ወጪ አይነት",
@@ -81,7 +83,7 @@ const TeamleaderSubmittedViewPlan = () => {
     costName: "የመጪው ስም",
     CIbaseline: "መነሻ በ ገንዘብ",
     CIplan: "እቅድ በ ገንዘብ",
-    outcomeCI: "ክንውን በ ገንዘብ",
+    CIoutcome: "ክንውን በ ገንዘብ",
   };
 
   // Filtering fields to only display those that are defined and not null in the plan.
@@ -98,22 +100,50 @@ const TeamleaderSubmittedViewPlan = () => {
     });
   };
 
+  // Function to render the progress bar with tooltip using react-tooltip v5 attributes
+  const renderProgressBar = (percentage) => {
+    let color;
+    if (percentage <= 33) {
+      color = "red";
+    } else if (percentage <= 66) {
+      color = "yellow";
+    } else {
+      color = "green";
+    }
+
+    return (
+      <div className="progress-bar" style={{ width: "100%", backgroundColor: "#e0e0e0" }}>
+        <div
+          style={{
+            width: `${percentage}%`,
+            backgroundColor: color,
+            height: "10px",
+          }}
+          data-tooltip-id="executionTooltip" // Associate this element with the tooltip
+          data-tooltip-content={`${percentage}%`} // Set the tooltip content to the execution percentage value
+        ></div>
+        <ReactTooltip id="executionTooltip" place="top" effect="solid" className="magical-tooltip" />
+      </div>
+    );
+  };
+
   return (
     <div className="supervisor-dashboard">
-      <h2>በ ዲፓርትመንቱ  የታቀዱ እቅዶች</h2>
+      <h2>በ ዲፓርትመንቱ የታቀዱ እቅዶች</h2>
 
       <div className="plan-list">
         {plans.length > 0 ? (
           <table>
             <thead>
               <tr>
-                <th>Department</th>
-                <th>Plan By</th>
-                <th>Goal</th>
-                <th>Objective</th>
-                <th>Specific Objective</th>
-                <th>Specific Objective Detail</th>
+                <th>ዲፓርትመንቱ</th>
+                <th>አቃጅ</th>
+                <th>ግብ</th>
+                <th>አላማ</th>
+                <th>ውጤት</th>
+                <th>የውጤቱ ዝርዝር ተ��ባር</th>
                 <th>Status</th>
+                <th>ክንውን በ %</th>
                 <th>Actions</th>
               </tr>
             </thead>
@@ -127,6 +157,7 @@ const TeamleaderSubmittedViewPlan = () => {
                   <td>{plan.specific_objective_name}</td>
                   <td>{plan.specific_objective_detailname}</td>
                   <td>{plan.status || "N/A"}</td>
+                  <td>{renderProgressBar(plan.execution_percentage || 0)}</td>
                   <td>
                     <button onClick={() => handleReviewClick(plan)}>Review</button>
                   </td>
