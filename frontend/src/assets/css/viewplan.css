@@ -167,4 +167,22 @@
     /* background-color: rgba(0, 0, 0, 0.6); */
     z-index: -1;
   }
+  .magic-tooltip {
+    background: linear-gradient(45deg, #ff00ff, #00ffff);
+    color: #fff;
+    padding: 8px 12px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+    border: none;
+    opacity: 0.95;
+    transition: transform 0.2s ease-in-out;
+  }
+  
+  .magic-tooltip:hover {
+    transform: scale(1.05);
+  }
+
   

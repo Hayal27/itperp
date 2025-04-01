@@ -1,0 +1,14 @@
+.magical-tooltip {
+    background: radial-gradient(circle, #ff6ec4 0%, #7873f5 100%);
+    border: none;
+    color: #fff;
+    font-weight: bold;
+    padding: 38px 42px !important;
+    border-radius: 23px !important;
+     transform: scale(1.1);
+    transition: transform 0.2s ease-in-out;
+  }
+  
+  .magical-tooltip:hover {
+    transform: scale(1.3);
+  }

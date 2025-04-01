@@ -359,7 +359,7 @@ function App() {
           
           <Route path="/" element={<TeamleaderDashboard />} />
     <Route path="/plan/View" element={<DeputiyManagerSubmittedViewPlan />} />
-    <Route path="/report/Viewapprovedreport" element={<DeputiyManagerSubmittedViewReport />} />
+    <Route path="/report/Viewapprovedreport" element={<TeamleaderSubmittedViewReport />} />
     <Route path="/plan/PlanSteps/Add" element={<PlanSteps/>} />
     <Route path="/plan/View_myplan" element={<StaffViewPlan />} />
     <Route path="/report/View_myreport" element={<DeputiyManagerViewReport />} />

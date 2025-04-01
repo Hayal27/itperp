@@ -11,11 +11,40 @@ const PlansTable = ({ plans, handleSorting, sortConfig }) => {
   const [errorMessage, setErrorMessage] = useState("");
   const token = localStorage.getItem("token"); // Assuming the token is stored in localStorage
 
+  // Returns sort icon based on column key
   const getSortIcon = (key) => {
     if (sortConfig.key !== key) return null;
     return sortConfig.direction === "asc" ? "↑" : "↓";
   };
 
+  // Helper to determine progress bar color based on execution percentage
+  const getProgressBarColor = (percentage) => {
+    if (percentage < 50) return "bg-danger"; // Red for <50%
+    if (percentage < 80) return "bg-warning"; // Yellow for 50-79%
+    return "bg-success"; // Green for 80-100%
+  };
+
+  // New component to render the execution percentage as a colored progress bar.
+  const ExecutionProgressBar = ({ percentage }) => {
+    console.log("Rendering progress bar with percentage:", percentage);
+    return (
+      <div>
+        <strong>Execution:</strong> {percentage}%
+        <div className="progress mt-2" style={{ height: "20px", width: "100%" }}>
+          <div
+            className={`progress-bar ${getProgressBarColor(percentage)}`}
+            role="progressbar"
+            style={{ width: `${percentage}%`, transition: "width 0.5s ease-in-out" }}
+            aria-valuenow={percentage}
+            aria-valuemin="0"
+            aria-valuemax="100"
+          >
+            {percentage}%
+          </div>
+        </div>
+      </div>
+    );
+  };
   const fetchPlanDetail = async (planId) => {
     try {
       setLoading(true);
@@ -83,43 +112,36 @@ const PlansTable = ({ plans, handleSorting, sortConfig }) => {
   // Define the list of fields to display with their corresponding labels.
   // Only fields present in the backend response (i.e. with a value) will be rendered.
   const planFields = [
-
-
-    { key: "created_by", label: "አቃጅ"  },
-
-    { key: "goal_name", label: "ግብ"  },
-,
-    { key: "objective_name", label: "አላማ"  },
-
-    { key: "specific_objective_name", label: "ውጤት"  },
-    { key: "specific_objective_detailname", label: "ዝርዝር ተገባር"  },
-    { key: "details", label: "ዝርዝር"  },
-    { key: "baseline", label: "መነሻ በ %"  },
-    { key: "plan", label: "እቅድ በ %"  },
-    { key: "measurement", label: "መለኪያ በ %"  },
-    { key: "execution_percentage", label: "ክንዉን በ %"  },
+    { key: "created_by", label: "አቃጅ" },
+    { key: "department_name", label: "ስራ ክፍል" },
+    { key: "goal_name", label: "ግብ" },
+    { key: "objective_name", label: "አላማ" },
+    { key: "specific_objective_name", label: "ውጤት" },
+    { key: "specific_objective_detailname", label: "ዝርዝር ተገባር" },
+    { key: "measurement", label: "መለኪያ በ %" },
+    { key: "details", label: "መግለጫ" },
+    { key: "baseline", label: "መነሻ በ %" },
+    { key: "plan", label: "እቅድ በ %" },
+    { key: "outcome", label: "ክንዉን" },
+    { key: "execution_percentage", label: "ክንዉን በ %" },
     { key: "created_at", label: "Created At" },
     { key: "updated_at", label: "Updated At" },
     { key: "year", label: "አመት" },
-    { key: "month", label: "ወር"  },
+    { key: "month", label: "ወር" },
     { key: "day", label: "Day" },
-    { key: "deadline", label: "ማጠናቀቂያ ቀን" },,
+    { key: "deadline", label: "ማጠናቀቂያ ቀን" },
     { key: "status", label: "Status" },
     { key: "priority", label: "ቅድሚያ" },
-   
-    { key: "department_name", label: "ስራ ክፍል" },
-    { key: "outcome", label: "ክንዉን" },
     { key: "የ እቅዱ ሂደት", label: "የ እቅዱ ሂደት" },
     { key: "plan_type", label: "የ እቅዱ አይነት" },
     { key: "income_exchange", label: "ምናዘሬው" },
-    { key: "cost_type", label: "የ ወጪው አይነት"},
+    { key: "cost_type", label: "የ ወጪው አይነት" },
     { key: "employment_type", label: "የ ቅጥር ሁኔታ" },
     { key: "incomeName", label: "የ ገቢው ስም" },
     { key: "costName", label: "የ ወጪው ስም" },
     { key: "CIbaseline", label: "መነሻ" },
     { key: "CIplan", label: "እቅድ" },
-    { key: "CIoutcome", label: "CI Outcome" },
-
+    { key: "CIoutcome", label: "ክንውን በቁጥር" },
   ];
 
   // Helper to format dates if the field appears to be a date.
@@ -152,6 +174,7 @@ const PlansTable = ({ plans, handleSorting, sortConfig }) => {
             <th onClick={() => handleSorting("SpecificObjective")}>
               Specific Objective {getSortIcon("SpecificObjective")}
             </th>
+            <th>Execution</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -165,6 +188,13 @@ const PlansTable = ({ plans, handleSorting, sortConfig }) => {
                 <td>{plan.Goal || "N/A"}</td>
                 <td>{plan.Objective || "N/A"}</td>
                 <td>{plan.SpecificObjective || "N/A"}</td>
+                <td>
+      {plan.execution_percentage !== undefined ? (
+        <ExecutionProgressBar percentage={plan.execution_percentage} />
+      ) : (
+        "N/A"
+      )}
+    </td>
                 <td>
                   <Link
                     to={`update/${plan.Plan_ID}`}
@@ -195,7 +225,7 @@ const PlansTable = ({ plans, handleSorting, sortConfig }) => {
             ))
           ) : (
             <tr>
-              <td colSpan="7" className="text-center">
+              <td colSpan="8" className="text-center">
                 No plans found.
               </td>
             </tr>
