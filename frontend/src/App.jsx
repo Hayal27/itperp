@@ -433,7 +433,7 @@ function App() {
                {/* staff */}
 
                </>:state.role_id==8?<>
-     <Route path="/" element={<StaffDashboard />} />
+     <Route path="/" element={<TeamleaderDashboard />} />
      <Route path="/plan/PlanSteps/Add" element={<PlanSteps/>} />
     
     <Route path="/plan/StaffViewDeclinedPlan" element={<StaffViewDeclinedPlan/>} />
