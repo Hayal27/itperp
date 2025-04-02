@@ -10,6 +10,8 @@ const {getGoals,getGoalById,getObjectiveById,getObjectivesByGoals,getspesificObj
 const {getProfilePic,getSpecificGoal,getSpesificObjectives,getdepartment,getUserRoles} = require("../controllers/planget");
 const { addGoals, addObjectives, addSpecificObjectives, addspecificObjectiveDetails} =require("../controllers/planDtailedController")
 
+// profile pic
+const { getProfilePicture,uploadProfilePicture} =require("../controllers/profileUploadController")
 
 router.get("/getplan", verifyToken, getAllPlans); // GET /api/plan
 router.get("/plandeclined", verifyToken, getAllPlansDeclined); // GET /api/plan
@@ -33,6 +35,7 @@ router.put("/supervisor/plans/approveceo", verifyToken, updatePlanApprovalStatus
 // Route to fetch detailed plan information for the next supervisor (GET)
 router.get("/supervisor/plans/detailed", verifyToken, getDetailedPlanForSupervisor);
 // adding plan routes 
+
 router.post("/addgoal", verifyToken, addGoals);
 router.post("/addobjective", verifyToken, addObjectives);
 router.post("/addSpecificObjective", verifyToken, addSpecificObjectives);
@@ -56,8 +59,16 @@ router.get("/specificGoals/:sgoalId",verifyToken, getSpecificGoal);
 router.get("/getSpesificObjectives",verifyToken, getSpesificObjectives);
 router.get("/getdepartment",verifyToken, getdepartment);
 router.get ('/userrole', verifyToken, getUserRoles);
-router.get ('/getprofile', verifyToken, getProfilePic);
+
 router.get ('/submitted_reports', verifyToken,getSubmittedreports)
+
+
+
+
+
+// profile pic 
+router.post('/uploadProfilePicture', verifyToken,uploadProfilePicture);
+router.get("/getprofile/:user_id",verifyToken, getProfilePicture); // API endpoint
 
 
 

@@ -1,7 +1,8 @@
-// server.js
+
 const express = require("express");
 const cors = require("cors");
 const session = require("express-session");
+const path = require("path");
 
 // Importing Routes
 const userRoutes = require("./routes/userRoutes.js");
@@ -30,6 +31,9 @@ app.use(session({
   saveUninitialized: true,
   cookie: { maxAge: 3600000 } // 1 hour session expiration
 }));
+
+// Middleware to serve static files from the uploads folder
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

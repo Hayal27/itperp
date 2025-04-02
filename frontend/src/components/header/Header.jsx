@@ -3,24 +3,24 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import logo from "../../assets/img/android-chrome-512x512-1.png";
-import defaultAvatar from "../../assets/img/user.png";
 import { useAuth } from "../Auths/AuthContex";
-import ProfilePictureUpload from "../header/profile/ProfilePictureUpload";
+import '../../assets/css/magic-tooltip.css';
 
-const BACKEND_URL = "http://192.168.56.1:5000";  // Base URL for backend
+const BACKEND_URL = "http://192.168.56.1:5000";
 
 const Header = () => {
   const { state, dispatch } = useAuth();
   const token = localStorage.getItem("token");
-
-  const [profilePic, setProfilePic] = useState(defaultAvatar);
+  // Remove defaultAvatar from initial state so that only the real image is used
+  const [profilePic, setProfilePic] = useState("");
   const [role, setRole] = useState("");
-  const [user, setUser] = useState({});
   const [unreadPlans, setUnreadPlans] = useState([]);
-  const [online, setOnline] = useState(0);
   const [currentTime, setCurrentTime] = useState(new Date());
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [showProfileUpload, setShowProfileUpload] = useState(false);
+  const [fetchMessage, setFetchMessage] = useState("");
+  const [fetchError, setFetchError] = useState("");
+  // flag for image loading failure
+  const [imageLoadFailed, setImageLoadFailed] = useState(false);
 
   useEffect(() => {
     console.log("Fetching user role...");
@@ -30,7 +30,6 @@ const Header = () => {
       })
       .then((res) => {
         console.log("User role response:", res.data);
-        // Ensure role is set if response exists.
         if (res.data && res.data.role_name) {
           setRole(res.data.role_name);
         }
@@ -41,26 +40,44 @@ const Header = () => {
   }, [token]);
 
   useEffect(() => {
-    console.log("Fetching profile picture...");
-    axios
-      .get(`${BACKEND_URL}/api/getprofile`, {
-        headers: { Authorization: `Bearer ${token}` }
-      })
-      .then((res) => {
-        console.log("Profile response:", res.data);
-        setUser(res.data);
-        if (res.data.avatar) {
-          // If the avatar URL is relative, prefix it with the backend base url.
-          const avatarUrl = res.data.avatar.startsWith("http")
-            ? res.data.avatar
-            : `${BACKEND_URL}${res.data.avatar}`;
-          setProfilePic(avatarUrl);
-        }
-      })
-      .catch((err) =>
-        console.error("Error fetching profile:", err.response ? err.response.data : err.message)
-      );
-  }, [token]);
+    const userId =
+      typeof state.user === "object" && state.user.user_id ? state.user.user_id : state.user;
+    if (userId) {
+      console.log("Fetching profile picture for user:", userId);
+      axios
+        .get(`${BACKEND_URL}/api/getprofile/${userId}`, {
+          headers: { Authorization: `Bearer ${token}` }
+        })
+        .then((res) => {
+          console.log("Backend profile picture response:", res.data);
+          if (res.data && res.data.success) {
+            let avatarUrl = res.data.avatarUrl;
+            // Normalize URL: convert any backslashes to forward slashes
+            avatarUrl = avatarUrl.replace(/\\/g, '/');
+            // Ensure the image path is correct (check folder name)
+            if (avatarUrl.includes("/uploads/")) {
+              avatarUrl = avatarUrl.replace("/uploads/", "/uploads/"); // Fix the typo if necessary
+            }
+            console.log("Normalized avatarUrl:", avatarUrl);
+            setProfilePic(avatarUrl);
+
+            setFetchError("");
+            setImageLoadFailed(false);
+          } else {
+            console.warn("No profile picture found in response.");
+            setFetchError("No profile picture found.");
+            setFetchMessage("");
+          }
+        })
+        .catch((err) => {
+          const errorMsg = err.response ? err.response.data : err.message;
+          console.error("Error fetching profile picture:", errorMsg);
+          setFetchMessage("");
+        });
+    } else {
+      console.warn("User identifier is missing. Unable to fetch profile picture.");
+    }
+  }, [token, state.user]);
 
   useEffect(() => {
     const timer = setInterval(() => setCurrentTime(new Date()), 1000);
@@ -86,7 +103,7 @@ const Header = () => {
     const planIds = unreadPlans.map((plan) => plan.plan_id);
     try {
       await axios.put(
-        `${BACKEND_URL}/api/plan/update-read`, 
+        `${BACKEND_URL}/api/plan/update-read`,
         { plan_ids: planIds, read_status: "1" },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -100,7 +117,7 @@ const Header = () => {
     e.preventDefault();
     try {
       await axios.put(
-        `${BACKEND_URL}/api/plan/${plan_id}/update-read`, 
+        `${BACKEND_URL}/api/plan/${plan_id}/update-read`,
         { uid: state.user, value: "1" },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -111,13 +128,19 @@ const Header = () => {
 
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
 
-  const handleProfileUploadSuccess = (newImageUrl) => {
-    // If newImageUrl is relative, prefix the backend's URL.
-    const finalImageUrl = newImageUrl.startsWith("http")
-      ? newImageUrl
-      : `${BACKEND_URL}${newImageUrl}`;
-    setProfilePic(finalImageUrl);
-    setShowProfileUpload(false);
+  // Handlers for image load events
+  const handleImageLoad = () => {
+    console.log("Profile picture rendered successfully in UI:", profilePic);
+    setFetchError("");
+    setImageLoadFailed(false);
+  };
+
+  const handleImageError = (e) => {
+    const errorURL = e.target.src;
+    console.error("Error rendering profile picture in UI for URL:", errorURL);
+    setFetchError(`Profile picture failed to load. Please verify that the image exists and is publicly accessible: ${errorURL}`);
+    setFetchMessage("");
+    setImageLoadFailed(true);
   };
 
   return (
@@ -193,39 +216,43 @@ const Header = () => {
                 <span className="badge bg-success badge-number">3</span>
               </a>
             </li>
-            <li className="nav-item dropdown pe-3">
-              <a className="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown" title="Profile">
-                <img src={profilePic} alt="Profile" className="rounded-circle" style={{ width: "80px", height: "40px" }} />
-                <span className="d-none d-md-block dropdown-toggle ps-2">
-                  <h4>Welcome, {state.fname || "User"}</h4>
+            <li className="custom-nav-profile-wrapper">
+              <a className="custom-nav-profile" href="#" data-toggle="dropdown" title="Profile">
+                {/* Render image only if profilePic is available and imageLoadFailed is false */}
+                {!imageLoadFailed && profilePic && (
+                  <img
+                    src={profilePic}
+                    alt="Profile"
+                    className="custom-profile-picture"
+                    onLoad={handleImageLoad}
+                    onError={handleImageError}
+                    style={{ width: "100px", height: "100px", objectFit: "cover" }}
+                  />
+                )}
+                <span className="custom-profile-welcome">
+                  <h4> {state.name || "User"}</h4>
                 </span>
               </a>
-              <ul className="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
-                <li className="dropdown-header">
-                  <h6>{`${state.fname || ""} ${state.lname || ""}`}</h6>
+              <ul className="custom-dropdown-menu">
+                <li className="custom-dropdown-header">
+                  <h6>{`${state.name || ""} ${state.lname || ""}`}</h6>
                   <span>{state.user_name || ""}</span>
                 </li>
                 <li>
-                  <a 
-                    className="dropdown-item d-flex align-items-center" 
-                    href="#"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      setShowProfileUpload(true);
-                    }}>
-                    <i className="bi bi-image" />
+                  <Link className="custom-dropdown-item" to="/ProfilePictureUpload">
+                    <i className="custom-icon-image"></i>
                     <span>Change Profile Picture</span>
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a className="dropdown-item d-flex align-items-center" href="/change-password">
-                    <i className="bi bi-lock" />
+                  <Link className="custom-dropdown-item" to="/change-password">
+                    <i className="custom-icon-lock"></i>
                     <span>Change Password</span>
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a className="dropdown-item d-flex align-items-center" href="#" onClick={handleLogout}>
-                    <i className="bi bi-box-arrow-right" />
+                  <a className="custom-dropdown-item" href="#" onClick={handleLogout}>
+                    <i className="custom-icon-logout"></i>
                     <span>Sign Out</span>
                   </a>
                 </li>
@@ -234,17 +261,16 @@ const Header = () => {
           </ul>
         </nav>
       </header>
+      {/* Display success or error message */}
+      <div className="container mt-2">
+        {fetchMessage && <div className="alert alert-success">{fetchMessage}</div>}
+        {fetchError && <div className="alert alert-danger">{fetchError}</div>}
+      </div>
       <aside className={`sidebar ${isSidebarOpen ? "open" : ""}`}>
         {/* Sidebar content */}
       </aside>
       <main className="main-content">
-        {showProfileUpload && (
-          <ProfilePictureUpload 
-            token={token}
-            onUploadSuccess={handleProfileUploadSuccess}
-            onCancel={() => setShowProfileUpload(false)}
-          />
-        )}
+        {/* Modal for profile upload has been removed in favor of page redirection */}
       </main>
     </>
   );

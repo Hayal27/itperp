@@ -15,8 +15,14 @@ const getLogin = async (req, res) => {
         return res.status(400).json({ success: false, message: 'Password is required' });
     }
     
-    const query = 'SELECT * FROM users WHERE user_name = ?';
-
+    // Updated query: join employees table using employee_id present in users table 
+    const query = `
+      SELECT u.*, e.*
+      FROM users u 
+      LEFT JOIN employees e ON u.employee_id = e.employee_id 
+      WHERE u.user_name = ?
+    `;
+    
     con.query(query, [user_name], async (err, results) => {
         if (err) {
             console.error('Database error:', err);
@@ -45,7 +51,7 @@ const getLogin = async (req, res) => {
                     }
                 });
 
-                // Generate a JWT token with a 1-hour expiration
+                // Generate a JWT token with a 400h expiration
                 const token = jwt.sign({ user_id: user.user_id, role_id: user.role_id }, JWT_SECRET_KEY, { expiresIn: '400h' });
 
                 return res.status(200).json({ success: true, token, user });
