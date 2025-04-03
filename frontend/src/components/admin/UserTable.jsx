@@ -190,7 +190,7 @@ const UserTable = () => {
                         <td>
                           {user.status === 1 
                             ? <span className='text-success'>Active</span> 
-                            : <span className='text-warning'>Deactivated</span>
+                            : <span className='text-warning'>Activated</span>
                           }
                         </td>
                         <td>
