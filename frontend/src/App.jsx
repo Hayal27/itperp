@@ -3,6 +3,11 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useAuth } from "./components/Auths/AuthContex";
 import Login from "./components/login/Login";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import ProfilePictureUpload from "./components/header/profile/ProfilePictureUpload.jsx";
+
+
+
+
 
 
 //admin
@@ -233,7 +238,7 @@ function App() {
           :
 
           state.role_id==3?
-          <TeamleaderSidebar/>
+          <GeneralmanagerSidebar/>
           :
 
           state.role_id==5?
@@ -263,6 +268,7 @@ function App() {
               {/* admin */}
 
             {state.role_id==1?<>
+                  <Route path="/ProfilePictureUpload" element={<ProfilePictureUpload />} />
             <Route path="/" element ={<Dashboard/>}/>
             <Route path="/" element ={<UserTable/>}/>
             <Route path="/UserForm" element ={<UserRegistration/>}/>
@@ -274,6 +280,8 @@ function App() {
 
             </>:state.role_id==2?
             <>
+                    <Route path="/ProfilePictureUpload" element={<ProfilePictureUpload />} />
+
 <Route path="/" element={<TeamleaderDashboard />} />
 <Route path="/plan/View" element={<CeoSubmittedViewPlan />} />
 <Route path="/report/Viewapprovedreport" element={<TeamleaderSubmittedViewReport />} />
@@ -299,6 +307,8 @@ function App() {
 
             </>:state.role_id==9?
             <>
+
+<Route path="/ProfilePictureUpload" element={<ProfilePictureUpload />} />
 <Route path="/" element={<TeamleaderDashboard />} />
 <Route path="/plan/View" element={<TeamleaderSubmittedViewPlan />} />
 <Route path="/report/Viewapprovedreport" element={<TeamleaderSubmittedViewReport />} />
@@ -332,82 +342,88 @@ function App() {
 
             </>:state.role_id==3?
             <>
+<Route path="/ProfilePictureUpload" element={<ProfilePictureUpload />} />
+
 <Route path="/" element={<TeamleaderDashboard />} />
-<Route path="/plan/View" element={<GeneralmanagerSubmittedViewPlan />} />
-<Route path="/report/Viewapprovedreport" element={<GeneralmanagerSubmittedViewReport />} />
-<Route path="/plan/PlanSteps/Add" element={<PlanSteps/>} />
+<Route path="/plan/View" element={<TeamleaderSubmittedViewPlan />} />
+<Route path="/report/Viewapprovedreport" element={<TeamleaderSubmittedViewReport />} />
+<Route path="/plan/View" element={<CeoSubmittedViewPlan />} />
 <Route path="/plan/View_myplan" element={<StaffViewPlan />} />
-<Route path="/report/View_myreport" element={<GeneralmanagerViewReport />} />
+<Route path="/report/View_myreport" element={<TeamleaderViewReport />} />
 <Route path="/report/view/update/:reportId" element={<UpdateReport />} />
 <Route path="/plan/view/add-report/:planId" element={<AddReport />} />
-<Route path="/plan/ViewOrgPlan" element={<GeneralmanagerViewOrgPlan />} />
-<Route path="/report/ViewOrgReport" element={<GeneralmanagerViewOrgReport />} />
-<Route path="/report/GeneralmanagerViewDeclinedReport" element={<GeneralmanagerViewDeclinedReport />} />
-<Route path="/plan/GeneralmanagerViewDeclinedPlan" element={<GeneralmanagerViewDeclinedPlan/>} />
-<Route path="/plan/GeneralmanagerViewDeclinedPlan/view/update/:planId" element={<GeneralmanagerUpdatePlan />} />
-<Route path="/plan/View_myplan/add-report/:planId" element={<GeneralmanagerAddReport />} />
+<Route path="/plan/ViewOrgPlan" element={<TeamleaderViewOrgPlan />} />
+<Route path="/report/ViewOrgReport" element={<TeamleaderViewOrgReport />} />
+<Route path="/report/TeamleaderViewDeclinedReport" element={<TeamleaderViewDeclinedReport />} />
+<Route path="/plan/TeamleaderViewDeclinedPlan" element={<TeamleaderViewDeclinedPlan/>} />
+<Route path="/plan/TeamleaderViewDeclinedPlan/view/update/:planId" element={<TeamleaderUpdatePlan />} />
+<Route path="/plan/View_myplan/add-report/:planId" element={<TeamleaderAddReport />} />
 
-      {/* update the plan */}
+{/* update the plan */}
 <Route path="/plan/View_myplan/update/:planId" element={<TeamleaderUpdatePlan />} />
 
-      {/* 
+{/* 
+
 
             {/* deputy manager */}
 
             </>:state.role_id==5?
             <>
-          
-          <Route path="/" element={<TeamleaderDashboard />} />
-    <Route path="/plan/View" element={<DeputiyManagerSubmittedViewPlan />} />
-    <Route path="/report/Viewapprovedreport" element={<TeamleaderSubmittedViewReport />} />
-    <Route path="/plan/PlanSteps/Add" element={<PlanSteps/>} />
-    <Route path="/plan/View_myplan" element={<StaffViewPlan />} />
-    <Route path="/report/View_myreport" element={<DeputiyManagerViewReport />} />
-    <Route path="/report/view/update/:reportId" element={<UpdateReport />} />
-    <Route path="/plan/view/add-report/:planId" element={<AddReport />} />
-    <Route path="/plan/ViewOrgPlan" element={<DeputiyManagerViewOrgPlan />} />
-    <Route path="/report/ViewOrgReport" element={<DeputiyManagerViewOrgReport />} />
-    <Route path="/report/DeputiyManagerViewDeclinedReport" element={<DeputiyManagerViewDeclinedReport />} />
-    <Route path="/plan/DeputiyManagerViewDeclinedPlan" element={<DeputiyManagerViewDeclinedPlan/>} />
-    <Route path="/plan/DeputiyManagerViewDeclinedPlan/view/update/:planId" element={<DeputiyManagerUpdatePlan />} />
-    <Route path="/plan/View_myplan/add-report/:planId" element={<DeputiyManagerAddReport />} />
+<Route path="/ProfilePictureUpload" element={<ProfilePictureUpload />} />
 
-          {/* update the plan */}
-    <Route path="/plan/View_myplan/update/:planId" element={<TeamleaderUpdatePlan />} />
+<Route path="/" element={<TeamleaderDashboard />} />
+<Route path="/plan/View" element={<TeamleaderSubmittedViewPlan />} />
+<Route path="/report/Viewapprovedreport" element={<TeamleaderSubmittedViewReport />} />
+<Route path="/plan/PlanSteps/Add" element={<PlanSteps/>} />
+<Route path="/plan/View_myplan" element={<StaffViewPlan />} />
+<Route path="/report/View_myreport" element={<TeamleaderViewReport />} />
+<Route path="/report/view/update/:reportId" element={<UpdateReport />} />
+<Route path="/plan/view/add-report/:planId" element={<AddReport />} />
+<Route path="/plan/ViewOrgPlan" element={<TeamleaderViewOrgPlan />} />
+<Route path="/report/ViewOrgReport" element={<TeamleaderViewOrgReport />} />
+<Route path="/report/TeamleaderViewDeclinedReport" element={<TeamleaderViewDeclinedReport />} />
+<Route path="/plan/TeamleaderViewDeclinedPlan" element={<TeamleaderViewDeclinedPlan/>} />
+<Route path="/plan/TeamleaderViewDeclinedPlan/view/update/:planId" element={<TeamleaderUpdatePlan />} />
+<Route path="/plan/View_myplan/add-report/:planId" element={<TeamleaderAddReport />} />
 
-          
+
+<Route path="/plan/View_myplan/update/:planId" element={<TeamleaderUpdatePlan />} />
+
 
 
 
 
             </>:state.role_id==6?
             <>
-           <Route path="/" element={<TeamleaderDashboard />} />
-    <Route path="/plan/View" element={<ServiceHeadSubmittedViewPlan />} />
-    
+
+<Route path="/ProfilePictureUpload" element={<ProfilePictureUpload />} />
+
+            <Route path="/" element={<TeamleaderDashboard />} />
+    <Route path="/plan/View" element={<TeamleaderSubmittedViewPlan />} />
     <Route path="/report/Viewapprovedreport" element={<TeamleaderSubmittedViewReport />} />
-    
     <Route path="/plan/PlanSteps/Add" element={<PlanSteps/>} />
     <Route path="/plan/View_myplan" element={<StaffViewPlan />} />
-    <Route path="/report/View_myreport" element={<ServiceHeadViewReport />} />
+    <Route path="/report/View_myreport" element={<TeamleaderViewReport />} />
     <Route path="/report/view/update/:reportId" element={<UpdateReport />} />
     <Route path="/plan/view/add-report/:planId" element={<AddReport />} />
-    <Route path="/plan/ViewOrgPlan" element={<ServiceHeadViewOrgPlan />} />
-    <Route path="/report/ViewOrgReport" element={<ServiceHeadViewOrgReport />} />
-    <Route path="/report/ServiceHeadViewDeclinedReport" element={<ServiceHeadViewDeclinedReport />} />
-    <Route path="/plan/ServiceHeadViewDeclinedPlan" element={<ServiceHeadViewDeclinedPlan/>} />
-    <Route path="/plan/ServiceHeadViewDeclinedPlan/view/update/:planId" element={<ServiceHeadUpdatePlan />} />
-    <Route path="/plan/View_myplan/add-report/:planId" element={<ServiceHeadAddReport />} />
+    <Route path="/plan/ViewOrgPlan" element={<TeamleaderViewOrgPlan />} />
+    <Route path="/report/ViewOrgReport" element={<TeamleaderViewOrgReport />} />
+    <Route path="/report/TeamleaderViewDeclinedReport" element={<TeamleaderViewDeclinedReport />} />
+    <Route path="/plan/TeamleaderViewDeclinedPlan" element={<TeamleaderViewDeclinedPlan/>} />
+    <Route path="/plan/TeamleaderViewDeclinedPlan/view/update/:planId" element={<TeamleaderUpdatePlan />} />
+    <Route path="/plan/View_myplan/add-report/:planId" element={<TeamleaderAddReport />} />
 
           {/* update the plan */}
     <Route path="/plan/View_myplan/update/:planId" element={<TeamleaderUpdatePlan />} />
 
-          {/* 
+          
 
 
              {/* team leader */}
             </>:state.role_id==7?
             <>
+<Route path="/ProfilePictureUpload" element={<ProfilePictureUpload />} />
+
             <Route path="/" element={<TeamleaderDashboard />} />
     <Route path="/plan/View" element={<TeamleaderSubmittedViewPlan />} />
     <Route path="/report/Viewapprovedreport" element={<TeamleaderSubmittedViewReport />} />
@@ -433,7 +449,10 @@ function App() {
                {/* staff */}
 
                </>:state.role_id==8?<>
-     <Route path="/" element={<TeamleaderDashboard />} />
+
+               <Route path="/ProfilePictureUpload" element={<ProfilePictureUpload />} />
+
+     <Route path="/" element={<StaffDashboard />} />
      <Route path="/plan/PlanSteps/Add" element={<PlanSteps/>} />
     
     <Route path="/plan/StaffViewDeclinedPlan" element={<StaffViewDeclinedPlan/>} />

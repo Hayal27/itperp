@@ -192,37 +192,37 @@ const getUserRoles = async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
-const getProfilePic = async (req, res) => {
-  try {
-    // Assuming that the current user's ID is available in req.user_id from verifyToken middleware
-    const user_id = req.user_id;
-    if (!user_id) {
-      return res.status(400).json({ error: "User ID not provided" });
-    }
-    const sql = `
-      SELECT avatar
-      FROM users
-      WHERE user_id = ?
-    `;
-    con.query(sql, [user_id], (err, results) => {
-      if (err) {
-        console.error("Database query error:", err);
-        return res.status(500).json({ error: "Internal server error" });
-      }
-      if (results.length === 0) {
-        return res.status(404).json({ error: "User not found" });
-      }
-      res.json(results[0]);
-    });
-  } catch (error) {
-    console.error("Error in getProfilePic:", error.message);
-    res.status(500).json({ error: "Internal server error" });
-  }
-};
+// const getProfilePic = async (req, res) => {
+//   try {
+//     // Assuming that the current user's ID is available in req.user_id from verifyToken middleware
+//     const user_id = req.user_id;
+//     if (!user_id) {
+//       return res.status(400).json({ error: "User ID not provided" });
+//     }
+//     const sql = `
+//       SELECT avatar_url
+//       FROM users
+//       WHERE user_id = ?
+//     `;
+//     con.query(sql, [user_id], (err, results) => {
+//       if (err) {
+//         console.error("Database query error:", err);
+//         return res.status(500).json({ error: "Internal server error" });
+//       }
+//       if (results.length === 0) {
+//         return res.status(404).json({ error: "User not found" });
+//       }
+//       res.json(results[0]);
+//     });
+//   } catch (error) {
+//     console.error("Error in getProfilePic:", error.message);
+//     res.status(500).json({ error: "Internal server error" });
+//   }
+// };
 
 // Exporting all functions
 module.exports = {
-  getProfilePic,
+
   getUserRoles,
   getObjective,
   getGoals,

@@ -2,58 +2,50 @@
 
 const con = require("../models/db"); // Assumes you have a db.js file that exports the database connection
 const bcrypt = require('bcrypt');
+const util = require('util');
 
-// Add user
-const addUser = async (req, res) => {
-  const { user_name, fname, lname, email, phone, department_id, role_name } = req.body;
 
-  // Set default password
-  const defaultPassword = 'itp@123';
 
-  // First, check for existing user with the same email
-  const checkEmailQuery = "SELECT * FROM user WHERE email = ?";
-  con.query(checkEmailQuery, [email], (err, results) => {
-    if (err) {
-      console.error("Database error while checking email:", err);
-      return res.status(500).send({ message: "Error checking email", error: err.message });
+const updateUser = async (req, res) => {
+  const { user_id } = req.params;
+  // Expecting role_id (not role_name) since the users table only has role_id field.
+  const { fname, lname, user_name, phone, department_id, role_id } = req.body;
+  
+  try {
+    // Promisify the query method for async/await usage
+    const query = util.promisify(con.query).bind(con);
+    
+    // Retrieve the employee_id from the users table
+    const usersData = await query("SELECT employee_id FROM users WHERE user_id = ?", [user_id]);
+    if (!usersData || usersData.length === 0) {
+      console.error("User not found for update, user_id:", user_id);
+      return res.status(404).json({ message: "User not found" });
+    }
+    const employee_id = usersData[0].employee_id;
+    
+    // If an employee_id exists, update the employees table for employee details
+    if (employee_id) {
+      await query(
+        "UPDATE employees SET fname = ?, lname = ?, phone = ?, department_id = ? WHERE employee_id = ?",
+        [fname, lname, phone, department_id, employee_id]
+      );
+      console.log("Employee details updated for employee_id:", employee_id);
     }
     
-    if (results.length > 0) {
-      return res.status(400).send({ message: "Email already registered." });
-    }
-
-    // Next, check for existing user with the same phone number
-    const checkPhoneQuery = "SELECT * FROM users WHERE phone = ?";
-    con.query(checkPhoneQuery, [phone], (err, results) => {
-      if (err) {
-        console.error("Database error while checking phone:", err);
-        return res.status(500).send({ message: "Error checking phone", error: err.message });
-      }
-
-      if (results.length > 0) {
-        return res.status(400).send({ message: "Phone number already registered." });
-      }
-
-      // If checks pass, hash the default password
-      bcrypt.hash(defaultPassword, 10, (err, hashedPassword) => {
-        if (err) {
-          console.error("Error hashing password:", err);
-          return res.status(500).send({ message: "Error hashing password", error: err.message });
-        }
-
-        // Insert the new user with the hashed password
-        const query = "INSERT INTO users (user_name, fname, lname, email, phone, department_id, role_name, password) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-        con.query(query, [user_name, fname, lname, email, phone, department_id, role_name, hashedPassword], (err, result) => {
-          if (err) {
-            console.error("Database error:", err);
-            return res.status(500).send({ message: "Error saving user data", error: err.message });
-          }
-          res.status(200).send({ message: "User successfully registered" });
-        });
-      });
-    });
-  });
+    // Update the users table with account details (user_name and role_id)
+    await query(
+      "UPDATE users SET user_name = ?, role_id = ? WHERE user_id = ?",
+      [user_name, role_id, user_id]
+    );
+    console.log("User account updated for user_id:", user_id);
+    
+    res.status(200).json({ message: "User updated successfully" });
+  } catch (error) {
+    console.error("Error updating user:", error);
+    res.status(500).json({ message: "Error updating user", error: error.message });
+  }
 };
+
 
 
 
@@ -61,93 +53,90 @@ const addUser = async (req, res) => {
 const getAllRoles = (req, res) => {
   con.query("SELECT * FROM role", (err, results) => {
     if (err) {
+      console.error("Error retrieving roles:", err);
       return res.status(500).json({ message: "Error retrieving roles", error: err });
     }
+    console.log("Fetched roles:", results);
     res.json(results);
   });
 };
 
-
-// get departments
-const getdepartment = (req, res) => {
+// Get all departments
+const getDepartment = (req, res) => {
   con.query("SELECT * FROM department", (err, results) => {
     if (err) {
+      console.error("Error retrieving department:", err);
       return res.status(500).json({ message: "Error retrieving department", error: err });
     }
+    console.log("Fetched departments:", results);
     res.json(results);
   });
 };
 
+// Get all users (including employee details if available)
+// We use LEFT JOIN with employees table so that employee fields (fname, lname, phone) override users fields
 
-// Get all users
-const getAllUsers = (req, res) => { // Renamed to getAllUsers
-  con.query("SELECT * FROM users", (err, results) => {
+const getAllUsers = (req, res) => {
+  const query = `
+    SELECT u.*, e.*
+    FROM users u 
+    LEFT JOIN employees e ON u.employee_id = e.employee_id
+  `;
+  con.query(query, (err, results) => {
     if (err) {
+      console.error("Error retrieving users:", err);
       return res.status(500).json({ message: "Error retrieving users", error: err });
     }
+    console.log("Fetched users:", results);
     res.json(results);
   });
 };
 
 
-
-// Change user status active or inactive
+// Change user status active (1) or inactive (0)
 const changeUserStatus = (req, res) => {
   const { user_id } = req.params;
   const { status } = req.body;
 
   if (status !== 0 && status !== 1) {
+    console.error("Invalid status provided:", status);
     return res.status(400).json({ message: "Invalid status. Use 0 for inactive and 1 for active." });
   }
 
   con.query("UPDATE users SET status = ? WHERE user_id = ?", [status, user_id], (err, result) => {
     if (err) {
+      console.error("Error updating user status:", err);
       return res.status(500).json({ message: "Error updating user status", error: err });
     }
 
     if (result.affectedRows === 0) {
+      console.error("User not found for update, user_id:", user_id);
       return res.status(404).json({ message: "User not found" });
     }
 
+    console.log("User status updated successfully for user_id:", user_id, "New status:", status);
     res.json({ message: "User status updated successfully" });
   });
 };
 
-// Update user
-const updateUser = (req, res) => {
-  const { user_id } = req.params;
-  const { fname, lname, user_name, department_id, phone, role_name } = req.body;
 
-  con.query(
-    "UPDATE users SET fname = ?, lname = ?, user_name = ?, phone = ?, department_id=?, role_name = ? WHERE user_id = ?",
-    [fname, lname, user_name, phone, role_name, department_id, user_id],
-    (err, result) => {
-      if (err) {
-        return res.status(500).json({ message: "Error updating user information", error: err });
-      }
 
-      if (result.affectedRows === 0) {
-        return res.status(404).json({ message: "User not found" });
-      }
-
-      res.json({ message: "User information updated successfully" });
-    }
-  );
-};
-
-// Delete user
+// Delete user - using correct table name (users)
 const deleteUser = (req, res) => {
   const { user_id } = req.params;
 
-  con.query("DELETE FROM user WHERE user_id = ?", [user_id], (err, result) => {
+  con.query("DELETE FROM users WHERE user_id = ?", [user_id], (err, result) => {
     if (err) {
+      console.error("Error deleting user:", err);
       return res.status(500).json({ message: "Error deleting user", error: err });
     }
 
     if (result.affectedRows === 0) {
+      console.error("User not found for deletion, user_id:", user_id);
       return res.status(404).json({ message: "User not found" });
     }
 
+    console.log("User deleted successfully, user_id:", user_id);
     res.json({ message: "User deleted successfully" });
   });
 
@@ -156,7 +145,7 @@ const deleteUser = (req, res) => {
 
 const changeStatus = async (status, user_id) => {
   try {
-    const response = await fetch(`http://192.168.100.134:5000/api/users/${user_id}/status`, {
+    const response = await fetch(`http://192.168.56.1:5000/api/users/${user_id}/status`, {
       method: "PUT",
       headers: { "Content-type": "application/json" },
       body: JSON.stringify({ status }),
@@ -183,9 +172,9 @@ const changeStatus = async (status, user_id) => {
 
 const getUserRoles = async (req, res) => {
   try {
-    // Assuming that the current user's ID is available in req.user_id from verifyToken middleware
     const user_id = req.user_id;
     if (!user_id) {
+      console.error("User ID not provided in request.");
       return res.status(400).json({ error: "User ID not provided" });
     }
     const sql = `
@@ -196,16 +185,18 @@ const getUserRoles = async (req, res) => {
     `;
     con.query(sql, [user_id], (err, results) => {
       if (err) {
-        console.error("Database query error:", err);
+        console.error("Database query error for user roles:", err);
         return res.status(500).json({ error: "Internal server error" });
       }
       if (results.length === 0) {
+        console.error("User role not found for user_id:", user_id);
         return res.status(404).json({ error: "User role not found" });
       }
+      console.log("Fetched user role for user_id:", user_id, results[0]);
       res.json(results[0]);
     });
   } catch (error) {
-    console.error("Error in getUserRole:", error.message);
+    console.error("Error in getUserRoles:", error.message);
     res.status(500).json({ error: "Internal server error" });
   }
 };
@@ -214,14 +205,15 @@ const getUserRoles = async (req, res) => {
 
 
 module.exports = {
+ 
   getUserRoles,
-  addUser,
+ 
   getAllRoles,
-  getdepartment,
+  getDepartment,
   getAllUsers, // Updated function name here
   changeUserStatus,
   updateUser,
   deleteUser,
- changeStatus,
-
+  changeUserStatus,
+  updateUser
 };

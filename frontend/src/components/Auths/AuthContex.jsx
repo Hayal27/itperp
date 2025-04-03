@@ -5,7 +5,7 @@ const AuthContext = createContext();
 
 const initialState = {
   user: localStorage.getItem('user_id') || null,
-  fname: localStorage.getItem('fname') || null,
+  name: localStorage.getItem('name') || null,
   lname: localStorage.getItem('lname') || null,
   role_id: localStorage.getItem('role_id') || null,
   user_name: localStorage.getItem('user_name') || null,
@@ -16,14 +16,14 @@ const authReducer = (state, action) => {
   switch (action.type) {
     case 'LOGIN':
       localStorage.setItem('user_id', action.payload.user_id);
-      localStorage.setItem('fname', action.payload.fname);
+      localStorage.setItem('name', action.payload.name);
       localStorage.setItem('lname', action.payload.lname);
       localStorage.setItem('role_id', action.payload.role_id);
       localStorage.setItem('user_name', action.payload.user_name);
       return {
         ...state,
         user: action.payload.user_id,
-        fname: action.payload.fname,
+        name: action.payload.name,
         lname: action.payload.lname,
         role_id: action.payload.role_id,
         user_name: action.payload.user_name,
@@ -31,14 +31,14 @@ const authReducer = (state, action) => {
       };
     case 'LOGOUT':
       localStorage.removeItem('user_id');
-      localStorage.removeItem('fname');
+      localStorage.removeItem('name');
       localStorage.removeItem('lname');
       localStorage.removeItem('role_id');
       localStorage.removeItem('user_name');
       return {
         ...state,
         user: null,
-        fname: null,
+        name: null,
         lname: null,
         role_id: null,
         user_name: null,

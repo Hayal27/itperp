@@ -1,0 +1,132 @@
+/* ProfilePictureUpload Component Styling */
+.profile-picture-upload {
+
+   
+    max-width: 500px;
+    margin: 30px auto;
+    padding: 20px;
+    background: linear-gradient(135deg, #fdfbfb, #ebedee);
+    border: 1px solid #ddd;
+    border-radius: 15px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    text-align: center;
+  }
+  
+  .profile-picture-upload h3 {
+    margin-bottom: 20px;
+    color: #333;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  
+  .profile-picture-upload .error-message {
+    color: #e74c3c;
+    font-weight: bold;
+  }
+  
+  /* File input styling */
+  .profile-picture-upload input[type="file"] {
+    margin: 15px auto;
+    cursor: pointer;
+    background-color: #fff;
+    border: 2px dashed #4a90e2;
+    border-radius: 10px;
+    padding: 10px;
+    transition: border-color 0.3s ease;
+  }
+  
+  .profile-picture-upload input[type="file"]:hover {
+    border-color: #357ab8;
+  }
+  
+  /* Crop container styling */
+  .crop-container {
+    position: relative;
+    width: 300px;
+    height: 300px;
+    margin: 20px auto;
+    border: 2px dashed #ccc;
+    border-radius: 10px;
+    background-color: #fff;
+    overflow: hidden;
+  }
+  
+  /* Zoom controls styling */
+  .zoom-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 15px;
+  }
+  
+  .zoom-label {
+    margin-right: 10px;
+    font-size: 0.95rem;
+    color: #555;
+  }
+  
+  .zoom-slider {
+    -webkit-appearance: none;
+    width: 60%;
+    height: 8px;
+    border-radius: 5px;
+    background: #ddd;
+    outline: none;
+    transition: background 0.3s ease;
+  }
+  
+  .zoom-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #4a90e2;
+    cursor: pointer;
+    box-shadow: 0 0 6px rgba(0,0,0,0.2);
+    transition: transform 0.3s ease, background 0.3s ease;
+  }
+  
+  .zoom-slider::-webkit-slider-thumb:hover {
+    background: #357ab8;
+    transform: scale(1.1);
+  }
+  
+  /* Button group styling */
+  .button-group {
+    margin-top: 20px;
+  }
+  
+  .profile-picture-upload button {
+    padding: 10px 20px;
+    margin: 0 10px;
+    background-color: #4a90e2;
+    color: #fff;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+  }
+  
+  .profile-picture-upload button:hover {
+    background-color: #357ab8;
+    transform: scale(1.05);
+  }
+  
+  .profile-picture-upload button:disabled {
+    background-color: #a0c4f2;
+    cursor: not-allowed;
+  }
+  
+  /* Magical effects for all elements */
+  .profile-picture-upload * {
+    transition: all 0.3s ease;
+  }
+  
+  .profile-picture-upload input:focus,
+  .profile-picture-upload button:focus,
+  .zoom-slider:focus {
+    outline: none;
+    box-shadow: 0 0 5px 2px rgba(74, 144, 226, 0.4);
+  }
