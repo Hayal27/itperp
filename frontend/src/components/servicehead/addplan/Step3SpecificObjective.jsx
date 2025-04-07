@@ -22,7 +22,7 @@ const Step3SpecificObjective = ({ objectiveId, token, onBack, onNext }) => {
     setIsLoading(true);
     try {
       const response = await axios.get(
-        `http://192.168.56.1:5000/api/spesificObjectivesg?objective_id=${objectiveId}`,
+        `http://192.168.100.134:5000/api/spesificObjectivesg?objective_id=${objectiveId}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -100,7 +100,7 @@ const Step3SpecificObjective = ({ objectiveId, token, onBack, onNext }) => {
 
     try {
       const response = await axios.post(
-        "http://192.168.56.1:5000/api/addSpecificObjective",
+        "http://192.168.100.134:5000/api/addSpecificObjective",
         {
           specific_objective_name: newSpecificObjective.specific_objective_name,
           view: newSpecificObjective.view,

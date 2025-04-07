@@ -4,7 +4,7 @@ const con = mysql.createConnection({
     user: "root",
     host: "localhost",
     password: "", // Use an empty string if PASSWORD is undefined
-    database: "itperp"
+    database: "itperp3"
 });
 
 con.connect((err) => {

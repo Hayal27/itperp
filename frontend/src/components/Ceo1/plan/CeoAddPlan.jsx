@@ -45,7 +45,7 @@
 //     try {
 //       // Send the request to submit the plan using Axios
                                       
-//       const response = await Axios.post("http://192.168.56.1:5000/api/plans", formData, {
+//       const response = await Axios.post("http://192.168.100.134:5000/api/plans", formData, {
 //         headers: {
 //           'Content-Type': 'application/json',
 //           'Authorization': `Bearer ${token}`,  // Ensure that your token is valid and sent correctly

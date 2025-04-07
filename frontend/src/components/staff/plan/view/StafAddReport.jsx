@@ -25,7 +25,7 @@ const CIcalculateExecutionPercentage = (CIbaseline, CIplan, CIoutcome) => {
   return Math.round(((cio - cibase) / (cip - cibase)) * 100);
 };
 
-const AddReport = () => {
+const StafAddReport = () => {
   const { planId } = useParams();
   const navigate = useNavigate();
   const hiddenFileInput = useRef(null);
@@ -74,7 +74,7 @@ const AddReport = () => {
       return;
     }
     const token = localStorage.getItem("token");
-    Axios.get(`http://192.168.56.1:5000/api/pland/${planId}`, {
+    Axios.get(`http://192.168.100.134:5000/api/pland/${planId}`, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then((res) => {
@@ -190,7 +190,7 @@ const AddReport = () => {
       formPayload.append("files", file);
     });
     
-    Axios.put(`http://192.168.56.1:5000/api/addReport/${planId}`, formPayload, {
+    Axios.put(`http://192.168.100.134:5000/api/StafaddReport/${planId}`, formPayload, {
       headers: { 
         "Authorization": `Bearer ${token}`,
         "Content-Type": "multipart/form-data"
@@ -223,7 +223,7 @@ const AddReport = () => {
     <div className="container d-flex justify-content-center mt-5 container-report">
       <div className="card shadow w-100" style={{ maxWidth: "900px" }}>
         <div className="card-body">
-          <h2 className="card-title text-center mb-4">እቅዶን ያዘምኑ</h2>
+          <h2 className="card-title text-center mb-4">የ እቅዶን ሩፖርት ያስገቡ</h2>
           {plan ? (
             <>
               <form onSubmit={handleSubmit} encType="multipart/form-data">
@@ -555,4 +555,4 @@ const AddReport = () => {
   );
 };
 
-export default AddReport;
+export default StafAddReport;
