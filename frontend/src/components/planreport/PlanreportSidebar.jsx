@@ -71,12 +71,12 @@ function PlanreportSidebar() {
           /* Sidebar Toggle Button */
           .toggle-sidebar-btn {
             cursor: pointer;
-            font-size: 2.5rem;
+            font-size: 2.0rem;
             position: fixed;
-            top: 15px;
-            left: 170px;
+            top: 28px;
+            left: 250px;
             z-index: 1050;
-            color: #007bff;
+            color:rgb(97, 43, 43);
             transition: color 0.3s ease;
           }
 
@@ -133,29 +133,19 @@ function PlanreportSidebar() {
               <li>
                 <Link to='/plan/view' className="nav-link">
                   <i className="bi bi-circle" />
-                  <span>Submitted Plan</span>
+                  <span>Pending Plan</span>
                 </Link>
               </li>
 
+ 
               <li>
-                <Link to='/plan/View_myplan' className="nav-link">
-                  <i className="bi bi-circle" />
-                  <span>View My Plan</span>
-                </Link>
-              </li>
-              <li>
-                <Link to='plan/PlanSteps/Add' className="nav-link">
+                <Link to='/plan/PlanSteps/Add' className="nav-link">
                   <i className="bi bi-circle" />
                   <span>Add Plan</span>
                 </Link>
               </li>
 
-    <li>
-                <Link to='/plan/PlanreportViewDeclinedPlan' className="nav-link">
-                  <i className="bi bi-eye" />
-                  <span>Declined Plan</span>
-                </Link>
-              </li>
+ 
 
 
               <li>
@@ -188,22 +178,12 @@ function PlanreportSidebar() {
               <li>
                 <Link to='/report/Viewapprovedreport' className="nav-link">
                   <i className="bi bi-circle" />
-                  <span>Submitted Report</span>
+                  <span>Pending Report</span>
                 </Link>
               </li>
-              <li>
-                <Link to='/report/View_myreport' className="nav-link">
-                  <i className="bi bi-circle" />
-                  <span>View My Report</span>
-                </Link>
-              </li>
+ 
 
-              <li>
-                <Link to='/report/PlanreportViewDeclinedReport' className="nav-link">
-                  <i className="bi bi-eye" />
-                  <span>Declined Report</span>
-                </Link>
-              </li>
+   
 
 
 
