@@ -973,11 +973,10 @@ const updatePlan = async (req, res) => {
 
 const addReport = async (req, res) => {
   try {
-    const user_id = req.user_id; // Get user_id from the request
-    const { planId } = req.params; // Get planId from URL parameters
-    const updates = req.body; // Get update values from the request body
+    const user_id = req.user_id;
+    const { planId } = req.params;
+    const updates = req.body;
 
-    // Allowed fields: outcome, execution_percentage, CIoutcome, CIexecution_percentage.
     const allowedUpdates = [
       "outcome",
       "execution_percentage",
@@ -985,77 +984,53 @@ const addReport = async (req, res) => {
       "CIexecution_percentage"
     ];
 
-    // Filter out invalid fields not present in allowedUpdates.
     const updateFields = Object.keys(updates).filter(field => allowedUpdates.includes(field));
 
     if (updateFields.length === 0) {
-      console.error("No valid fields to update. Only Outcome, Execution Percentage, CIoutcome, and CIexecution_percentage can be updated.");
       return res.status(400).json({
         success: false,
-        message: "No valid fields to update. Ensure you're updating only outcome fields.",
+        message: "No valid fields to update.",
         error_code: "NO_VALID_FIELDS"
       });
     }
 
-    // Step 1: Fetch specific_objective_detail_id from the plans table for the current plan and user.
     const fetchSpecificObjectiveDetailIDQuery = `
       SELECT specific_objective_detail_id 
       FROM plans 
       WHERE plan_id = ? AND user_id = ?
     `;
-    con.query(fetchSpecificObjectiveDetailIDQuery, [planId, user_id], (err, planResults) => {
-      if (err) {
-        console.error("Error fetching plan:", err.stack);
-        return res.status(500).json({
-          success: false,
-          message: "Database error while fetching the plan.",
-          error_code: "DB_ERROR_PLAN_FETCH",
-          error: err.message
-        });
-      }
 
-      if (planResults.length === 0) {
-        console.error("Plan not found or unauthorized access. Plan ID:", planId);
+    con.query(fetchSpecificObjectiveDetailIDQuery, [planId, user_id], (err, planResults) => {
+      if (err || planResults.length === 0) {
         return res.status(404).json({
           success: false,
-          message: "Plan not found or you don't have permission to update this plan.",
+          message: "Plan not found or unauthorized access.",
           error_code: "PLAN_NOT_FOUND_OR_UNAUTHORIZED"
         });
       }
 
       const specific_objective_detail_id = planResults[0].specific_objective_detail_id;
 
-      // Step 2: Check if the specific objective detail exists and belongs to the user.
       const checkSpecificObjectiveDetailQuery = `
         SELECT * FROM specific_objective_details 
         WHERE specific_objective_detail_id = ? AND user_id = ?
       `;
-      con.query(checkSpecificObjectiveDetailQuery, [specific_objective_detail_id, user_id], (err, specificObjectiveDetailResults) => {
-        if (err) {
-          console.error("Error checking specific objective detail existence:", err.stack);
-          return res.status(500).json({
-            success: false,
-            message: "Error while checking specific objective detail existence in the database.",
-            error_code: "DB_ERROR_CHECK",
-            error: err.message
-          });
-        }
 
-        if (specificObjectiveDetailResults.length === 0) {
-          console.error("Specific objective detail not found or unauthorized. Specific Objective Detail ID:", specific_objective_detail_id);
+      con.query(checkSpecificObjectiveDetailQuery, [specific_objective_detail_id, user_id], (err, specificObjectiveDetailResults) => {
+        if (err || specificObjectiveDetailResults.length === 0) {
           return res.status(404).json({
             success: false,
-            message: "Specific objective detail not found or you don't have permission to update this detail.",
+            message: "Specific objective detail not found or unauthorized.",
             error_code: "SPECIFIC_OBJECTIVE_DETAIL_NOT_FOUND_OR_UNAUTHORIZED"
           });
         }
 
-        // Step 3: Update the specific objective details using only the allowed outcome fields.
         const updateQuery = `
           UPDATE specific_objective_details 
           SET ${updateFields.map(field => `${field} = ?`).join(", ")}
           WHERE specific_objective_detail_id = ? AND user_id = ?
         `;
+
         const updateValues = [
           ...updateFields.map(field => updates[field]),
           specific_objective_detail_id,
@@ -1063,68 +1038,62 @@ const addReport = async (req, res) => {
         ];
 
         con.query(updateQuery, updateValues, (err, result) => {
-          if (err) {
-            console.error("Error during update:", err.stack);
+          if (err || result.affectedRows === 0) {
             return res.status(500).json({
               success: false,
-              message: "Database error while updating the specific objective detail.",
-              error_code: "DB_ERROR_UPDATE",
-              error: err.message
+              message: "Failed to update specific objective detail.",
+              error_code: "DB_ERROR_UPDATE"
             });
           }
 
-          if (result.affectedRows === 0) {
-            console.warn("No updates applied. Either the specific objective detail does not exist or no changes were made.");
-            return res.status(404).json({
-              success: false,
-              message: "No updates were applied. The specific objective detail may not exist or no changes were made.",
-              error_code: "NO_UPDATES_APPLIED"
+          // Insert files if any
+          if (req.files && req.files.length > 0) {
+            const fileInsertQuery = `
+              INSERT INTO reportfile (specific_objective_id, file_name, file_path)
+              VALUES ?
+            `;
+            const fileData = req.files.map(file => [
+              specific_objective_detail_id,
+              file.originalname,
+              file.path
+            ]);
+
+            con.query(fileInsertQuery, [fileData], (err, fileInsertResult) => {
+              if (err) {
+                console.error("File upload DB insert error:", err.stack);
+                // You can decide whether to fail the whole request or just warn
+              } else {
+                console.log(`${fileInsertResult.affectedRows} file(s) uploaded`);
+              }
             });
           }
 
-          console.log("Specific objective detail updated successfully. Specific Objective Detail ID:", specific_objective_detail_id);
-
-          // Step 4: Automatically update the plan's reporting column to 'active' and report_progress column to 'on_progress'
+          // Update reporting and report_progress status
           const updatePlanQuery = `
             UPDATE plans
             SET reporting = 'active', report_progress = 'on_progress'
             WHERE plan_id = ? AND user_id = ?
           `;
-          con.query(updatePlanQuery, [planId, user_id], (err, planUpdateResult) => {
+          con.query(updatePlanQuery, [planId, user_id], (err) => {
             if (err) {
-              console.error("Error updating reporting status in plans table:", err.stack);
               return res.status(500).json({
                 success: false,
-                message: "Error while updating reporting status in the plans table.",
-                error_code: "DB_ERROR_PLAN_UPDATE",
-                error: err.message
+                message: "Failed to update plan reporting status.",
+                error_code: "DB_ERROR_PLAN_UPDATE"
               });
             }
 
-            console.log("Reporting status updated to 'active' and report_progress set to 'on_progress'. Plan ID:", planId);
-
-            // New Step: Update supervisor_id in plans table with the supervisor id of the employee associated with the user.
+            // Get supervisor ID
             const getSupervisorQuery = `
               SELECT e.supervisor_id FROM employees e
               JOIN users u ON e.employee_id = u.employee_id
               WHERE u.user_id = ?
             `;
             con.query(getSupervisorQuery, [user_id], (err, supervisorResults) => {
-              if (err) {
-                console.error("Error fetching supervisor id:", err.stack);
-                return res.status(500).json({
-                  success: false,
-                  message: "Database error while fetching supervisor id.",
-                  error_code: "DB_ERROR_SUPERVISOR_FETCH",
-                  error: err.message
-                });
-              }
-
-              if (supervisorResults.length === 0) {
-                console.error("Supervisor id not found for user, user_id:", user_id);
+              if (err || supervisorResults.length === 0) {
                 return res.status(404).json({
                   success: false,
-                  message: "Supervisor id not found for user.",
+                  message: "Supervisor not found.",
                   error_code: "SUPERVISOR_NOT_FOUND"
                 });
               }
@@ -1135,70 +1104,48 @@ const addReport = async (req, res) => {
                 SET supervisor_id = ?
                 WHERE plan_id = ? AND user_id = ?
               `;
-              con.query(updateSupervisorQuery, [supervisor_id, planId, user_id], (err, supervisorUpdateResult) => {
+              con.query(updateSupervisorQuery, [supervisor_id, planId, user_id], (err) => {
                 if (err) {
-                  console.error("Error updating supervisor id in plans table:", err.stack);
                   return res.status(500).json({
                     success: false,
-                    message: "Database error while updating supervisor id in plans.",
-                    error_code: "DB_ERROR_SUPERVISOR_UPDATE",
-                    error: err.message
+                    message: "Failed to update supervisor ID.",
+                    error_code: "DB_ERROR_SUPERVISOR_UPDATE"
                   });
                 }
 
-                console.log("Supervisor id updated in plans table:", supervisor_id);
-
-                // Step 5: Update the related approval workflow status to 'pending'
+                // Update approval workflow to pending
                 const updateApprovalWorkflowQuery = `
                   UPDATE approvalworkflow
                   SET status = 'pending'
                   WHERE plan_id = ?
                 `;
-                con.query(updateApprovalWorkflowQuery, [planId], (err, approvalResult) => {
+                con.query(updateApprovalWorkflowQuery, [planId], (err) => {
                   if (err) {
-                    console.error("Error updating approval workflow:", err.stack);
                     return res.status(500).json({
                       success: false,
-                      message: "Database error while updating approval workflow status.",
-                      error_code: "DB_ERROR_APPROVAL_UPDATE",
-                      error: err.message
+                      message: "Failed to update approval workflow.",
+                      error_code: "DB_ERROR_APPROVAL_UPDATE"
                     });
                   }
 
-                  console.log("Approval workflow status updated to 'pending'. Plan ID:", planId);
-
-                  // Step 6: Fetch the updated specific objective detail for confirmation.
+                  // Fetch final updated result
                   const fetchUpdatedDetailQuery = `
                     SELECT * FROM specific_objective_details 
                     WHERE specific_objective_detail_id = ? AND user_id = ?
                   `;
                   con.query(fetchUpdatedDetailQuery, [specific_objective_detail_id, user_id], (err, updatedDetailResults) => {
-                    if (err) {
-                      console.error("Error fetching updated specific objective detail:", err.stack);
+                    if (err || updatedDetailResults.length === 0) {
                       return res.status(500).json({
                         success: false,
-                        message: "Error fetching updated specific objective detail from the database.",
-                        error_code: "DB_ERROR_FETCH_UPDATED",
-                        error: err.message
+                        message: "Failed to fetch updated report.",
+                        error_code: "FETCH_UPDATED_FAILED"
                       });
                     }
-
-                    if (updatedDetailResults.length === 0) {
-                      console.error("Updated specific objective detail not found. Specific Objective Detail ID:", specific_objective_detail_id);
-                      return res.status(404).json({
-                        success: false,
-                        message: "Updated specific objective detail not found. Please try again.",
-                        error_code: "UPDATED_SPECIFIC_OBJECTIVE_DETAIL_NOT_FOUND"
-                      });
-                    }
-
-                    const updatedSpecificObjectiveDetail = updatedDetailResults[0];
-                    console.log("Fetched updated specific objective detail:", updatedSpecificObjectiveDetail);
 
                     return res.status(200).json({
                       success: true,
-                      message: "Specific objective detail updated and report submitted successfully. Reporting status set to 'active', report_progress updated to 'on_progress', supervisor updated, and approval workflow updated.",
-                      data: updatedSpecificObjectiveDetail
+                      message: "Report updated and files uploaded successfully.",
+                      data: updatedDetailResults[0]
                     });
                   });
                 });
@@ -1209,14 +1156,15 @@ const addReport = async (req, res) => {
       });
     });
   } catch (error) {
-    console.error("Error in addReport function:", error.stack);
+    console.error("Unexpected error:", error.stack);
     return res.status(500).json({
       success: false,
-      message: `An unexpected error occurred. ${error.message}`,
-      error_code: "UNKNOWN_ERROR"
+      message: "Unexpected server error.",
+      error: error.message
     });
   }
 };
+
 
 
 

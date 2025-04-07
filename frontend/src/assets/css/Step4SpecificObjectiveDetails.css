@@ -1,0 +1,149 @@
+/* Container */
+.form-container {
+    max-width: 960px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s ease;
+  }
+  
+  .form-container:hover {
+    transform: scale(1.02);
+  }
+  
+  /* Title */
+  .form-title {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 800;
+    margin-bottom: 1.5rem;
+    background: linear-gradient(90deg, #5a67d8, #805ad5, #ed64a6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  
+  /* Form Fields */
+  .form-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  
+  /* Field Group */
+  .form-field-group {
+    border: 1px solid #e2e8f0;
+    padding: 1rem;
+    border-radius: 8px;
+  }
+  
+  /* Grid for Common Fields */
+  .form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+  }
+  
+  /* Individual Field */
+  .form-field {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* Labels */
+  .form-label {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #4a5568;
+  }
+  
+  /* Inputs, Selects & Textareas */
+  .form-input,
+  .form-select,
+  .form-textarea {
+    padding: 0.75rem;
+    border: 1px solid #cbd5e0;
+    border-radius: 6px;
+    background: #f7fafc;
+    font-size: 1rem;
+    transition: border-color 0.2s ease;
+  }
+  
+  .form-input:focus,
+  .form-select:focus,
+  .form-textarea:focus {
+    outline: none;
+    border-color: #5a67d8;
+  }
+  
+  /* Textarea Specific */
+  .form-textarea {
+    resize: vertical;
+    min-height: 120px;
+  }
+  
+  /* Group Header for Options */
+  .group-header {
+    font-weight: 700;
+    background: #fae3b0;
+    padding: 0.4rem;
+  }
+  
+  /* CI Fields Container */
+  .ci-fields {
+    display: flex;
+    gap: 1rem;
+  }
+  
+  /* Button Group */
+  .form-button-group {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 1.5rem;
+  }
+  
+  /* Buttons */
+  .btn {
+    padding: 0.75rem 1.5rem;
+    border-radius: 30px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border: none;
+  }
+  
+  .btn:hover {
+    transform: scale(1.03);
+  }
+  
+  /* Primary Button */
+  .btn-primary {
+    background: linear-gradient(90deg, #5a67d8, #4299e1);
+    color: #ffffff;
+    box-shadow: 0 4px 8px rgba(66, 153, 225, 0.3);
+  }
+  
+  /* Secondary Button */
+  .btn-secondary {
+    background: #edf2f7;
+    color: #5a67d8;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Error and Success Messages */
+  .form-error {
+    text-align: center;
+    color: #e53e3e;
+    font-size: 1.1rem;
+    margin-top: 1rem;
+  }
+  
+  .form-success {
+    text-align: center;
+    color: #38a169;
+    font-size: 1.1rem;
+    margin-top: 1rem;
+  }

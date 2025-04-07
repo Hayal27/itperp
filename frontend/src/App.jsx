@@ -57,8 +57,7 @@ import PlanreportSidebar from "./components/planreport/PlanreportSidebar";
 
 
 
-import PlanreportSubmittedViewPlan from "./components/planreport/addplan/PlanreportSubmittedViewPlan";
-import PlanreportViewPlan from "./components/planreport/addplan/PlanreportViewPlan";
+
 import PlanreportViewOrgPlan from "./components/planreport/addplan/PlanreportViewOrgPlan";
 import PlanreportUpdatePlan from "./components/planreport/addplan/view/PlanreportUpdatePlan";
 import PlanreportViewDeclinedPlan from "./components/planreport/addplan/PlanreportViewDeclinedPlan";
@@ -82,73 +81,6 @@ import GeneralmanagerSidebar from "./components/generalmanager/GeneralmanagerSid
 
 //                        // Generalmanager plan 
 
-
-
-import GeneralmanagerSubmittedViewPlan from "./components/generalmanager/addplan/GeneralmanagerSubmittedViewPlan";
-import GeneralmanagerViewPlan from "./components/generalmanager/addplan/GeneralmanagerViewPlan";
-import GeneralmanagerViewOrgPlan from "./components/generalmanager/addplan/GeneralmanagerViewOrgPlan";
-import GeneralmanagerUpdatePlan from "./components/generalmanager/addplan/view/GeneralmanagerUpdatePlan";
-import GeneralmanagerViewDeclinedPlan from "./components/generalmanager/addplan/GeneralmanagerViewDeclinedPlan";
-
-
-                     // report
-
-import GeneralmanagerViewReport from "./components/generalmanager/report/GeneralmanagerViewReport";
-import GeneralmanagerUpdateReport from "./components/generalmanager/report/view/GeneralmanagerUpdateReport";
-import GeneralmanagerViewOrgReport from "./components/generalmanager/report/GeneralmanagerViewOrgReport";
-import GeneralmanagerSubmittedViewReport from "./components/generalmanager/report/GeneralmanagerSubmittedViewReport";
-import GeneralmanagerAddReport from "./components/generalmanager/addplan/view/GeneralmanagerAddReport";
-// import GeneralmanagerUpdateReport from "./components/generalmanager/report/view/GeneralmanagerUpdateReport";
-import GeneralmanagerViewDeclinedReport from "./components/generalmanager/report/GeneralmanagerViewDeclinedReport";
-
- // DeputiyManager
-
- import DeputiyManagerDashboard from "./components/deputiyManager/DeputiyManagerDashboard";
- import DeputiyManagerSidebar from "./components/deputiyManager/DeputiyManagerSidebar";
- 
- 
- //                        // DeputiyManager plan 
- import DeputiyManagerSubmittedViewPlan from "./components/deputiyManager/addplan/DeputiyManagerSubmittedViewPlan";
- import DeputiyManagerViewPlan from "./components/deputiyManager/addplan/DeputiyManagerViewPlan";
- import DeputiyManagerViewOrgPlan from "./components/deputiyManager/addplan/DeputiyManagerViewOrgPlan";
- import DeputiyManagerUpdatePlan from "./components/deputiyManager/addplan/view/DeputiyManagerUpdatePlan";
- import DeputiyManagerViewDeclinedPlan from "./components/deputiyManager/addplan/DeputiyManagerViewDeclinedPlan";
- 
- 
-                      // report
- 
- import DeputiyManagerViewReport from "./components/deputiymanager/report/DeputiyManagerViewReport.jsx";
-//  import DeputiyManagerUpdateReport from "./components/deputiyManager/report/view/DeputiyManagerUpdateReport";
- import DeputiyManagerViewOrgReport from "./components/deputiyManager/report/DeputiyManagerViewOrgReport";
- import DeputiyManagerSubmittedViewReport from "./components/deputiyManager/report/DeputiyManagerSubmittedViewReport";
- import DeputiyManagerAddReport from "./components/deputiyManager/addplan/view/DeputiyManagerAddReport";
- // import DeputiyManagerUpdateReport from "./components/deputiyManager/report/view/DeputiyManagerUpdateReport";
- import DeputiyManagerViewDeclinedReport from "./components/deputiyManager/report/DeputiyManagerViewDeclinedReport";
- 
-
-// service head
-
-import ServiceHeadDashboard from "./components/serviceHead/ServiceHeadDashboard";
-import ServiceHeadSidebar from "./components/serviceHead/ServiceHeadSidebar";
-
-
-//                        // ServiceHead plan 
-import ServiceHeadSubmittedViewPlan from "./components/ServiceHead/addplan/ServiceHeadSubmittedViewPlan";
-import ServiceHeadViewPlan from "./components/ServiceHead/addplan/ServiceHeadViewPlan";
-import ServiceHeadViewOrgPlan from "./components/ServiceHead/addplan/ServiceHeadViewOrgPlan";
-import ServiceHeadUpdatePlan from "./components/ServiceHead/addplan/view/ServiceHeadUpdatePlan";
-import ServiceHeadViewDeclinedPlan from "./components/ServiceHead/addplan/ServiceHeadViewDeclinedPlan";
-
-
-                     // report
-
-import ServiceHeadViewReport from "./components/ServiceHead/report/ServiceHeadViewReport";
-import ServiceHeadUpdateReport from "./components/ServiceHead/report/view/ServiceHeadUpdateReport";
-import ServiceHeadViewOrgReport from "./components/ServiceHead/report/ServiceHeadViewOrgReport";
-import ServiceHeadSubmittedViewReport from "./components/ServiceHead/report/ServiceHeadSubmittedViewReport";
-import ServiceHeadAddReport from "./components/ServiceHead/addplan/view/ServiceHeadAddReport";
-// import ServiceHeadUpdateReport from "./components/ServiceHead/report/view/ServiceHeadUpdateReport";
-import ServiceHeadViewDeclinedReport from "./components/ServiceHead/report/ServiceHeadViewDeclinedReport";
 
 
 
@@ -238,7 +170,7 @@ function App() {
           :
 
           state.role_id==3?
-          <TeamleaderSidebar/>
+          <GeneralmanagerSidebar/>
           :
 
           state.role_id==5?
@@ -320,7 +252,7 @@ function App() {
 
 
 <Route path="/plan/View_myplan" element={<StaffViewPlan />} />
-<Route path="/report/View_myreport" element={<PlanreportViewReport />} />
+<Route path="/report/View_myreport" element={<StaffViewReport />} />
 <Route path="/report/view/update/:reportId" element={<UpdateReport />} />
 <Route path="/plan/view/add-report/:planId" element={<AddReport />} />
 <Route path="/plan/ViewOrgPlan" element={<PlanreportViewOrgPlan />} />
@@ -347,9 +279,9 @@ function App() {
 <Route path="/" element={<TeamleaderDashboard />} />
 <Route path="/plan/View" element={<TeamleaderSubmittedViewPlan />} />
 <Route path="/report/Viewapprovedreport" element={<TeamleaderSubmittedViewReport />} />
-<Route path="/plan/PlanSteps/Add" element={<PlanSteps/>} />
+<Route path="/plan/View" element={<CeoSubmittedViewPlan />} />
 <Route path="/plan/View_myplan" element={<StaffViewPlan />} />
-<Route path="/report/View_myreport" element={<TeamleaderViewReport />} />
+<Route path="/report/View_myreport" element={<StaffViewReport />} />
 <Route path="/report/view/update/:reportId" element={<UpdateReport />} />
 <Route path="/plan/view/add-report/:planId" element={<AddReport />} />
 <Route path="/plan/ViewOrgPlan" element={<TeamleaderViewOrgPlan />} />
@@ -362,6 +294,7 @@ function App() {
 {/* update the plan */}
 <Route path="/plan/View_myplan/update/:planId" element={<TeamleaderUpdatePlan />} />
 
+{/* 
 
 
             {/* deputy manager */}
@@ -375,7 +308,7 @@ function App() {
 <Route path="/report/Viewapprovedreport" element={<TeamleaderSubmittedViewReport />} />
 <Route path="/plan/PlanSteps/Add" element={<PlanSteps/>} />
 <Route path="/plan/View_myplan" element={<StaffViewPlan />} />
-<Route path="/report/View_myreport" element={<TeamleaderViewReport />} />
+<Route path="/report/View_myreport" element={<StaffViewReport />} />
 <Route path="/report/view/update/:reportId" element={<UpdateReport />} />
 <Route path="/plan/view/add-report/:planId" element={<AddReport />} />
 <Route path="/plan/ViewOrgPlan" element={<TeamleaderViewOrgPlan />} />
@@ -385,33 +318,37 @@ function App() {
 <Route path="/plan/TeamleaderViewDeclinedPlan/view/update/:planId" element={<TeamleaderUpdatePlan />} />
 <Route path="/plan/View_myplan/add-report/:planId" element={<TeamleaderAddReport />} />
 
-{/* update the plan */}
+
 <Route path="/plan/View_myplan/update/:planId" element={<TeamleaderUpdatePlan />} />
+
 
 
 
 
             </>:state.role_id==6?
             <>
+
 <Route path="/ProfilePictureUpload" element={<ProfilePictureUpload />} />
 
-<Route path="/" element={<TeamleaderDashboard />} />
-<Route path="/plan/View" element={<TeamleaderSubmittedViewPlan />} />
-<Route path="/report/Viewapprovedreport" element={<TeamleaderSubmittedViewReport />} />
-<Route path="/plan/PlanSteps/Add" element={<PlanSteps/>} />
-<Route path="/plan/View_myplan" element={<StaffViewPlan />} />
-<Route path="/report/View_myreport" element={<TeamleaderViewReport />} />
-<Route path="/report/view/update/:reportId" element={<UpdateReport />} />
-<Route path="/plan/view/add-report/:planId" element={<AddReport />} />
-<Route path="/plan/ViewOrgPlan" element={<TeamleaderViewOrgPlan />} />
-<Route path="/report/ViewOrgReport" element={<TeamleaderViewOrgReport />} />
-<Route path="/report/TeamleaderViewDeclinedReport" element={<TeamleaderViewDeclinedReport />} />
-<Route path="/plan/TeamleaderViewDeclinedPlan" element={<TeamleaderViewDeclinedPlan/>} />
-<Route path="/plan/TeamleaderViewDeclinedPlan/view/update/:planId" element={<TeamleaderUpdatePlan />} />
-<Route path="/plan/View_myplan/add-report/:planId" element={<TeamleaderAddReport />} />
+            <Route path="/" element={<TeamleaderDashboard />} />
+    <Route path="/plan/View" element={<TeamleaderSubmittedViewPlan />} />
+    <Route path="/report/Viewapprovedreport" element={<TeamleaderSubmittedViewReport />} />
+    <Route path="/plan/PlanSteps/Add" element={<PlanSteps/>} />
+    <Route path="/plan/View_myplan" element={<StaffViewPlan />} />
+    <Route path="/report/View_myreport" element={<StaffViewReport />} />
+    <Route path="/report/view/update/:reportId" element={<UpdateReport />} />
+    <Route path="/plan/view/add-report/:planId" element={<AddReport />} />
+    <Route path="/plan/ViewOrgPlan" element={<TeamleaderViewOrgPlan />} />
+    <Route path="/report/ViewOrgReport" element={<TeamleaderViewOrgReport />} />
+    <Route path="/report/TeamleaderViewDeclinedReport" element={<TeamleaderViewDeclinedReport />} />
+    <Route path="/plan/TeamleaderViewDeclinedPlan" element={<TeamleaderViewDeclinedPlan/>} />
+    <Route path="/plan/TeamleaderViewDeclinedPlan/view/update/:planId" element={<TeamleaderUpdatePlan />} />
+    <Route path="/plan/View_myplan/add-report/:planId" element={<TeamleaderAddReport />} />
 
-{/* update the plan */}
-<Route path="/plan/View_myplan/update/:planId" element={<TeamleaderUpdatePlan />} />
+          {/* update the plan */}
+    <Route path="/plan/View_myplan/update/:planId" element={<TeamleaderUpdatePlan />} />
+
+          
 
 
              {/* team leader */}
@@ -424,7 +361,7 @@ function App() {
     <Route path="/report/Viewapprovedreport" element={<TeamleaderSubmittedViewReport />} />
     <Route path="/plan/PlanSteps/Add" element={<PlanSteps/>} />
     <Route path="/plan/View_myplan" element={<StaffViewPlan />} />
-    <Route path="/report/View_myreport" element={<TeamleaderViewReport />} />
+    <Route path="/report/View_myreport" element={<StaffViewReport />} />
     <Route path="/report/view/update/:reportId" element={<UpdateReport />} />
     <Route path="/plan/view/add-report/:planId" element={<AddReport />} />
     <Route path="/plan/ViewOrgPlan" element={<TeamleaderViewOrgPlan />} />
@@ -445,10 +382,9 @@ function App() {
 
                </>:state.role_id==8?<>
 
-
                <Route path="/ProfilePictureUpload" element={<ProfilePictureUpload />} />
 
-     <Route path="/" element={<StaffDashboard />} />
+     <Route path="/" element={<TeamleaderDashboard />} />
      <Route path="/plan/PlanSteps/Add" element={<PlanSteps/>} />
     
     <Route path="/plan/StaffViewDeclinedPlan" element={<StaffViewDeclinedPlan/>} />
@@ -464,8 +400,8 @@ function App() {
     <Route path="/report/view/update/:reportId" element={<UpdateReport />} />
     <Route path="/plan/view/add-report/:planId" element={<AddReport />} />
     <Route path="/plan/view/detail/:planId" element={<PlanDetail />} />
-    <Route path="/plan/ViewOrgPlan" element={<StaffViewOrgPlan />} />
-    <Route path="/report/ViewOrgReport" element={<StaffViewOrgReport />} />
+    <Route path="/plan/ViewOrgPlan" element={<TeamleaderViewOrgPlan />} />
+    <Route path="/report/ViewOrgReport" element={<TeamleaderViewOrgReport />} />
   
             </>:
             <>

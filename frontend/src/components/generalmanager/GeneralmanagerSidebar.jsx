@@ -74,7 +74,7 @@ function GeneralmanagerSidebar() {
             font-size: 2.5rem;
             position: fixed;
             top: 15px;
-            left: 170px;
+            left: 260px;
             z-index: 1050;
             color: #007bff;
             transition: color 0.3s ease;
@@ -133,37 +133,21 @@ function GeneralmanagerSidebar() {
               <li>
                 <Link to='/plan/view' className="nav-link">
                   <i className="bi bi-circle" />
-                  <span>Submitted Plan</span>
+                  <span>Pending plans</span>
                 </Link>
               </li>
 
-              <li>
-                <Link to='/plan/View_myplan' className="nav-link">
-                  <i className="bi bi-circle" />
-                  <span>View My Plan</span>
-                </Link>
-              </li>
-              <li>
-                <Link to='/plan/PlanSteps/Add' className="nav-link">
-                  <i className="bi bi-circle" />
-                  <span>Add Plan</span>
-                </Link>
-              </li>
-
-    <li>
-                <Link to='/plan/GeneralmanagerViewDeclinedPlan' className="nav-link">
-                  <i className="bi bi-eye" />
-                  <span>Declined Plan</span>
-                </Link>
-              </li>
-
-
+              
               <li>
                 <Link to='/plan/ViewOrgPlan' className="nav-link">
                   <i className="bi bi-circle" />
-                  <span>Orginazation Plans</span>
+                  <span>Approved plans</span>
                 </Link>
               </li>
+
+    
+
+              
             </ul>
           </li>
         </ul>
@@ -188,31 +172,19 @@ function GeneralmanagerSidebar() {
               <li>
                 <Link to='/report/Viewapprovedreport' className="nav-link">
                   <i className="bi bi-circle" />
-                  <span>Submitted Report</span>
+                  <span>Pending Reports</span>
                 </Link>
               </li>
               <li>
                 <Link to='/report/View_myreport' className="nav-link">
                   <i className="bi bi-circle" />
-                  <span>View My Report</span>
-                </Link>
-              </li>
-
-              <li>
-                <Link to='/report/GeneralmanagerViewDeclinedReport' className="nav-link">
-                  <i className="bi bi-eye" />
-                  <span>Declined Report</span>
+                  <span>Approved Report</span>
                 </Link>
               </li>
 
 
 
-              <li>
-                <Link to='/report/ViewOrgReport' className="nav-link">
-                  <i className="bi bi-circle" />
-                  <span>Orginazation Report</span>
-                </Link>
-              </li>
+
             </ul>
           </li>
 

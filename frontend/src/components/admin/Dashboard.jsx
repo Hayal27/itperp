@@ -4,9 +4,8 @@ const Dashboard = () => {
   const [users, setUsers] = useState([
     { id: 1, name: 'Hayal Tamrat', email: 'Hayal@itpark.et', status: 'Active' },
     { id: 2, name: 'Henok Ahmed', email: 'Henok@itpark.et', status: 'Active' },
-    { id: 3, name: 'Ewunetu Yriga', email: 'Ewunetu@itpark.et', status: 'Active' },
-    { id: 4, name: 'Samuel ', email: 'samuel@itpark.et', status: 'inactive' },
-    { id: 5, name: ' Nebyat ', email: 'Nebyat@itpark.et', status: 'Active' },
+    { id: 3, name: 'Samuel ', email: 'samuel@itpark.et', status: 'inactive' },
+    { id: 4, name: ' Nebyat ', email: 'Nebyat@itpark.et', status: 'Active' },
   ]);
 
   const [filter, setFilter] = useState('All');
@@ -106,7 +105,7 @@ const Dashboard = () => {
                     <div className="activite-label">1 hr</div>
                     <i className="bi bi-circle-fill activity-badge text-primary align-self-start" />
                     <div className="activity-content">
-                      User <a href="#" className="fw-bold text-dark">Ewunetu Yriga</a> updated profile.
+                      User <a href="#" className="fw-bold text-dark"> walelign </a> updated profile.
                     </div>
                   </div>
                   {/* Add more activity items as needed */}

@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import Axios from "axios";
@@ -7,14 +8,43 @@ const PlansTable = ({ plans, handleSorting, sortConfig }) => {
   const [loading, setLoading] = useState(false);
   const [planDetail, setPlanDetail] = useState(null);
   const [showDetail, setShowDetail] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState("");
   const token = localStorage.getItem("token"); // Assuming the token is stored in localStorage
 
+  // Returns sort icon based on column key
   const getSortIcon = (key) => {
     if (sortConfig.key !== key) return null;
     return sortConfig.direction === "asc" ? "↑" : "↓";
   };
 
+  // Helper to determine progress bar color based on execution percentage
+  const getProgressBarColor = (percentage) => {
+    if (percentage < 50) return "bg-danger"; // Red for <50%
+    if (percentage < 80) return "bg-warning"; // Yellow for 50-79%
+    return "bg-success"; // Green for 80-100%
+  };
+
+  // New component to render the execution percentage as a colored progress bar.
+  const ExecutionProgressBar = ({ percentage }) => {
+    console.log("Rendering progress bar with percentage:", percentage);
+    return (
+      <div>
+        <strong>Execution:</strong> {percentage}%
+        <div className="progress mt-2" style={{ height: "20px", width: "100%" }}>
+          <div
+            className={`progress-bar ${getProgressBarColor(percentage)}`}
+            role="progressbar"
+            style={{ width: `${percentage}%`, transition: "width 0.5s ease-in-out" }}
+            aria-valuenow={percentage}
+            aria-valuemin="0"
+            aria-valuemax="100"
+          >
+            {percentage}%
+          </div>
+        </div>
+      </div>
+    );
+  };
   const fetchPlanDetail = async (planId) => {
     try {
       setLoading(true);
@@ -27,13 +57,13 @@ const PlansTable = ({ plans, handleSorting, sortConfig }) => {
       if (response.data.success) {
         setPlanDetail(response.data.plan);
         setShowDetail(true);
-        setErrorMessage('');
+        setErrorMessage("");
       } else {
-        setErrorMessage('Failed to fetch plan details.');
+        setErrorMessage("Failed to fetch plan details.");
       }
     } catch (error) {
       console.error(error);
-      setErrorMessage('Error fetching plan details.');
+      setErrorMessage("Error fetching plan details.");
     } finally {
       setLoading(false);
     }
@@ -46,13 +76,13 @@ const PlansTable = ({ plans, handleSorting, sortConfig }) => {
 
   const handleDelete = async (planId) => {
     Swal.fire({
-      title: 'Are you sure?',
+      title: "Are you sure?",
       text: "This action cannot be undone!",
-      icon: 'warning',
+      icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: '#d33',
-      cancelButtonColor: '#3085d6',
-      confirmButtonText: 'Yes, delete it!',
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, delete it!",
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
@@ -64,14 +94,14 @@ const PlansTable = ({ plans, handleSorting, sortConfig }) => {
           });
 
           if (response.data.success) {
-            Swal.fire('Deleted!', 'The plan has been deleted.', 'success');
-            // Optionally, you can refresh the plans or call a parent method to update the table.
+            Swal.fire("Deleted!", "The plan has been deleted.", "success");
+            // Optionally, refresh plans or call a parent method to update the table.
           } else {
-            Swal.fire('Error!', 'Failed to delete the plan.', 'error');
+            Swal.fire("Error!", "Failed to delete the plan.", "error");
           }
         } catch (error) {
           console.error(error);
-          Swal.fire('Error!', 'An error occurred while deleting the plan.', 'error');
+          Swal.fire("Error!", "An error occurred while deleting the plan.", "error");
         } finally {
           setLoading(false);
         }
@@ -79,18 +109,73 @@ const PlansTable = ({ plans, handleSorting, sortConfig }) => {
     });
   };
 
+  // Define the list of fields to display with their corresponding labels.
+  // Only fields present in the backend response (i.e. with a value) will be rendered.
+  const planFields = [
+    { key: "created_by", label: "አቃጅ" },
+    { key: "department_name", label: "ስራ ክፍል" },
+    { key: "goal_name", label: "ግብ" },
+    { key: "objective_name", label: "አላማ" },
+    { key: "specific_objective_name", label: "ውጤት" },
+    { key: "specific_objective_detailname", label: "ዝርዝር ተገባር" },
+    { key: "measurement", label: "መለኪያ በ %" },
+    { key: "details", label: "መግለጫ" },
+    { key: "baseline", label: "መነሻ በ %" },
+    { key: "plan", label: "እቅድ በ %" },
+    { key: "outcome", label: "ክንዉን" },
+    { key: "execution_percentage", label: "ክንዉን በ %" },
+    { key: "created_at", label: "Created At" },
+    { key: "updated_at", label: "Updated At" },
+    { key: "year", label: "አመት" },
+    { key: "month", label: "ወር" },
+    { key: "day", label: "Day" },
+    { key: "deadline", label: "ማጠናቀቂያ ቀን" },
+    { key: "status", label: "Status" },
+    { key: "priority", label: "ቅድሚያ" },
+    { key: "የ እቅዱ ሂደት", label: "የ እቅዱ ሂደት" },
+    { key: "plan_type", label: "የ እቅዱ አይነት" },
+    { key: "income_exchange", label: "ምናዘሬው" },
+    { key: "cost_type", label: "የ ወጪው አይነት" },
+    { key: "employment_type", label: "የ ቅጥር ሁኔታ" },
+    { key: "incomeName", label: "የ ገቢው ስም" },
+    { key: "costName", label: "የ ወጪው ስም" },
+    { key: "CIbaseline", label: "መነሻ" },
+    { key: "CIplan", label: "እቅድ" },
+    { key: "CIoutcome", label: "ክንውን በቁጥር" },
+  ];
+
+  // Helper to format dates if the field appears to be a date.
+  const formatValue = (key, value) => {
+    if (!value) return value;
+    if (["created_at", "updated_at", "deadline"].includes(key)) {
+      return new Date(value).toLocaleString();
+    }
+    return value;
+  };
+
   return (
     <div>
       <table className="table table-striped">
         <thead>
           <tr>
-            <th onClick={() => handleSorting("Department")}>Department {getSortIcon("Department")}</th>
-            <th onClick={() => handleSorting("Year")}>Year {getSortIcon("Year")}</th>
+            <th onClick={() => handleSorting("Department")}>
+              Department {getSortIcon("Department")}
+            </th>
+            <th onClick={() => handleSorting("Year")}>
+              Year {getSortIcon("Year")}
+            </th>
             <th>Quarter</th>
-            <th onClick={() => handleSorting("Goal")}>Goal {getSortIcon("Goal")}</th>
-            <th onClick={() => handleSorting("Objective")}>Objective {getSortIcon("Objective")}</th>
-            <th onClick={() => handleSorting("SpecificObjective")}>Specific Objective {getSortIcon("SpecificObjective")}</th>
-            <th onClick={() => handleSorting("SpecificObjective")}>Action {getSortIcon("SpecificObjective")}</th>
+            <th onClick={() => handleSorting("Goal")}>
+              Goal {getSortIcon("Goal")}
+            </th>
+            <th onClick={() => handleSorting("Objective")}>
+              Objective {getSortIcon("Objective")}
+            </th>
+            <th onClick={() => handleSorting("SpecificObjective")}>
+              Specific Objective {getSortIcon("SpecificObjective")}
+            </th>
+           
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -102,18 +187,27 @@ const PlansTable = ({ plans, handleSorting, sortConfig }) => {
                 <td>{plan.Quarter || "N/A"}</td>
                 <td>{plan.Goal || "N/A"}</td>
                 <td>{plan.Objective || "N/A"}</td>
-                
                 <td>{plan.SpecificObjective || "N/A"}</td>
                
                 <td>
                   
-                  <button onClick={() => fetchPlanDetail(plan.Plan_ID)} className="btn btn-secondary btn-sm">Details</button>
+                  
+                  
+                  
+                  <button
+                    onClick={() => fetchPlanDetail(plan.Plan_ID)}
+                    className="btn btn-secondary btn-sm"
+                  >
+                    Details
+                  </button>
                 </td>
               </tr>
             ))
           ) : (
             <tr>
-              <td colSpan="7" className="text-center">No plans found.</td>
+              <td colSpan="8" className="text-center">
+                No plans found.
+              </td>
             </tr>
           )}
         </tbody>
@@ -122,27 +216,18 @@ const PlansTable = ({ plans, handleSorting, sortConfig }) => {
       {showDetail && planDetail && (
         <div className="plan-detail-box">
           <h3>Plan Details</h3>
-          <p><strong>Department:</strong> {planDetail.Department}</p>
-          <p><strong>ግብ:</strong> {planDetail.Goal_Name}</p>
-          <p><strong>አላማ:</strong> {planDetail.Objective_Name}</p>
-          <p><strong>የ አላማው ውጤት </strong> {planDetail.Specific_Objective_Name}</p>
-          <p><strong>Specific Objective Detail:</strong> {planDetail.Specific_Objective_Detail}</p>
-          <p><strong>Details:</strong> {planDetail.Details}</p>
-          <p><strong>Measurement:</strong> {planDetail.Measurement}</p>
-          <p><strong>Baseline:</strong> {planDetail.Baseline}</p>
-          <p><strong>Plan:</strong> {planDetail.Plan}</p>
-          <p><strong>Description:</strong> {planDetail.Description}</p>
-          <p><strong>Status:</strong> {planDetail.Status}</p>
-          <p><strong>Comment:</strong> {planDetail.Comment}</p>
-          <p><strong>Created At:</strong> {new Date(planDetail.Created_At).toLocaleString()}</p>
-          <p><strong>Updated At:</strong> {new Date(planDetail.Updated_At).toLocaleString()}</p>
-          <p><strong>Year:</strong> {planDetail.Year}</p>
-          <p><strong>ሩብ አመት:</strong> {planDetail.Quarter}</p>
-          <p><strong>Created By:</strong> {planDetail.Created_By}</p>
-          <p><strong>Progress:</strong> {planDetail.Progress}</p>
-          <p><strong>Deadline:</strong> {planDetail.Deadline}</p>
-
-          <button onClick={closePlanDetails} className="btn btn-primary">Close</button>
+          {planFields.map(
+            ({ key, label }) =>
+              planDetail[key] !== undefined &&
+              planDetail[key] !== "" && (
+                <p key={key}>
+                  <strong>{label}:</strong> {formatValue(key, planDetail[key])}
+                </p>
+              )
+          )}
+          <button onClick={closePlanDetails} className="btn btn-primary">
+            Close
+          </button>
         </div>
       )}
 

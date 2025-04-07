@@ -29,7 +29,7 @@ const PlansTable = ({ plans, handleSorting, sortConfig }) => {
     console.log("Rendering progress bar with percentage:", percentage);
     return (
       <div>
-        <strong>Execution:</strong> {percentage}%
+      
         <div className="progress mt-2" style={{ height: "20px", width: "100%" }}>
           <div
             className={`progress-bar ${getProgressBarColor(percentage)}`}
@@ -174,7 +174,7 @@ const PlansTable = ({ plans, handleSorting, sortConfig }) => {
             <th onClick={() => handleSorting("SpecificObjective")}>
               Specific Objective {getSortIcon("SpecificObjective")}
             </th>
-            <th>Execution</th>
+           
             <th>Actions</th>
           </tr>
         </thead>
@@ -188,26 +188,10 @@ const PlansTable = ({ plans, handleSorting, sortConfig }) => {
                 <td>{plan.Goal || "N/A"}</td>
                 <td>{plan.Objective || "N/A"}</td>
                 <td>{plan.SpecificObjective || "N/A"}</td>
+                
                 <td>
-      {plan.execution_percentage !== undefined ? (
-        <ExecutionProgressBar percentage={plan.execution_percentage} />
-      ) : (
-        "N/A"
-      )}
-    </td>
-                <td>
-                  <Link
-                    to={`update/${plan.Plan_ID}`}
-                    className="btn btn-primary btn-sm me-1"
-                  >
-                    Update
-                  </Link>
-                  <button
-                    onClick={() => handleDelete(plan.Plan_ID)}
-                    className="btn btn-danger btn-sm me-1"
-                  >
-                    Delete
-                  </button>
+ 
+    
                   <Link
                     to={`add-report/${plan.Plan_ID}`}
                     className="btn btn-info btn-sm me-1"

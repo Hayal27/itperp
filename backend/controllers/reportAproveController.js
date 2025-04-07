@@ -287,7 +287,7 @@ const updateReportStatus = async (req, res) => {
 
                     return res.status(200).json({
                       success: true,
-                      message: "Plan approved and forwarded to the next supervisor.",
+                      message: "approved",
                     });
                   });
                 });

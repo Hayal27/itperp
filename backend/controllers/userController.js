@@ -139,10 +139,38 @@ const deleteUser = (req, res) => {
     console.log("User deleted successfully, user_id:", user_id);
     res.json({ message: "User deleted successfully" });
   });
+
 };
 
-// Get user role for current user (using req.user_id from middleware)
-const getUserRoles = (req, res) => {
+
+const changeStatus = async (status, user_id) => {
+  try {
+    const response = await fetch(`http://192.168.56.1:5000/api/users/${user_id}/status`, {
+      method: "PUT",
+      headers: { "Content-type": "application/json" },
+      body: JSON.stringify({ status }),
+    });
+
+    const data = await response.json(); // Parse the response
+    console.log('API Response:', data); // Log the API response for debugging
+
+    if (response.ok) {
+      const action = status === 1 ? 'activated' : 'deactivated';
+      setModalMessage(`User has been successfully ${action}.`);
+      setShowModal(true);
+      fetchUsers(); // Refresh users after status change
+    } else {
+      setModalMessage(data.message || 'Error changing user status. Please try again.');
+      setShowModal(true);
+    }
+  } catch (error) {
+    console.log("Error changing status:", error);
+    setModalMessage('Error changing user status. Please try again.');
+    setShowModal(true);
+  }
+};
+
+const getUserRoles = async (req, res) => {
   try {
     const user_id = req.user_id;
     if (!user_id) {

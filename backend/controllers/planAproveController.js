@@ -170,7 +170,6 @@ const getSubmittedPlans = async (req, res) => {
 
 
 
-
 const getSubmittedreports = async (req, res) => {
   const token = req.headers["authorization"]?.split(" ")[1];
   if (!token) {
@@ -183,9 +182,9 @@ const getSubmittedreports = async (req, res) => {
 
   try {
     const user_id = await verifyToken(token);
-    // Get employee_id from the users table using user_id
+
     const getEmployeeQuery = "SELECT employee_id FROM users WHERE user_id = ?";
-    con.query(getEmployeeQuery, [user_id], async (err, results) => {
+    con.query(getEmployeeQuery, [user_id], (err, results) => {
       if (err) {
         return res.status(500).json({
           success: false,
@@ -205,8 +204,6 @@ const getSubmittedreports = async (req, res) => {
 
       const supervisor_id = results[0].employee_id;
 
-      // Extended query to fetch additional attributes from sod and related tables.
-      // Fixed the SQL query by removing the semicolon and conflicting condition for aw.status.
       const query = `
         SELECT 
           p.plan_id,
@@ -247,7 +244,9 @@ const getSubmittedreports = async (req, res) => {
           p.goal_id,
           o.name AS objective_name,
           g.name AS goal_name,
-          so.specific_objective_name
+          so.specific_objective_name,
+          rf.file_name,
+          rf.file_path
         FROM plans p
         JOIN ApprovalWorkflow aw ON p.plan_id = aw.plan_id
         JOIN departments d ON p.department_id = d.department_id
@@ -255,10 +254,11 @@ const getSubmittedreports = async (req, res) => {
         JOIN specific_objectives so ON p.specific_objective_id = so.specific_objective_id
         JOIN goals g ON p.goal_id = g.goal_id
         JOIN specific_objective_details sod ON p.specific_objective_detail_id = sod.specific_objective_detail_id
+        LEFT JOIN reportfile rf ON sod.specific_objective_detail_id = rf.specific_objective_id
         WHERE p.supervisor_id = ? 
           AND aw.approver_id = ? 
           AND aw.status = 'Pending'
-          AND aw.report_status = 'pending';
+          AND aw.report_status = 'pending'
       `;
 
       con.query(query, [supervisor_id, supervisor_id], (err, results) => {
@@ -279,12 +279,35 @@ const getSubmittedreports = async (req, res) => {
           });
         }
 
-        // Filter out any columns that have null values from each row.
-        const filteredResults = results.map(row =>
-          Object.fromEntries(Object.entries(row).filter(([key, value]) => value !== null))
-        );
+        const groupedPlans = {};
+        results.forEach(row => {
+          const planId = row.plan_id;
+          const fullFilePath = row.file_path ? `${req.protocol}://${req.get("host")}${row.file_path}` : null;
 
-        res.json({ success: true, plans: filteredResults });
+          if (!groupedPlans[planId]) {
+            const { file_name, file_path, ...planData } = row;
+            groupedPlans[planId] = {
+              ...planData,
+              files: []
+            };
+            if (file_name && fullFilePath) {
+              groupedPlans[planId].files.push({
+                file_name,
+                file_path: fullFilePath
+              });
+            }
+          } else {
+            if (row.file_name && fullFilePath) {
+              groupedPlans[planId].files.push({
+                file_name: row.file_name,
+                file_path: fullFilePath
+              });
+            }
+          }
+        });
+
+        const finalResults = Object.values(groupedPlans);
+        res.json({ success: true, plans: finalResults });
       });
     });
   } catch (error) {
@@ -295,6 +318,7 @@ const getSubmittedreports = async (req, res) => {
     });
   }
 };
+
 
 
 
@@ -439,7 +463,7 @@ const updatePlanStatus = async (req, res) => {
 
                     return res.status(200).json({
                       success: true,
-                      message: "Plan approved and forwarded to the next supervisor.",
+                      message: "approved",
                     });
                   });
                 });
@@ -664,7 +688,7 @@ const updateReportStatus = async (req, res) => {
 
                     return res.status(200).json({
                       success: true,
-                      message: "Plan approved and forwarded to the next supervisor.",
+                      message: "approved",
                     });
                   });
                 });
@@ -1037,7 +1061,7 @@ const updatePlanApprovalStatus = async (req, res) => {
               }
               return res.status(200).json({
                 success: true,
-                message: "Plan approved with updated supervisor."
+                message: "approved"
               });
             });
           } else if (status === "Declined") {

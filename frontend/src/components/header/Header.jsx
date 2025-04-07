@@ -6,7 +6,7 @@ import logo from "../../assets/img/android-chrome-512x512-1.png";
 import { useAuth } from "../Auths/AuthContex";
 import '../../assets/css/magic-tooltip.css';
 
-const BACKEND_URL = "http://192.168.56.1:5000";
+const BACKEND_URL = "http://192.168.56.1:5000";  // Base URL for backend
 
 const Header = () => {
   const { state, dispatch } = useAuth();

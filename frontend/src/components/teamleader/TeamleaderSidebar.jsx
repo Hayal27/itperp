@@ -198,12 +198,7 @@ function TeamleaderSidebar() {
                 </Link>
               </li>
 
-              <li>
-                <Link to='/report/TeamleaderViewDeclinedReport' className="nav-link">
-                  <i className="bi bi-eye" />
-                  <span>Declined Report</span>
-                </Link>
-              </li>
+   
 
 
 

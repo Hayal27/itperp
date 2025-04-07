@@ -9,6 +9,7 @@ const {getAllPlansDeclined,getApprovedOrgPlans, getPlanDetail,getAllOrgPlans,get
 const {getGoals,getGoalById,getObjectiveById,getObjectivesByGoals,getspesificObjectivesByGoals,getGoal, getPlansBySpecificGoal} = require("../controllers/planDetailFetchController");
 const {getProfilePic,getSpecificGoal,getSpesificObjectives,getdepartment,getUserRoles} = require("../controllers/planget");
 const { addGoals, addObjectives, addSpecificObjectives, addspecificObjectiveDetails} =require("../controllers/planDtailedController")
+const {upload} = require("../middleware/upload");
 
 // profile pic
 const { getProfilePicture,uploadProfilePicture} =require("../controllers/profileUploadController")
@@ -18,7 +19,7 @@ router.get("/plandeclined", verifyToken, getAllPlansDeclined); // GET /api/plan
 router.get("/planorg", verifyToken, getAllOrgPlans);
 router.delete("/plandelete/:planId",verifyToken, deletePlan); // DELETE /api/plan/:planId
 router.put("/planupdate/:planId",verifyToken, updatePlan); // PUT /api/plan/:planId
-router.put("/addReport/:planId",verifyToken, addReport); // PUT /api/plan/:planId
+router.put("/addReport/:planId", verifyToken, upload.array("files"), addReport);
 
 router.get("/planget/:planId", verifyToken, getPlanById);
 router.get("/pland/:id", verifyToken, getPlanDetail);

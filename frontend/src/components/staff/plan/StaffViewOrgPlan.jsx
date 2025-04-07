@@ -45,7 +45,7 @@ const StaffViewPlan = () => {
         setErrorMessage("No plans found.");
       }
     } catch (error) {
-      setErrorMessage("Failed to fetch plans.");
+      setErrorMessage("የተገኘ እቅድ ወይም ሪፖርት የለም");
       console.error(error);
     } finally {
       setLoading(false);
