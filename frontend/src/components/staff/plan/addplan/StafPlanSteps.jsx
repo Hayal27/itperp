@@ -8,7 +8,7 @@ import Step5Review from "./Step5Review"; // Review and submission step
 import "../../../../assets/css/objective.css";
 import Swal from "sweetalert2"; // SweetAlert2 for popups
 
-const PlanSteps = () => {
+const StafPlanSteps = () => {
   const [step, setStep] = useState(1); // Current step in the process
   const [goal, setGoal] = useState(null); // Holds selected goal
   const [objective, setObjective] = useState(null); // Holds selected objective
@@ -199,4 +199,4 @@ const PlanSteps = () => {
   );
 };
 
-export default PlanSteps;
+export default StafPlanSteps;

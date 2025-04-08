@@ -112,8 +112,8 @@ const PlanStep3SpecificObjective = ({ objectiveId, token, onBack, onNext }) => {
       );
 
       Swal.fire({
-        title: "Specific Objective Created",
-        text: "Your new specific objective has been successfully created!",
+        title: "በተገቢው ተከናውኗል",
+        text: "አዲስ ውጤት በተገቢው ፈጥረዋል!",
         icon: "success",
         confirmButtonText: "OK",
       });
@@ -142,7 +142,7 @@ const PlanStep3SpecificObjective = ({ objectiveId, token, onBack, onNext }) => {
 
       {/* Search Bar */}
       <div className="mb-3">
-        <label htmlFor="search">Search Specific Objectives:</label>
+        <label htmlFor="search">ውጤት ይፈልጉ:</label>
         <div className="input-group">
           <input
             type="text"
@@ -225,10 +225,10 @@ const PlanStep3SpecificObjective = ({ objectiveId, token, onBack, onNext }) => {
             className="form-control"
           >
             <option value="">Select View</option>
-            <option value="1">Financial View</option>
-            <option value="2">Customer View</option>
-            <option value="3">Internal Process View</option>
-            <option value="4">Learning & Growth View</option>
+            <option value="የፋይናንስ ዕይታ">የፋይናንስ ዕይታ</option>
+            <option value="የተገሌጋይ ዕይታ">የተገሌጋይ ዕይታ</option>
+            <option value="የውስጥ አሰራር ዕይታ">የውስጥ አሰራር ዕይታ</option>
+            <option value="የመማማርና ዕዴገት ዕይታ">የመማማርና ዕዴገት ዕይታ</option>
           </select>
         </div>
       </div>

@@ -235,7 +235,7 @@ const Step4SpecificObjectiveDetails = ({ specificObjectiveId, token, onBack, onN
         { ...newDetail, id: createdDetailId },
       ]);
   
-      Swal.fire("Success", "Detail created successfully!", "success");
+      Swal.fire("Success", "በተገቢው አዲስ የውጤት ዝርዝር መዝገበዋል!", "መዝግበዋል");
       setNewDetail({ ...defaultDetailValues });
     } catch (err) {
       console.error("Error occurred:", err);
@@ -403,7 +403,7 @@ const Step4SpecificObjectiveDetails = ({ specificObjectiveId, token, onBack, onN
   
                 <div className="ci-fields">
                   <div className="form-field">
-                    <label htmlFor="CIbaseline" className="form-label">Baseline</label>
+                    <label htmlFor="CIbaseline" className="form-label">እቅድ በቁጥር</label>
                     <input
                       id="CIbaseline"
                       type="number"
@@ -420,7 +420,7 @@ const Step4SpecificObjectiveDetails = ({ specificObjectiveId, token, onBack, onN
                     />
                   </div>
                   <div className="form-field">
-                    <label htmlFor="CIplan" className="form-label">Plan</label>
+                    <label htmlFor="CIplan" className="form-label">መነሻ በቁጥር</label>
                     <input
                       id="CIplan"
                       type="number"
@@ -498,7 +498,7 @@ const Step4SpecificObjectiveDetails = ({ specificObjectiveId, token, onBack, onN
   
                 <div className="ci-fields">
                   <div className="form-field">
-                    <label htmlFor="CIbaseline" className="form-label">Baseline</label>
+                    <label htmlFor="CIbaseline" className="form-label">እቅድ በቁጥር</label>
                     <input
                       id="CIbaseline"
                       type="number"
@@ -515,7 +515,7 @@ const Step4SpecificObjectiveDetails = ({ specificObjectiveId, token, onBack, onN
                     />
                   </div>
                   <div className="form-field">
-                    <label htmlFor="CIplan" className="form-label">Plan</label>
+                    <label htmlFor="CIplan" className="form-label">መነሻ በቁጥር</label>
                     <input
                       id="CIplan"
                       type="number"
@@ -556,7 +556,7 @@ const Step4SpecificObjectiveDetails = ({ specificObjectiveId, token, onBack, onN
             
             <div className="ci-fields">
               <div className="form-field">
-                <label htmlFor="CIbaseline" className="form-label">Baseline</label>
+                <label htmlFor="CIbaseline" className="form-label">እቅድ በቁጥር</label>
                 <input
                   id="CIbaseline"
                   type="number"
@@ -573,7 +573,7 @@ const Step4SpecificObjectiveDetails = ({ specificObjectiveId, token, onBack, onN
                 />
               </div>
               <div className="form-field">
-                <label htmlFor="CIplan" className="form-label">Plan</label>
+                <label htmlFor="CIplan" className="form-label">መነሻ በቁጥር</label>
                 <input
                   id="CIplan"
                   type="number"
@@ -623,10 +623,7 @@ const Step4SpecificObjectiveDetails = ({ specificObjectiveId, token, onBack, onN
             >
               <option value="">⬇️ Select Measurement</option>
               <option value="present">Present</option>
-              <option value="USD">USD</option>
-              <option value="ETB">ETB</option>
               <option value="performance">Performance</option>
-              <option value="number">Number</option>
             </select>
           </div>
   

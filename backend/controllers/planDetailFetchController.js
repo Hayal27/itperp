@@ -145,7 +145,7 @@ const getspesificObjectivesByGoals = (req, res) => {
     SELECT 
       specific_objective_id,    -- Update to the correct column name
       objective_id, 
-      specific_objective_name
+      specific_objective_name, view
     FROM specific_objectives
     WHERE objective_id = ? 
   `;
