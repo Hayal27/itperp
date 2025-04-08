@@ -39,7 +39,7 @@ const EmployeeRegistration = () => {
         console.error("Error fetching departments:", error);
       }
     };
-
+   
     const fetchSupervisors = async () => {
       try {
         const response = await Axios.get("http://192.168.56.1:5000/api/supervisors");
