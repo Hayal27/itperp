@@ -8,11 +8,19 @@ const util = require('util');
 
 const updateUser = async (req, res) => {
   const { user_id } = req.params;
-  // Expecting role_id (not role_name) since the users table only has role_id field.
-  const { fname, lname, user_name, phone, department_id, role_id } = req.body;
+  // Expecting role_id from the req.body as a number (or numeric string)
+  // Also accepting supervisor_id for optionally updating the supervisor field
+  const { fname, lname, user_name, phone, department_id, role_id, supervisor_id } = req.body;
+  
+  // Convert role_id to an integer and check validity (if needed)
+  const parsedRoleID = parseInt(role_id, 10);
+  if (isNaN(parsedRoleID)) {
+    console.error("Invalid role_id provided:", role_id);
+    return res.status(400).json({ message: "Invalid role_id provided" });
+  }
   
   try {
-    // Promisify the query method for async/await usage
+    // Promisify the query function for async/await usage
     const query = util.promisify(con.query).bind(con);
     
     // Retrieve the employee_id from the users table
@@ -23,29 +31,39 @@ const updateUser = async (req, res) => {
     }
     const employee_id = usersData[0].employee_id;
     
-    // If an employee_id exists, update the employees table for employee details
+    // Log for debugging to verify the parsed role id
+    console.log(`Updating user_id ${user_id} with role_id ${parsedRoleID}`);
+    
+    // Update the employees table for personal details, including optional supervisor_id
     if (employee_id) {
-      await query(
-        "UPDATE employees SET fname = ?, lname = ?, phone = ?, department_id = ? WHERE employee_id = ?",
-        [fname, lname, phone, department_id, employee_id]
+      const empResult = await query(
+        "UPDATE employees SET fname = ?, lname = ?, phone = ?, department_id = ?, supervisor_id = ? WHERE employee_id = ?",
+        [fname, lname, phone, department_id, supervisor_id || null, employee_id]
       );
-      console.log("Employee details updated for employee_id:", employee_id);
+      console.log("Employee update result for employee_id:", employee_id, empResult);
     }
     
-    // Update the users table with account details (user_name and role_id)
-    await query(
+    // Update the users table with account details - updating the role_id.
+    const userResult = await query(
       "UPDATE users SET user_name = ?, role_id = ? WHERE user_id = ?",
-      [user_name, role_id, user_id]
+      [user_name, parsedRoleID, user_id]
     );
-    console.log("User account updated for user_id:", user_id);
+    console.log("User update result:", userResult);
     
+    // Check if the role update affected any rows. If not, log and return error message.
+    if (userResult.affectedRows === 0) {
+      const errorMsg = `No rows were updated for the user_id ${user_id}. This might mean the provided role_id ${parsedRoleID} is invalid or unchanged.`;
+      console.error(errorMsg);
+      return res.status(400).json({ message: errorMsg });
+    }
+    
+    console.log("User account updated for user_id:", user_id);
     res.status(200).json({ message: "User updated successfully" });
   } catch (error) {
     console.error("Error updating user:", error);
     res.status(500).json({ message: "Error updating user", error: error.message });
   }
 };
-
 
 
 

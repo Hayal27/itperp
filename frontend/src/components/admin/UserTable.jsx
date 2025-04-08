@@ -1,12 +1,12 @@
-
 import Axios from 'axios';
 import React, { useEffect, useState } from 'react';
 
 const UserTable = () => {
-  // State for users, roles, and departments
+  // State for users, roles, departments, and supervisors
   const [users, setUsers] = useState([]);
   const [roles, setRoles] = useState([]);
   const [departments, setDepartments] = useState([]);
+  const [supervisors, setSupervisors] = useState([]);
 
   // State for modal feedback (for status changes)
   const [showModal, setShowModal] = useState(false);
@@ -21,7 +21,8 @@ const UserTable = () => {
     user_name: '',
     phone: '',
     department_id: '',
-    role_name: ''
+    role_id: '', // Changed from role_name to role_id
+    supervisor_id: '' // supervisor update field remains unchanged
   });
 
   // Pagination and searching state
@@ -68,6 +69,18 @@ const UserTable = () => {
       });
   };
 
+  // Fetch supervisors from backend
+  const fetchSupervisors = () => {
+    Axios.get("http://192.168.56.1:5000/api/supervisors")
+      .then((res) => {
+        console.log("Fetched supervisors data:", res.data);
+        setSupervisors(res.data);
+      })
+      .catch((err) => {
+        console.error("Error fetching supervisors:", err);
+      });
+  };
+
   // Change user status and log response/error to console
   const changeStatus = async (status, user_id) => {
     try {
@@ -102,8 +115,9 @@ const UserTable = () => {
       lname: user.lname || '',
       user_name: user.user_name || '',
       phone: user.phone || '',
-      department_id: user.department_id || '',
-      role_name: user.role_name || ''
+      department_id: user.department_id || '', // Optional update
+      role_id: user.role_id || '', // Updated to use role_id from user object
+      supervisor_id: user.supervisor_id || '' // Added supervisor update field
     });
     setShowUpdateModal(true);
   };
@@ -135,6 +149,7 @@ const UserTable = () => {
     fetchUsers();
     fetchRoles();
     fetchDepartments();
+    fetchSupervisors();
   }, []);
 
   // Create lookup object for roles and departments for easy display
@@ -148,6 +163,12 @@ const UserTable = () => {
     departmentLookup[dept.department_id] = dept.name;
   });
 
+  // Create lookup object for supervisors
+  const supervisorLookup = {};
+  supervisors.forEach((supervisor) =>  {
+    supervisorLookup[supervisor.employee_id] = supervisor.name;
+  });
+  
   // Handle search input change
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
@@ -167,7 +188,7 @@ const UserTable = () => {
   const filteredUsers = users.filter(user => {
     const searchLower = searchTerm.toLowerCase();
     return (
-      user.name.toLowerCase().includes(searchLower) ||
+      user.fname.toLowerCase().includes(searchLower) ||
       user.lname.toLowerCase().includes(searchLower) ||
       user.user_name.toLowerCase().includes(searchLower)
     );
@@ -256,7 +277,7 @@ const UserTable = () => {
                           <td>{user.phone}</td>
                           <td>{roleLookup[user.role_id] || "N/A"}</td>
                           <td>{departmentLookup[user.department_id] || "N/A"}</td>
-                          <td>{user.supervisor_name || "N/A"}</td>
+                          <td>{supervisorLookup[user.supervisor_id] || "N/A"}</td>
                           <td>
                             {user.status === 1 
                               ? <span className='text-success'>Active</span> 
@@ -347,19 +368,30 @@ const UserTable = () => {
                     </div>
                     <div className="form-group">
                       <label>Department</label>
-                      <select name="department_id" value={updateData.department_id} onChange={handleUpdateChange} className="form-control" required>
-                        <option value="">Select Department</option>
+                      <select name="department_id" value={updateData.department_id} onChange={handleUpdateChange} className="form-control">
+                        <option value="">Select Department (Optional)</option>
                         {departments.map(dept => (
                           <option key={dept.department_id} value={dept.department_id}>{dept.name}</option>
                         ))}
                       </select>
                     </div>
+
                     <div className="form-group">
-                      <label>Role</label>
-                      <select name="role_name" value={updateData.role_name} onChange={handleUpdateChange} className="form-control" required>
-                        <option value="">Select Role</option>
-                        {roles.map(role => (
-                          <option key={role.role_id} value={role.role_name}>{role.role_name}</option>
+    <label>Role</label>
+    <select name="role_id" value={updateData.role_id} onChange={handleUpdateChange} className="form-control" required>
+      <option value="">Select Role</option>
+      {roles.map(role => (
+        <option key={role.role_id} value={role.role_id}>{role.role_name}</option>
+      ))}
+    </select>
+  </div>
+
+                    <div className="form-group">
+                      <label>Supervisor</label>
+                      <select name="supervisor_id" value={updateData.supervisor_id} onChange={handleUpdateChange} className="form-control">
+                        <option value="">Select Supervisor (Optional)</option>
+                        {supervisors.map(sup => (
+                          <option key={sup.employee_id} value={sup.employee_id}>{sup.name}</option>
                         ))}
                       </select>
                     </div>
