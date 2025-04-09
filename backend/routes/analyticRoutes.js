@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const verifyToken = require('../middleware/verifyToken');
 const { 
+    HRPlanOutcomeDifferenceFulltime,
     displayTotalCost,
     displayTotalCostPlan,
     compareCostPlanOutcome,
@@ -15,7 +16,7 @@ const {
     compareIncomePlanOutcomeTotal,
     costPlanOutcomeDifferenceRegularBudget,
     costPlanOutcomeDifferenceCapitalBudget,
-    HRPlanOutcomeDifferenceFulltime
+    
     // costPlan_Outcome_difference_capital_budget,
     // compareCostCIplanAndCIoutcome,
     // compareCostCIexecutionPercentage,
@@ -26,6 +27,14 @@ const {
     // displayTotalHR,
     // compareTotalHRCIplanAndCIoutcome
 } = require("../controllers/analytics");
+
+
+
+
+// Human Resource 
+router.get("/hrPlanOutcomeDifferenceFulltime", verifyToken, HRPlanOutcomeDifferenceFulltime);
+
+
 
 
 // ROUTE TO GET TOTAL COST
@@ -44,10 +53,6 @@ router.get("/compareIncomePlanOutcomeUSD", verifyToken, compareIncomePlanOutcome
 router.get("/compareIncomePlanOutcomeTotal", verifyToken, compareIncomePlanOutcomeTotal);
 router.get("/costPlanOutcomeDifferenceRegularBudget", verifyToken, costPlanOutcomeDifferenceRegularBudget);
 router.get("/costPlanOutcomeDifferenceCapitalBudget", verifyToken, costPlanOutcomeDifferenceCapitalBudget);
-
-
-// Human Resource 
-router.get("/hrPlanOutcomeDifferenceFulltime", verifyToken, HRPlanOutcomeDifferenceFulltime);
 
 
 

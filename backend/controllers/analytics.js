@@ -655,6 +655,11 @@ const displayTotalHR = async (req, res) => {
 
 // HRPlanOutcomeDifference
 
+
+
+
+
+
 const HRPlanOutcomeDifferenceFulltime = async (req, res) => {
   try {
     // Retrieve joinClause and extraFilters from the request.
@@ -739,14 +744,12 @@ const HRPlanOutcomeDifferenceFulltime = async (req, res) => {
 
 
 
-
-
-
 module.exports = {
 
   //Human Resource analitics
-  HRPlanOutcomeDifferenceFulltime,
+  
   displayTotalCost,
+
   displayTotalCostPlan,
   compareCostPlanOutcome,
   displayTotalCostExcutionPercentage,
@@ -759,6 +762,8 @@ module.exports = {
   compareIncomePlanOutcomeTotal,
   costPlanOutcomeDifferenceRegularBudget,
   costPlanOutcomeDifferenceCapitalBudget,
+
+  HRPlanOutcomeDifferenceFulltime,
   
 //   compareCostCIplanAndCIoutcome,
 //   compareCostCIexecutionPercentage,
