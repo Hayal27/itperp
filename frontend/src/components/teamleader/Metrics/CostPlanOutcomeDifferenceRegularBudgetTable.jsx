@@ -3,29 +3,7 @@ import axios from "axios";
 import { API_BASE_URL } from "../services/constants";
 import DataTableComponent from "./DataTableComponent";
 
-/**
- * CostPlanOutcomeDifferenceRegularBudgetTable component fetches cost plan and outcome data
- * for the regular budget, processes the API response, and renders a data table.
- *
- * The component supports both legacy and new backend structures.
- *
- * Legacy Response:
- *   - total_cost_plan_regular
- *   - total_cost_outcome_regular
- *   - difference
- *
- * New Response:
- *   - data: an array of objects (each with costName, plan, outcome, difference)
- *   - totals: an object with totals for plan, outcome, and difference
- *
- * To apply filters, pass an object as the "filters" prop. The component converts these
- * filters to a query string to modify API calls accordingly. Ensure that the filter keys
- * match what the backend expects.
- *
- * Additional Tips:
- *   - Verify that the parent component sends a new filters object with new references.
- *   - Ensure filter keys exactly match what the backend expects.
- */
+
 const CostPlanOutcomeDifferenceRegularBudgetTable = ({ filters = {} }) => {
   const [backendData, setBackendData] = useState(null);
   const [categories, setCategories] = useState(null);

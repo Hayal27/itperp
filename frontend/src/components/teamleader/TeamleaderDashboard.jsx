@@ -12,12 +12,22 @@ import CostPlanOutcomeDifferenceRegularBudgetTable from "./Metrics/CostPlanOutco
 import CostPlanOutcomeDifferenceCapitalBudgetTable from "./Metrics/CostPlanOutcomeDifferenceCapitalBudgetTable";
 import CostPlanOutcomeDifferenceCapitalBudget from "./Metrics/CostPlanOutcomeDifferenceCapitalBudget";
 import CostPlanOutcomeDifferenceCapitalBudgetPieChart from "./Metrics/CostPlan_Outcome_difference_capital_budget_pichart";
+
+// human resource metrics
+// import HrMetricsBarchart from "./Metrics/HrMetricsBarchart";
+// import HrMetricsPichart from "./Metrics/HrMetricsPichart";
+// import HrMetricsDataTable from "./Metrics/HrMetricsDataTable";
+import HRPlanOutcomeDifferenceFulltimeTable from "./Metrics/HRPlanOutcomeDifferenceFulltimeTable";
+// import HrPlan_Outcome_difference_fulltime_pichart from "./Metrics/HrPlan_Outcome_difference_fulltime_pichart";
+// import HrPlanOutcomeDifferenceContrat from "./Metrics/HrPlanOutcomeDifferenceContrat";
+// import HrPlanOutcomeDifferenceContratPieChart from "./Metrics/HrPlanOutcomeDifferenceContratPieChart";
+// import HrPlanOutcomeDifferenceContratTable from "./Metrics/HrPlanOutcomeDifferenceContratTable";
 import { fetchDashboardData } from "./services/dashboardService";
 import NotificationDisplay from "./NotificationDisplay";
 import ExportSelection from "./ExportSelection";
 import DashboardViewSelector from "./DashboardViewSelector";
 import styles from "./StaffDashboard.module.css";
-import TaskManagement from './TaskManagement';
+import TaskManagement from "./TaskManagement";
 
 /**
  * Helper function to decide if a chart/table type should be rendered
@@ -52,13 +62,17 @@ const IncomeMetricsSection = ({ data, viewFilter, incomeVisible, toggleVisibilit
           <div className={styles.chartsRow}>
             {shouldRender(viewFilter, "bar") && (
               <div className={styles.chartContainer}>
-                <h3><i className="fas fa-chart-bar animated-icon"></i> Total Income Summation (ETB & USD)</h3>
+                <h3>
+                  <i className="fas fa-chart-bar animated-icon"></i> Total Income Summation (ETB & USD)
+                </h3>
                 <IncomeMetricsBarchart data={data.extra.filteredIncomeMetrics || data} />
               </div>
             )}
             {shouldRender(viewFilter, "pi") && (
               <div className={styles.chartContainer}>
-                <h3><i className="fas fa-pie-chart animated-icon"></i> Income Breakdown</h3>
+                <h3>
+                  <i className="fas fa-pie-chart animated-icon"></i> Income Breakdown
+                </h3>
                 <IncomeMetricsPichart data={data.extra.filteredIncomeMetrics || data} />
               </div>
             )}
@@ -66,7 +80,9 @@ const IncomeMetricsSection = ({ data, viewFilter, incomeVisible, toggleVisibilit
           {/* Income Table */}
           {shouldRender(viewFilter, "tables") && (
             <div className={styles.dataTableContainer}>
-              <h2><i className="fas fa-table animated-icon"></i> የታቀደው/የተገኘው ገቢ በ ETB እና USD </h2>
+              <h2>
+                <i className="fas fa-table animated-icon"></i> የታቀደው/የተገኘው ገቢ በ ETB እና USD
+              </h2>
               <IncomeMetricsDataTable data={data.extra.filteredIncomeMetrics || data} />
             </div>
           )}
@@ -106,32 +122,36 @@ const CostMetricsSection = ({ data, viewFilter, costVisible, toggleVisibility, a
             {shouldRender(viewFilter, "bar") && (
               <>
                 <div className={styles.costChart}>
-                  <h4><i className="fas fa-chart-bar animated-icon"></i> Total Cost in ETB (millions birr)</h4>
+                  <h4>
+                    <i className="fas fa-chart-bar animated-icon"></i> Total Cost in ETB (millions birr)
+                  </h4>
                   <CostMetricsBarchart
-                    data={{
-                      total_cost: data.extra.filteredTotalCost || data.extra.displayTotalCost
-                    }}
+                    data={{ total_cost: data.extra.filteredTotalCost || data.extra.displayTotalCost }}
                     type="totalCost"
                   />
                 </div>
                 <div className={styles.costChart}>
-                  <h4><i className="fas fa-chart-bar animated-icon"></i> Total Cost Plan</h4>
+                  <h4>
+                    <i className="fas fa-chart-bar animated-icon"></i> Total Cost Plan
+                  </h4>
                   <CostMetricsBarchart
-                    data={{
-                      total_cost_plan: data.extra.filteredTotalCostPlan || data.extra.displayTotalCostPlan
-                    }}
+                    data={{ total_cost_plan: data.extra.filteredTotalCostPlan || data.extra.displayTotalCostPlan }}
                     type="totalCostPlan"
                   />
                 </div>
                 <div className={styles.costChart}>
-                  <h4><i className="fas fa-chart-bar animated-icon"></i> Compare Cost Plan vs Outcome</h4>
+                  <h4>
+                    <i className="fas fa-chart-bar animated-icon"></i> Compare Cost Plan vs Outcome
+                  </h4>
                   <CostMetricsBarchart
                     data={data.extra.filteredCompareCostPlanOutcome || data.extra.compareCostPlanOutcome}
                     type="compareCostPlanOutcome"
                   />
                 </div>
                 <div className={styles.costChart}>
-                  <h4><i className="fas fa-chart-bar animated-icon"></i> Total Cost Execution Percentage</h4>
+                  <h4>
+                    <i className="fas fa-chart-bar animated-icon"></i> Total Cost Execution Percentage
+                  </h4>
                   <CostMetricsBarchart
                     data={{
                       averageCostCIExecutionPercentage:
@@ -146,32 +166,36 @@ const CostMetricsSection = ({ data, viewFilter, costVisible, toggleVisibility, a
             {shouldRender(viewFilter, "pi") && (
               <>
                 <div className={styles.costChart}>
-                  <h4><i className="fas fa-pie-chart animated-icon"></i> Total Cost in ETB (millions birr)</h4>
+                  <h4>
+                    <i className="fas fa-pie-chart animated-icon"></i> Total Cost in ETB (millions birr)
+                  </h4>
                   <CostMetricsPichart
-                    data={{
-                      total_cost: data.extra.filteredTotalCost || data.extra.displayTotalCost
-                    }}
+                    data={{ total_cost: data.extra.filteredTotalCost || data.extra.displayTotalCost }}
                     type="totalCost"
                   />
                 </div>
                 <div className={styles.costChart}>
-                  <h4><i className="fas fa-pie-chart animated-icon"></i> Total Cost Plan</h4>
+                  <h4>
+                    <i className="fas fa-pie-chart animated-icon"></i> Total Cost Plan
+                  </h4>
                   <CostMetricsPichart
-                    data={{
-                      total_cost_plan: data.extra.filteredTotalCostPlan || data.extra.displayTotalCostPlan
-                    }}
+                    data={{ total_cost_plan: data.extra.filteredTotalCostPlan || data.extra.displayTotalCostPlan }}
                     type="totalCostPlan"
                   />
                 </div>
                 <div className={styles.costChart}>
-                  <h4><i className="fas fa-pie-chart animated-icon"></i> Compare Cost Plan vs Outcome</h4>
+                  <h4>
+                    <i className="fas fa-pie-chart animated-icon"></i> Compare Cost Plan vs Outcome
+                  </h4>
                   <CostMetricsPichart
                     data={data.extra.filteredCompareCostPlanOutcome || data.extra.compareCostPlanOutcome}
                     type="compareCostPlanOutcome"
                   />
                 </div>
                 <div className={styles.costChart}>
-                  <h4><i className="fas fa-pie-chart animated-icon"></i> Total Cost Execution Percentage</h4>
+                  <h4>
+                    <i className="fas fa-pie-chart animated-icon"></i> Total Cost Execution Percentage
+                  </h4>
                   <CostMetricsPichart
                     data={{
                       averageCostCIExecutionPercentage:
@@ -188,7 +212,9 @@ const CostMetricsSection = ({ data, viewFilter, costVisible, toggleVisibility, a
           {/* Cost Metrics Data Table */}
           {shouldRender(viewFilter, "tables") && (
             <div className={styles.dataTableContainer}>
-              <h2><i className="fas fa-table animated-icon"></i> ጠቅላላ የ ወጪ እቅድ</h2>
+              <h2>
+                <i className="fas fa-table animated-icon"></i> ጠቅላላ የ ወጪ እቅድ
+              </h2>
               <CostMetricsDataTable data={data} type="totalCostPlan" />
             </div>
           )}
@@ -236,6 +262,176 @@ const CostMetricsSection = ({ data, viewFilter, costVisible, toggleVisibility, a
   );
 };
 
+/**
+ * HR Metrics Section Component.
+ * Logs filtered HR data and renders HR charts, tables, and subsections.
+ */
+const HrMetricsSection = ({ data, viewFilter, hrVisible, toggleVisibility, appliedFilters }) => {
+  useEffect(() => {
+    if (data && data.extra) {
+      console.log("Filtered Full time Employee Data:", data.extra.filteredFulltime);
+      console.log("Filtered Total HR Data:", data.extra.filteredTotalHr);
+      console.log("Filtered Compare HrPlanOutcome Data:", data.extra.filteredCompareHrPlanOutcome);
+      console.log("Filtered Total HR Execution Percentage Data:", data.extra.filteredExecutionPercentage);
+    }
+  }, [data]);
+
+  return (
+    <div className={styles.metricGroup} id="hrMetrics">
+      <h3
+        className={styles.groupTitle}
+        onClick={toggleVisibility}
+        style={{ cursor: "pointer" }}
+      >
+        {hrVisible ? "⬆️" : "⬇️"} <i className="fas fa-chart-line animated-icon"></i> ሰው ሃብት
+      </h3>
+      {hrVisible && (
+        <>
+          {/* HR Charts for Total HR, HR Plan, and Comparison */}
+          <div className={styles.hrChartsRow}>
+            {/* {shouldRender(viewFilter, "bar") && (
+              <>
+                <div className={styles.hrChart}>
+                  <h4>
+                    <i className="fas fa-chart-bar animated-icon"></i> Total HR in ETB (millions birr)
+                  </h4>
+                  <HrMetricsBarchart
+                    data={{ total_hr: data.extra.filteredTotalHr || data.extra.displayTotalHr }}
+                    type="totalhr"
+                  />
+                </div>
+                <div className={styles.hrChart}>
+                  <h4>
+                    <i className="fas fa-chart-bar animated-icon"></i> Total HR Plan
+                  </h4>
+                  <HrMetricsBarchart
+                    data={{ total_hr_plan: data.extra.filteredTotalHrPlan || data.extra.displayTotalHrPlan }}
+                    type="totalHrPlan"
+                  />
+                </div>
+                <div className={styles.hrChart}>
+                  <h4>
+                    <i className="fas fa-chart-bar animated-icon"></i> Compare HR Plan vs Outcome
+                  </h4>
+                  <HrMetricsBarchart
+                    data={data.extra.filteredCompareHrPlanOutcome || data.extra.compareHrPlanOutcome}
+                    type="compareHrPlanOutcome"
+                  />
+                </div>
+                <div className={styles.hrChart}>
+                  <h4>
+                    <i className="fas fa-chart-bar animated-icon"></i> Total HR Execution Percentage
+                  </h4>
+                  <HrMetricsBarchart
+                    data={{
+                      averageHrCIExecutionPercentage:
+                        data.extra.filteredExecutionPercentage?.averageHrCIExecutionPercentage ||
+                        data.extra.displayTotalHrExcutionPercentage?.averageHrCIExecutionPercentage
+                    }}
+                    type="totalHrExcutionPercentage"
+                  />
+                </div>
+              </>
+            )} */}
+            {/* {shouldRender(viewFilter, "pi") && (
+              <>
+                <div className={styles.hrChart}>
+                  <h4>
+                    <i className="fas fa-pie-chart animated-icon"></i> Total HR in ETB (millions birr)
+                  </h4>
+                  <HrMetricsPichart
+                    data={{ total_hr: data.extra.filteredTotalHr || data.extra.displayTotalHr }}
+                    type="totalhr"
+                  />
+                </div>
+                <div className={styles.hrChart}>
+                  <h4>
+                    <i className="fas fa-pie-chart animated-icon"></i> Total HR Plan
+                  </h4>
+                  <HrMetricsPichart
+                    data={{ total_hr_plan: data.extra.filteredTotalHrPlan || data.extra.displayTotalHrPlan }}
+                    type="totalHrPlan"
+                  />
+                </div>
+                <div className={styles.hrChart}>
+                  <h4>
+                    <i className="fas fa-pie-chart animated-icon"></i> Compare HR Plan vs Outcome
+                  </h4>
+                  <HrMetricsPichart
+                    data={data.extra.filteredCompareHrPlanOutcome || data.extra.compareHrPlanOutcome}
+                    type="compareHrPlanOutcome"
+                  />
+                </div>
+                <div className={styles.hrChart}>
+                  <h4>
+                    <i className="fas fa-pie-chart animated-icon"></i> Total HR Execution Percentage
+                  </h4>
+                  <HrMetricsPichart
+                    data={{
+                      averageHrCIExecutionPercentage:
+                        data.extra.filteredExecutionPercentage?.averageHrCIExecutionPercentage ||
+                        data.extra.displayTotalHrExcutionPercentage?.averageHrCIExecutionPercentage
+                    }}
+                    type="totalHrExcutionPercentage"
+                  />
+                </div>
+              </>
+            )} */}
+          </div>
+
+          {/* HR Metrics Data Table */}
+          {/* {shouldRender(viewFilter, "tables") && (
+            <div className={styles.dataTableContainer}>
+              <h2>
+                <i className="fas fa-table animated-icon"></i> ጠቅላላ የ HR እቅድ
+              </h2>
+              <HrMetricsDataTable data={data} type="totalHrPlan" />
+            </div>
+          )} */}
+
+          {/* Full Time Section */}
+          <div className={styles.chartsRow}>
+            {shouldRender(viewFilter, "bar") && (
+              <div className={styles.chartContainer}>
+                <HRPlanOutcomeDifferenceFulltimeTable filters={appliedFilters} />
+              </div>
+            )}
+            {/* {shouldRender(viewFilter, "pi") && (
+              <div className={styles.chartContainer}>
+                <HrPlan_Outcome_difference_fulltime_pichart filters={appliedFilters} />
+              </div>
+            )} */}
+            {/* {shouldRender(viewFilter, "tables") && (
+              <div className={styles.chartContainer}>
+                <HrMetricsDataTable data={data} type="totalHrPlan" />
+              </div>
+            )} */}
+          </div>
+
+          {/* Contract Section */}
+          <div className={styles.chartsRow}>
+            {/* {shouldRender(viewFilter, "bar") && (
+              <div className={styles.chartContainer}>
+                <HrPlanOutcomeDifferenceContrat filters={appliedFilters} />
+              </div>
+            )} */}
+            {/* {shouldRender(viewFilter, "pi") && (
+              <div className={styles.chartContainer}>
+                <HrPlanOutcomeDifferenceContratPieChart filters={appliedFilters} />
+              </div>
+            )} */}
+            {/* {shouldRender(viewFilter, "tables") && (
+              <div className={styles.chartContainer}>
+                <HrPlanOutcomeDifferenceContratTable filters={appliedFilters} />
+              </div>
+            )} */}
+          </div>
+        </>
+      )}
+    </div>
+  );
+};
+
 const TeamleaderDashboard = () => {
   // The filter values typed into the form
   const [formFilters, setFormFilters] = useState({
@@ -259,6 +455,7 @@ const TeamleaderDashboard = () => {
   // Visibility states for collapsible sections
   const [incomeVisible, setIncomeVisible] = useState(true);
   const [costVisible, setCostVisible] = useState(true);
+  const [hrVisible, setHrVisible] = useState(true);
 
   // Reference for content (for export functionalities)
   const contentRef = useRef();
@@ -325,6 +522,13 @@ const TeamleaderDashboard = () => {
               toggleVisibility={() => setCostVisible(prev => !prev)}
               appliedFilters={appliedFilters}
             />
+            <HrMetricsSection
+              data={data}
+              viewFilter={viewFilter}
+              hrVisible={hrVisible}
+              toggleVisibility={() => setHrVisible(prev => !prev)}
+              appliedFilters={appliedFilters}
+            />
           </section>
 
           {/* Sidebar: Separated into independent container boxes */}
@@ -342,7 +546,9 @@ const TeamleaderDashboard = () => {
             {/* Ethiopian IT Park Info Container */}
             <div className={styles.sidebarContainer}>
               <div className={styles.sidebarSection}>
-                <h3><i className="fas fa-info-circle animated-icon"></i> Ethiopian IT Park Info</h3>
+                <h3>
+                  <i className="fas fa-info-circle animated-icon"></i> Ethiopian IT Park Info
+                </h3>
                 <table className={styles.infoTable}>
                   <thead>
                     <tr>

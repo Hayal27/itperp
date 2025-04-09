@@ -198,13 +198,13 @@ const Step4SpecificObjectiveDetails = ({ specificObjectiveId, token, onBack, onN
             day: newDetail.day.toString(),
             deadline: newDetail.deadline,
             plan_type: newDetail.planType || "default_plan",
-            cost_type: newDetail.costType || "default_cost",
-            income_exchange: newDetail.incomeExchange || "none",
-            employment_type: newDetail.employmentType || "unknown",
+            cost_type: newDetail.costType,
+            income_exchange: newDetail.incomeExchange,
+            employment_type: newDetail.employmentType,
             costName: newDetail.costName === "other" 
               ? newDetail.CustomcostName 
-              : newDetail.costName || "default_cost",
-            incomeName: newDetail.incomeName || "default_income",
+              : newDetail.costName,
+            incomeName: newDetail.incomeName,
             CIbaseline: newDetail.CIbaseline.toString(),
             CIplan: newDetail.CIplan,
             xzx: newDetail.xzx.toString()
@@ -230,12 +230,20 @@ const Step4SpecificObjectiveDetails = ({ specificObjectiveId, token, onBack, onN
         return;
       }
   
-      setSpecificObjectiveDetails((prevDetails) => [
-        ...prevDetails,
+      // Create the new updated array of details including the newly created detail.
+      const updatedDetails = [
+        ...specificObjectiveDetails,
         { ...newDetail, id: createdDetailId },
-      ]);
+      ];
   
-      Swal.fire("Success", "Detail created successfully!", "success");
+      setSpecificObjectiveDetails(updatedDetails);
+  
+      Swal.fire("Success", "Detail created successfully!", "success").then(() => {
+        // Automatically move to the next step after successful creation
+        onNext(updatedDetails);
+      });
+  
+      // Reset the newDetail state to default values
       setNewDetail({ ...defaultDetailValues });
     } catch (err) {
       console.error("Error occurred:", err);

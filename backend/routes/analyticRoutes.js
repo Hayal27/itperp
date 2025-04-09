@@ -14,7 +14,8 @@ const {
     compareIncomePlanOutcomeUSD,
     compareIncomePlanOutcomeTotal,
     costPlanOutcomeDifferenceRegularBudget,
-    costPlanOutcomeDifferenceCapitalBudget
+    costPlanOutcomeDifferenceCapitalBudget,
+    HRPlanOutcomeDifferenceFulltime
     // costPlan_Outcome_difference_capital_budget,
     // compareCostCIplanAndCIoutcome,
     // compareCostCIexecutionPercentage,
@@ -45,8 +46,8 @@ router.get("/costPlanOutcomeDifferenceRegularBudget", verifyToken, costPlanOutco
 router.get("/costPlanOutcomeDifferenceCapitalBudget", verifyToken, costPlanOutcomeDifferenceCapitalBudget);
 
 
-// router.get("/costPlan_Outcome_difference_capital_budget", verifyToken, costPlan_Outcome_difference_capital_budget);
-
+// Human Resource 
+router.get("/hrPlanOutcomeDifferenceFulltime", verifyToken, HRPlanOutcomeDifferenceFulltime);
 
 
 

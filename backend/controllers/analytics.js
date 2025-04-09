@@ -608,174 +608,7 @@ const compareIncomePlanOutcomeTotal = async (req, res) => {
   }
 };
 
-// Display Total HR with proper relationships
 
-
-
-
-
-// // Compare Cost CIplan and CIoutcome with proper relationships
-// const compareCostCIplanAndCIoutcome = async (req, res) => {
-//   try {
-//     if (!validatePeriodParams(req, res)) return;
-//     const { year, quarter } = req.query;
-
-//     const query = `
-//       SELECT 
-//         COALESCE(SUM(CASE WHEN sod.cost_type = 'CIplan' THEN sod.cost ELSE 0 END), 0) as total_CIplan,
-//         COALESCE(SUM(CASE WHEN sod.cost_type = 'CIoutcome' THEN sod.cost ELSE 0 END), 0) as total_CIoutcome
-//       ${BASE_JOIN}
-//       WHERE g.year = ? AND g.quarter = ?`;
-
-//     con.query(query, [year, quarter], (err, results) => {
-//       if (err) return handleDatabaseError(err, res, 'comparing costs');
-//       if (handleEmptyResults(results, res, { total_CIplan: 0, total_CIoutcome: 0 })) return;
-//       res.json(results[0]);
-//     });
-//   } catch (error) {
-//     console.error('Unexpected error in compareCostCIplanAndCIoutcome:', error);
-//     res.status(500).json({ message: "Internal server error", error: error.message });
-//   }
-// };
-
-
-
-
-
-// // Compare Cost CIexecution Percentage with proper relationships
-// const compareCostCIexecutionPercentage = async (req, res) => {
-//   try {
-//     if (!validatePeriodParams(req, res)) return;
-//     const { year, quarter } = req.query;
-
-//     const query = `
-//       SELECT 
-//         COALESCE(
-//           (SUM(CASE WHEN sod.cost_type = 'CIoutcome' THEN sod.cost ELSE 0 END) / 
-//            NULLIF(SUM(CASE WHEN sod.cost_type = 'CIplan' THEN sod.cost ELSE 0 END), 0) * 100
-//           ), 0
-//         ) as total_execution_percentage
-//       ${BASE_JOIN}
-//       WHERE g.year = ? AND g.quarter = ?`;
-
-//     con.query(query, [year, quarter], (err, results) => {
-//       if (err) return handleDatabaseError(err, res, 'calculating execution percentage');
-//       if (handleEmptyResults(results, res, { total_execution_percentage: 0 })) return;
-//       res.json(results[0]);
-//     });
-//   } catch (error) {
-//     console.error('Unexpected error in compareCostCIexecutionPercentage:', error);
-//     res.status(500).json({ message: "Internal server error", error: error.message });
-//   }
-// };
-
-
-
-
-
-// // Display Total Income with proper relationships
-// const displayTotalIncome = async (req, res) => {
-//   try {
-//     const query = `
-//       SELECT COALESCE(SUM(sod.income), 0) as total_income 
-//       ${BASE_JOIN}`;
-    
-//     con.query(query, (err, results) => {
-//       if (err) return handleDatabaseError(err, res, 'fetching total income');
-//       if (handleEmptyResults(results, res, { total_income: 0 })) return;
-//       res.json(results[0].total_income);
-//     });
-//   } catch (error) {
-//     console.error('Unexpected error in displayTotalIncome:', error);
-//     res.status(500).json({ message: "Internal server error", error: error.message });
-//   }
-// };
-
-// // Compare Total Income CIplan and CIoutcome with proper relationships
-// const compareTotalIncomeCIplanAndCIoutcome = async (req, res) => {
-//   try {
-//     if (!validatePeriodParams(req, res)) return;
-//     const { year, quarter } = req.query;
-
-//     const query = `
-//       SELECT 
-//         COALESCE(SUM(CASE WHEN sod.cost_type = 'CIplan' THEN sod.income ELSE 0 END), 0) as total_CIplan,
-//         COALESCE(SUM(CASE WHEN sod.cost_type = 'CIoutcome' THEN sod.income ELSE 0 END), 0) as total_CIoutcome
-//       ${BASE_JOIN}
-//       WHERE g.year = ? AND g.quarter = ?`;
-
-//     con.query(query, [year, quarter], (err, results) => {
-//       if (err) return handleDatabaseError(err, res, 'comparing income');
-//       if (handleEmptyResults(results, res, { total_CIplan: 0, total_CIoutcome: 0 })) return;
-//       res.json(results[0]);
-//     });
-//   } catch (error) {
-//     console.error('Unexpected error in compareTotalIncomeCIplanAndCIoutcome:', error);
-//     res.status(500).json({ message: "Internal server error", error: error.message });
-//   }
-// };
-
-
-
-
-// // Compare Income CIplan and CIoutcome by Period with proper relationships
-// const compareIncomeCIplanAndCIoutcomeByPeriod = async (req, res) => {
-//   try {
-//     const query = `
-//       SELECT 
-//         g.year,
-//         g.quarter,
-//         COALESCE(SUM(CASE WHEN sod.cost_type = 'CIplan' THEN sod.income ELSE 0 END), 0) as total_CIplan,
-//         COALESCE(SUM(CASE WHEN sod.cost_type = 'CIoutcome' THEN sod.income ELSE 0 END), 0) as total_CIoutcome
-//       ${BASE_JOIN}
-//       GROUP BY g.year, g.quarter
-//       ORDER BY g.year, g.quarter`;
-
-//     con.query(query, (err, results) => {
-//       if (err) return handleDatabaseError(err, res, 'comparing income by period');
-//       if (handleEmptyResults(results, res, [])) return;
-//       res.json(results);
-//     });
-//   } catch (error) {
-//     console.error('Unexpected error in compareIncomeCIplanAndCIoutcomeByPeriod:', error);
-//     res.status(500).json({ message: "Internal server error", error: error.message });
-//   }
-// };
-
-// // Compare Cost and Income with proper relationships
-// const compareCostAndIncome = async (req, res) => {
-//   try {
-//     const query = `
-//       SELECT 
-//         COALESCE(SUM(CASE WHEN sod.cost_type = 'CIplan' THEN sod.cost ELSE 0 END), 0) as total_cost_CIplan,
-//         COALESCE(SUM(CASE WHEN sod.cost_type = 'CIplan' THEN sod.income ELSE 0 END), 0) as total_income_CIplan,
-//         COALESCE(SUM(CASE WHEN sod.cost_type = 'CIoutcome' THEN sod.cost ELSE 0 END), 0) as total_cost_CIoutcome,
-//         COALESCE(SUM(CASE WHEN sod.cost_type = 'CIoutcome' THEN sod.income ELSE 0 END), 0) as total_income_CIoutcome,
-//         COALESCE((SUM(CASE WHEN sod.cost_type = 'CIoutcome' THEN sod.cost ELSE 0 END) / 
-//          NULLIF(SUM(CASE WHEN sod.cost_type = 'CIplan' THEN sod.cost ELSE 0 END), 0) * 100), 0) as total_cost_CIexecution_percentage,
-//         COALESCE((SUM(CASE WHEN sod.cost_type = 'CIoutcome' THEN sod.income ELSE 0 END) / 
-//          NULLIF(SUM(CASE WHEN sod.cost_type = 'CIplan' THEN sod.income ELSE 0 END), 0) * 100), 0) as total_income_CIexecution_percentage
-//       ${BASE_JOIN}`;
-
-//     con.query(query, (err, results) => {
-//       if (err) return handleDatabaseError(err, res, 'comparing cost and income');
-//       if (handleEmptyResults(results, res, {
-//         total_cost_CIplan: 0,
-//         total_income_CIplan: 0,
-//         total_cost_CIoutcome: 0,
-//         total_income_CIoutcome: 0,
-//         total_cost_CIexecution_percentage: 0,
-//         total_income_CIexecution_percentage: 0
-//       })) return;
-//       res.json(results[0]);
-//     });
-//   } catch (error) {
-//     console.error('Unexpected error in compareCostAndIncome:', error);
-//     res.status(500).json({ message: "Internal server error", error: error.message });
-//   }
-// };
-
-// Display Total HR with proper relationships
 const displayTotalHR = async (req, res) => {
   try {
     const query = `
@@ -820,34 +653,99 @@ const displayTotalHR = async (req, res) => {
   
 
 
+// HRPlanOutcomeDifference
 
-
-
-const compareIncomePlanOutcomeTotal_capital = async (req, res) => {
+const HRPlanOutcomeDifferenceFulltime = async (req, res) => {
   try {
-    const joinClause = getJoinClause(req);
-    const extraFilters = getFilterConditions(req);
+    // Retrieve joinClause and extraFilters from the request.
+    // Using getJoinClause which returns the BASE_JOIN already.
+    let joinClause = getJoinClause(req);
+    const extraFilters = getFilterConditions(req) || "";
+
+    // If joinClause is missing a FROM clause, fallback to the BASE_JOIN.
+    if (!joinClause || !/FROM\s+/i.test(joinClause)) {
+      joinClause = BASE_JOIN;
+      console.warn("joinClause not provided or missing FROM clause; using default BASE_JOIN");
+    }
+
+    // Build the SQL query string. This groups rows by specific_objective_detailname.
+    // No extra join is appended here.
     const query = `
       SELECT 
-        COALESCE(SUM(CASE WHEN sod.plan_type = 'cost' THEN sod.CIplan END), 0) as total_cost_plan_capital,
-        COALESCE(SUM(CASE WHEN sod.plan_type = 'cost' THEN sod.CIoutcome END), 0) as total_cost_outcome_capital
+        sod.specific_objective_detailname,
+        COALESCE(SUM(CASE WHEN sod.plan_type = 'hr' THEN sod.CIplan END), 0) AS plan,
+        COALESCE(SUM(CASE WHEN sod.plan_type = 'hr' THEN sod.CIoutcome END), 0) AS outcome,
+        COALESCE(SUM(CASE WHEN sod.plan_type = 'hr' THEN sod.CIplan END), 0) - COALESCE(SUM(CASE WHEN sod.plan_type = 'hr' THEN sod.CIoutcome END), 0) AS difference
       ${joinClause}
-      WHERE sod.plan_type = 'cost' AND sod.cost_type = 'capital_project_budget' ${extraFilters}
+      WHERE 
+        sod.plan_type = 'hr' AND 
+        sod.employment_type = 'full_time' ${extraFilters}
+      GROUP BY sod.specific_objective_detailname
     `;
+    
+    console.log("Constructed Query:", query);
+
     con.query(query, (err, results) => {
-      if (err) return handleDatabaseError(err, res, 'comparing cost plan and outcome total_capital');
-      if (handleEmptyResults(results, res, { total_cost_plan_capital: 0, total_cost_outcome_capital: 0 })) return;
-      const { total_cost_plan_capital, total_cost_outcome_capital } = results[0];
-      const difference = total_cost_plan_capital - total_cost_outcome_capital;
-   res.json({ total_cost_plan_capital, total_cost_outcome_capital, difference });
+      if (err) {
+        console.error("Database error occurred:", err);
+        return handleDatabaseError(err, res, "comparing cost plan and outcome total_regular");
+      }
+      
+      // Check if the results are empty. If so, return default structured response.
+      if (handleEmptyResults(results, res, { data: [], totals: { plan: 0, outcome: 0, difference: 0 } })) {
+        return;
+      }
+      
+      // Log the raw SQL results for debugging purposes.
+      console.log("SQL Query Results:", results);
+      
+      // Compute overall totals by iterating over the grouped results.
+      let totalPlan = 0;
+      let totalOutcome = 0;
+      results.forEach(row => {
+        totalPlan += Number(row.plan);
+        totalOutcome += Number(row.outcome);
+      });
+      const totalDifference = totalPlan - totalOutcome;
+      
+      // Build the final response object.
+      const responseData = {
+        data: results, // array of { costName, plan, outcome, difference }
+        totals: {
+          plan: totalPlan,
+          outcome: totalOutcome,
+          difference: totalDifference
+        }
+      };
+      
+      // Log computed totals.
+      console.log("Computed Totals - Total Plan:", totalPlan, "Total Outcome:", totalOutcome, "Total Difference:", totalDifference);
+      
+      // Send the computed data to the frontend.
+      res.json(responseData);
     });
+    
   } catch (error) {
-    console.error('Unexpected error in compareIncomePlanOutcomeTotal_capital:', error);
+    console.error("Unexpected error in hrPlanOutcomeDifferenceFulltime:", error);
     res.status(500).json({ message: "Internal server error", error: error.message });
   }
 };
 
+
+
+
+
+
+
+
+
+
+
+
 module.exports = {
+
+  //Human Resource analitics
+  HRPlanOutcomeDifferenceFulltime,
   displayTotalCost,
   displayTotalCostPlan,
   compareCostPlanOutcome,

@@ -16,6 +16,7 @@ const Step5Review = ({
 }) => {
   const [expandedRow, setExpandedRow] = useState(null);
   const [activeTab, setActiveTab] = useState("all");
+  const [submitted, setSubmitted] = useState(false);
 
   // Summary data configuration
   const summaryData = [
@@ -57,7 +58,11 @@ const Step5Review = ({
       });
       return;
     }
+    // Call the onSubmit prop callback provided from the parent.
     onSubmit();
+    // After successful submission, set the submitted flag to true, disabling further
+    // resubmission or back navigation.
+    setSubmitted(true);
   };
 
   // Function to render extra details for recognized plan types only.
@@ -146,6 +151,32 @@ const Step5Review = ({
     </div>
   );
 
+  // If submitted, show a full-screen success message with a large animated happy emoji and disable navigation.
+  if (submitted) {
+    return (
+      <div className="flex flex-col items-center justify-center h-screen bg-green-50">
+        <motion.div
+          initial={{ scale: 0.5, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ duration: 0.5 }}
+          className="text-center"
+        >
+          <img
+            src="https://media.giphy.com/media/5GoVLqeAOo6PK/giphy.gif"
+            alt="Happy Emoji"
+            className="w-1/2 h-auto"
+          />
+          <h1 className="mt-4 text-6xl font-bold text-green-800">
+          እቅዶ በተሳካ ሁኔታ ተመዝግቧል💥
+          </h1>
+          <p className="mt-2 text-3xl text-green-700">
+            እባክዎ ይጠብቁ⏱️ ፡ እቅዶ በ CEO ተቀባይነት እስኪያገኝ ድረስ ይጠብቁ!
+          </p>
+        </motion.div>
+      </div>
+    );
+  }
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -153,9 +184,7 @@ const Step5Review = ({
       transition={{ duration: 0.5 }}
       className="container mx-auto mt-8 p-6 bg-white rounded-xl shadow-lg"
     >
-      <h3 className="text-2xl font-bold text-center text-gray-800 mb-8">
-        እቅዶን ይከልሱ
-      </h3>
+      <h3 className="text-2xl font-bold text-center text-gray-800 mb-8"></h3>
 
       {/* Error Message */}
       {error && (
