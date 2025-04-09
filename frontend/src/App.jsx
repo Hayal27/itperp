@@ -124,7 +124,7 @@ import StaffViewDeclinedPlan from "./components/staff/plan/StaffViewDeclinedPlan
 
 
 import UpdatePlan from "./components/staff/plan/view/UpdatePlan";
-import AddReport from "./components/staff/plan/view/AddReport";
+import StafAddReport from "./components/staff/plan/view/StafAddReport.jsx";
 import PlanDetail from "./components/staff/plan/view/PlanDetail";
 import StaffViewOrgPlan from "./components/staff/plan/StaffViewOrgPlan";
 import StafPlanSteps from "./components/staff/plan/addplan/StafPlanSteps.jsx";
@@ -222,12 +222,12 @@ function App() {
 <Route path="/report/View_myreport" element={<CeoViewReport />} />
 <Route path="/report/view/update/:reportId" element={<UpdateReport />} />
 <Route path="/plan/view/add-report/:planId" element={<AddReport />} />
-<Route path="/plan/ViewOrgPlan" element={<TeamleaderViewOrgPlan />} />
-<Route path="/report/ViewOrgReport" element={<TeamleaderViewOrgReport />} />
+<Route path="/plan/ViewOrgPlan" element={<CeoViewOrgPlan />} />
+<Route path="/report/ViewOrgReport" element={<CeoViewOrgReport />} />
 <Route path="/report/CeoViewDeclinedReport" element={<CeoViewDeclinedReport />} />
 <Route path="/plan/CeoViewDeclinedPlan" element={<CeoViewDeclinedPlan/>} />
 <Route path="/plan/CeoViewDeclinedPlan/view/update/:planId" element={<CeoUpdatePlan />} />
-<Route path="/plan/View_myplan/add-report/:planId" element={<CeoAddReport />} />
+<Route path="/plan/View_myplan/add-report/:planId" element={<StafAddReport />} />
 
       {/* update the plan */}
 <Route path="/plan/View_myplan/update/:planId" element={<CeoUpdatePlan />} />
@@ -255,12 +255,12 @@ function App() {
 <Route path="/report/View_myreport" element={<StaffViewReport />} />
 <Route path="/report/view/update/:reportId" element={<UpdateReport />} />
 <Route path="/plan/view/add-report/:planId" element={<AddReport />} />
-<Route path="/plan/ViewOrgPlan" element={<TeamleaderViewOrgPlan />} />
-<Route path="/report/ViewOrgReport" element={<TeamleaderViewOrgReport />} />
+<Route path="/plan/ViewOrgPlan" element={<PlanreportViewOrgPlan />} />
+<Route path="/report/ViewOrgReport" element={<PlanreportViewOrgReport />} />
 <Route path="/report/PlanreportViewDeclinedReport" element={<PlanreportViewDeclinedReport />} />
 <Route path="/plan/PlanreportViewDeclinedPlan" element={<PlanreportViewDeclinedPlan/>} />
 <Route path="/plan/PlanreportViewDeclinedPlan/view/update/:planId" element={<PlanreportUpdatePlan />} />
-<Route path="/plan/View_myplan/add-report/:planId" element={<PlanreportAddReport />} />
+<Route path="/plan/View_myplan/add-report/:planId" element={<StafAddReport />} />
 
       {/* update the plan */}
 <Route path="/plan/View_myplan/update/:planId" element={<TeamleaderUpdatePlan />} />
@@ -283,13 +283,13 @@ function App() {
 <Route path="/plan/View_myplan" element={<StaffViewPlan />} />
 <Route path="/report/View_myreport" element={<StaffViewReport />} />
 <Route path="/report/view/update/:reportId" element={<UpdateReport />} />
-<Route path="/plan/view/add-report/:planId" element={<AddReport />} />
+<Route path="/plan/view/add-report/:planId" element={<StafAddReport />} />
 <Route path="/plan/ViewOrgPlan" element={<TeamleaderViewOrgPlan />} />
 <Route path="/report/ViewOrgReport" element={<TeamleaderViewOrgReport />} />
 <Route path="/report/TeamleaderViewDeclinedReport" element={<TeamleaderViewDeclinedReport />} />
 <Route path="/plan/TeamleaderViewDeclinedPlan" element={<TeamleaderViewDeclinedPlan/>} />
 <Route path="/plan/TeamleaderViewDeclinedPlan/view/update/:planId" element={<TeamleaderUpdatePlan />} />
-<Route path="/plan/View_myplan/add-report/:planId" element={<TeamleaderAddReport />} />
+<Route path="/plan/View_myplan/add-report/:planId" element={<StafAddReport />} />
 
 {/* update the plan */}
 <Route path="/plan/View_myplan/update/:planId" element={<TeamleaderUpdatePlan />} />
@@ -310,13 +310,13 @@ function App() {
 <Route path="/plan/View_myplan" element={<StaffViewPlan />} />
 <Route path="/report/View_myreport" element={<StaffViewReport />} />
 <Route path="/report/view/update/:reportId" element={<UpdateReport />} />
-<Route path="/plan/view/add-report/:planId" element={<AddReport />} />
+<Route path="/plan/view/add-report/:planId" element={<StafAddReport />} />
 <Route path="/plan/ViewOrgPlan" element={<TeamleaderViewOrgPlan />} />
 <Route path="/report/ViewOrgReport" element={<TeamleaderViewOrgReport />} />
 <Route path="/report/TeamleaderViewDeclinedReport" element={<TeamleaderViewDeclinedReport />} />
 <Route path="/plan/TeamleaderViewDeclinedPlan" element={<TeamleaderViewDeclinedPlan/>} />
 <Route path="/plan/TeamleaderViewDeclinedPlan/view/update/:planId" element={<TeamleaderUpdatePlan />} />
-<Route path="/plan/View_myplan/add-report/:planId" element={<TeamleaderAddReport />} />
+<Route path="/plan/View_myplan/add-report/:planId" element={<StafAddReport />} />
 
 
 <Route path="/plan/View_myplan/update/:planId" element={<TeamleaderUpdatePlan />} />
@@ -337,13 +337,13 @@ function App() {
     <Route path="/plan/View_myplan" element={<StaffViewPlan />} />
     <Route path="/report/View_myreport" element={<StaffViewReport />} />
     <Route path="/report/view/update/:reportId" element={<UpdateReport />} />
-    <Route path="/plan/view/add-report/:planId" element={<AddReport />} />
+    <Route path="/plan/view/add-report/:planId" element={<StafAddReport />} />
     <Route path="/plan/ViewOrgPlan" element={<TeamleaderViewOrgPlan />} />
     <Route path="/report/ViewOrgReport" element={<TeamleaderViewOrgReport />} />
     <Route path="/report/TeamleaderViewDeclinedReport" element={<TeamleaderViewDeclinedReport />} />
     <Route path="/plan/TeamleaderViewDeclinedPlan" element={<TeamleaderViewDeclinedPlan/>} />
     <Route path="/plan/TeamleaderViewDeclinedPlan/view/update/:planId" element={<TeamleaderUpdatePlan />} />
-    <Route path="/plan/View_myplan/add-report/:planId" element={<TeamleaderAddReport />} />
+    <Route path="/plan/View_myplan/add-report/:planId" element={<StafAddReport />} />
 
           {/* update the plan */}
     <Route path="/plan/View_myplan/update/:planId" element={<TeamleaderUpdatePlan />} />
@@ -363,13 +363,13 @@ function App() {
     <Route path="/plan/View_myplan" element={<StaffViewPlan />} />
     <Route path="/report/View_myreport" element={<StaffViewReport />} />
     <Route path="/report/view/update/:reportId" element={<UpdateReport />} />
-    <Route path="/plan/view/add-report/:planId" element={<AddReport />} />
+    <Route path="/plan/view/add-report/:planId" element={<StafAddReport />} />
     <Route path="/plan/ViewOrgPlan" element={<TeamleaderViewOrgPlan />} />
     <Route path="/report/ViewOrgReport" element={<TeamleaderViewOrgReport />} />
     <Route path="/report/TeamleaderViewDeclinedReport" element={<TeamleaderViewDeclinedReport />} />
     <Route path="/plan/TeamleaderViewDeclinedPlan" element={<TeamleaderViewDeclinedPlan/>} />
     <Route path="/plan/TeamleaderViewDeclinedPlan/view/update/:planId" element={<TeamleaderUpdatePlan />} />
-    <Route path="/plan/View_myplan/add-report/:planId" element={<TeamleaderAddReport />} />
+    <Route path="/plan/View_myplan/add-report/:planId" element={<StafAddReport />} />
 
           {/* update the plan */}
     <Route path="/plan/View_myplan/update/:planId" element={<TeamleaderUpdatePlan />} />
@@ -398,7 +398,7 @@ function App() {
 
     
     <Route path="/report/view/update/:reportId" element={<UpdateReport />} />
-    <Route path="/plan/view/add-report/:planId" element={<AddReport />} />
+    <Route path="/plan/view/add-report/:planId" element={<StafAddReport />} />
     <Route path="/plan/view/detail/:planId" element={<PlanDetail />} />
     <Route path="/plan/ViewOrgPlan" element={<TeamleaderViewOrgPlan />} />
     <Route path="/report/ViewOrgReport" element={<TeamleaderViewOrgReport />} />
