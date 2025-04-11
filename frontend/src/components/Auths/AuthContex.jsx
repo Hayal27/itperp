@@ -54,7 +54,7 @@ const AuthProvider = ({ children }) => {
 
   const login = async (credentials) => {
     try {
-        const response = await Axios.post("http://192.168.100.134:5000/login", credentials);
+        const response = await Axios.post("http://192.168.56.1:5000/login", credentials);
         if (response.data.success) {
             const { token, user } = response.data;
             localStorage.setItem("token", token); // Store JWT token

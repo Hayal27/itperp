@@ -14,7 +14,7 @@ const ServiceHeadSubmittedViewPlan = () => {
 
   const fetchPlans = async () => {
     try {
-      const response = await axios.get("http://192.168.100.134:5000/api/submitted_reports", {
+      const response = await axios.get("http://192.168.56.1:5000/api/submitted_reports", {
         headers: { Authorization: `Bearer ${token}` }
       });
 
@@ -37,7 +37,7 @@ const ServiceHeadSubmittedViewPlan = () => {
 
     try {
       const response = await axios.put(
-        "http://192.168.100.134:5000/api/supervisor/plans/approve",
+        "http://192.168.56.1:5000/api/supervisor/plans/approve",
         { plan_id: planId, status: action, comment }, // Send plan_id along with status and comment
         { headers: { Authorization: `Bearer ${token}` } }
       );

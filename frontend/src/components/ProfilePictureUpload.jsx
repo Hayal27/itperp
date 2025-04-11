@@ -30,7 +30,7 @@ const ProfilePictureUpload = () => {
     setUploading(true);
     try {
       // Assuming the backend endpoint is configured to accept file uploads at this URL
-      const response = await Axios.post("http://192.168.100.134:5000/api/profile/upload", formData, {
+      const response = await Axios.post("http://192.168.56.1:5000/api/profile/upload", formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
       if (response.data && response.data.success) {

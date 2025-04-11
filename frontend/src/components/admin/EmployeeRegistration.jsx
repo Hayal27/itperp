@@ -24,7 +24,7 @@ const EmployeeRegistration = () => {
   useEffect(() => {
     const fetchRoles = async () => {
       try {
-        const response = await Axios.get("http://192.168.100.134:5000/api/roles");
+        const response = await Axios.get("http://192.168.56.1:5000/api/roles");
         setRoles(response.data);
       } catch (error) {
         console.error("Error fetching roles:", error);
@@ -33,7 +33,7 @@ const EmployeeRegistration = () => {
 
     const fetchDepartments = async () => {
       try {
-        const response = await Axios.get("http://192.168.100.134:5000/api/departments");
+        const response = await Axios.get("http://192.168.56.1:5000/api/departments");
         setDepartments(response.data);
       } catch (error) {
         console.error("Error fetching departments:", error);
@@ -42,7 +42,7 @@ const EmployeeRegistration = () => {
    
     const fetchSupervisors = async () => {
       try {
-        const response = await Axios.get("http://192.168.100.134:5000/api/supervisors");
+        const response = await Axios.get("http://192.168.56.1:5000/api/supervisors");
         setSupervisors(response.data);
       } catch (error) {
         console.error("Error fetching supervisors:", error);
@@ -64,7 +64,7 @@ const EmployeeRegistration = () => {
     e.preventDefault();
 
     try {
-      const response = await Axios.post("http://192.168.100.134:5000/api/addEmployee", data);
+      const response = await Axios.post("http://192.168.56.1:5000/api/addEmployee", data);
       console.log(response.data);
       if (response.data.message) {
         setErrorMessage(response.data.message);

@@ -20,7 +20,7 @@ const FilterForm = ({ filters, onSubmit }) => {
       setLoading(true);
       try {
         // Replace with the actual API endpoint if necessary
-        const response = await axios.get("http://192.168.100.134:5000/api/getSpesificObjectives", {
+        const response = await axios.get("http://192.168.56.1:5000/api/getSpesificObjectives", {
           headers: {
             Authorization: `Bearer ${token}`, // Include token in request headers
           },

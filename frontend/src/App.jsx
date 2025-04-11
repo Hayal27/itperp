@@ -221,7 +221,7 @@ function App() {
 <Route path="/plan/View_myplan" element={<StaffViewPlan />} />
 <Route path="/report/View_myreport" element={<CeoViewReport />} />
 <Route path="/report/view/update/:reportId" element={<UpdateReport />} />
-<Route path="/plan/view/add-report/:planId" element={<AddReport />} />
+<Route path="/plan/view/add-report/:planId" element={<StaffAddReport />} />
 <Route path="/plan/ViewOrgPlan" element={<CeoViewOrgPlan />} />
 <Route path="/report/ViewOrgReport" element={<CeoViewOrgReport />} />
 <Route path="/report/CeoViewDeclinedReport" element={<CeoViewDeclinedReport />} />

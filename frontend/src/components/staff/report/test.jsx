@@ -122,7 +122,7 @@ const StaffDashboard = () => {
       }
       try {
         const queryParams = "filterType=goal_id&filterValue=1";
-        const url = `http://192.168.100.134:5000/api/getAnalyticsData1?${queryParams}`;
+        const url = `http://192.168.56.1:5000/api/getAnalyticsData1?${queryParams}`;
         const response = await Axios.get(url, {
           headers: {
             Authorization: `Bearer ${token}`,

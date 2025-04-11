@@ -75,7 +75,7 @@ const TeamleaderUpdatePlan = () => {
       return;
     }
     const token = localStorage.getItem("token");
-    Axios.get(`http://192.168.100.134:5000/api/pland/${planId}`, {
+    Axios.get(`http://192.168.56.1:5000/api/pland/${planId}`, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then((res) => {
@@ -287,7 +287,7 @@ const TeamleaderUpdatePlan = () => {
     console.log("Payload to be submitted:", updatedData);
     const token = localStorage.getItem("token");
 
-    Axios.put(`http://192.168.100.134:5000/api/planupdate/${planId}`, updatedData, {
+    Axios.put(`http://192.168.56.1:5000/api/planupdate/${planId}`, updatedData, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then((response) => {

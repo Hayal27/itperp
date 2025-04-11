@@ -22,7 +22,7 @@ console.log(planId);
 
     const fetchPlanDetail = async () => {
       try {
-        const response = await Axios.get(`http://192.168.100.134:5000/api/pland/${planId}`, {
+        const response = await Axios.get(`http://192.168.56.1:5000/api/pland/${planId}`, {
           headers: { Authorization: `Bearer ${token}` }, // Attach token in headers
         });
 

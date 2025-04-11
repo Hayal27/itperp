@@ -215,7 +215,7 @@ const Step4SpecificObjectiveDetails = ({ specificObjectiveId, token, onBack, onN
       console.log("Payload:", payload);
   
       const response = await axios.post(
-        "http://192.168.100.134:5000/api/addspecificObjectiveDetail",
+        "http://192.168.56.1:5000/api/addspecificObjectiveDetail",
         payload,
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -236,7 +236,6 @@ const Step4SpecificObjectiveDetails = ({ specificObjectiveId, token, onBack, onN
         { ...newDetail, id: createdDetailId },
       ];
   
-<<<<<<< HEAD
       setSpecificObjectiveDetails(updatedDetails);
   
       Swal.fire("Success", "Detail created successfully!", "success").then(() => {
@@ -245,9 +244,6 @@ const Step4SpecificObjectiveDetails = ({ specificObjectiveId, token, onBack, onN
       });
   
       // Reset the newDetail state to default values
-=======
-      Swal.fire("Success", "በተገቢው አዲስ የውጤት ዝርዝር መዝገበዋል!", "መዝግበዋል");
->>>>>>> 2a5a7093a63309b67f6f36f32d04e374ac8ec01e
       setNewDetail({ ...defaultDetailValues });
     } catch (err) {
       console.error("Error occurred:", err);
@@ -415,7 +411,7 @@ const Step4SpecificObjectiveDetails = ({ specificObjectiveId, token, onBack, onN
   
                 <div className="ci-fields">
                   <div className="form-field">
-                    <label htmlFor="CIbaseline" className="form-label">እቅድ በቁጥር</label>
+                    <label htmlFor="CIbaseline" className="form-label">Baseline</label>
                     <input
                       id="CIbaseline"
                       type="number"
@@ -432,7 +428,7 @@ const Step4SpecificObjectiveDetails = ({ specificObjectiveId, token, onBack, onN
                     />
                   </div>
                   <div className="form-field">
-                    <label htmlFor="CIplan" className="form-label">መነሻ በቁጥር</label>
+                    <label htmlFor="CIplan" className="form-label">Plan</label>
                     <input
                       id="CIplan"
                       type="number"
@@ -510,7 +506,7 @@ const Step4SpecificObjectiveDetails = ({ specificObjectiveId, token, onBack, onN
   
                 <div className="ci-fields">
                   <div className="form-field">
-                    <label htmlFor="CIbaseline" className="form-label">እቅድ በቁጥር</label>
+                    <label htmlFor="CIbaseline" className="form-label">Baseline</label>
                     <input
                       id="CIbaseline"
                       type="number"
@@ -527,7 +523,7 @@ const Step4SpecificObjectiveDetails = ({ specificObjectiveId, token, onBack, onN
                     />
                   </div>
                   <div className="form-field">
-                    <label htmlFor="CIplan" className="form-label">መነሻ በቁጥር</label>
+                    <label htmlFor="CIplan" className="form-label">Plan</label>
                     <input
                       id="CIplan"
                       type="number"
@@ -568,7 +564,7 @@ const Step4SpecificObjectiveDetails = ({ specificObjectiveId, token, onBack, onN
             
             <div className="ci-fields">
               <div className="form-field">
-                <label htmlFor="CIbaseline" className="form-label">እቅድ በቁጥር</label>
+                <label htmlFor="CIbaseline" className="form-label">Baseline</label>
                 <input
                   id="CIbaseline"
                   type="number"
@@ -585,7 +581,7 @@ const Step4SpecificObjectiveDetails = ({ specificObjectiveId, token, onBack, onN
                 />
               </div>
               <div className="form-field">
-                <label htmlFor="CIplan" className="form-label">መነሻ በቁጥር</label>
+                <label htmlFor="CIplan" className="form-label">Plan</label>
                 <input
                   id="CIplan"
                   type="number"
@@ -635,7 +631,10 @@ const Step4SpecificObjectiveDetails = ({ specificObjectiveId, token, onBack, onN
             >
               <option value="">⬇️ Select Measurement</option>
               <option value="present">Present</option>
+              <option value="USD">USD</option>
+              <option value="ETB">ETB</option>
               <option value="performance">Performance</option>
+              <option value="number">Number</option>
             </select>
           </div>
   

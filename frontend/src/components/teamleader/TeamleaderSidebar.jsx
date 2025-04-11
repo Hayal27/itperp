@@ -1,262 +1,214 @@
+
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import '../../assets/css/TeamleaderSidebar.css';
 
 function TeamleaderSidebar() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  // Holds which dropdown is currently active: 'plan', 'report', 'chat', 'letter' or null
+  const [activeDropdown, setActiveDropdown] = useState(null);
 
-  // Toggle function for sidebar visibility
+  // Toggle sidebar open/close
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
+  // Handlers for mouse events so that the dropdown remains open
+  const handleMouseEnter = (menu) => {
+    setActiveDropdown(menu);
+  };
+
+  const handleMouseLeave = () => {
+    setActiveDropdown(null);
+  };
+
+  // Determine classes for sidebar and main content based on open state
+  const sidebarClassName = isSidebarOpen ? 'sidebar open' : 'sidebar closed';
+  const mainContentClassName = isSidebarOpen ? 'main-content open' : 'main-content closed';
+
   return (
     <>
-      <style>
-        {`
-          /* Sidebar Styling */
-          .sidebar {
-            transition: transform 0.3s ease;
-            transform: ${isSidebarOpen ? 'translateX(0)' : 'translateX(-250px)'};
-            width: 250px;
-            position: fixed;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            background-image: linear-gradient(180deg,#2a3753 0%,#0C7C92 100% );
-            color: #ffffff;
-            z-index: 1000;
-            box-shadow: ${isSidebarOpen ? '2px 0 5px rgba(0,0,0,0.1)' : 'none'};
-            padding-top: 20px;
-          }
-
-          /* Sidebar Nav Items */
-          .sidebar-nav {
-            padding-left: 0;
-            list-style-type: none;
-          }
-
-          .sidebar-nav .nav-item {
-            border-bottom: 1px solid #495057;
-            background-image: linear-gradient(180deg,#2a3753 0%,#0C7C92 100% );
-          }
-
-          /* Magical Hover Effect for Sidebar Items */
-          .sidebar-nav .nav-item:hover {
-            transform: scale(1.05) rotate(2deg);
-            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.3);
-            background-color: #007bff; /* Change background color on hover */
-          }
-
-          /* Sidebar Links */
-          .sidebar-nav .nav-link {
-            color: #adb5bd;
-            display: flex;
-            align-items: center;
-            padding: 10px 20px;
-            transition: color 0.3s ease, transform 0.3s ease;
-          }
-
-          .sidebar-nav .nav-link i {
-            margin-right: 10px;
-            font-size: 1.2rem;
-            transition: transform 0.3s ease;
-          }
-
-          /* Add magical hover effect to the nav link */
-          .sidebar-nav .nav-link:hover {
-            color: #ffffff;
-            transform: translateX(10px);
-          }
-
-          /* Sidebar Toggle Button */
-          .toggle-sidebar-btn {
-            cursor: pointer;
-            font-size: 2.0rem;
-            position: fixed;
-            top: 28px;
-            left: 250px;
-            z-index: 1050;
-            color:rgb(97, 43, 43);
-            transition: color 0.3s ease;
-          }
-
-          .toggle-sidebar-btn:hover {
-            color: #0056b3;
-          }
-
-          /* Main content shift when sidebar is open */
-          .main-content {
-            margin-left: ${isSidebarOpen ? '250px' : '0'};
-            transition: margin-left 0.3s ease;
-            padding: 20px;
-            transition: padding-left 0.3s ease;
-          }
-
-          /* Mobile Responsiveness */
-          @media (max-width: 768px) {
-            .sidebar {
-              transform: ${isSidebarOpen ? 'translateX(0)' : 'translateX(-100%)'};
-              // width: 20%;
-            }
-
-            .main-content {
-              margin-left: 0;
-            }
-
-            .toggle-sidebar-btn {
-              left: 15px;
-            }
-          }
-        `}
-      </style>
-
       {/* Sidebar Toggle Button */}
-      <i className="bi bi-list toggle-sidebar-btn" onClick={toggleSidebar} title="Toggle Sidebar" />
+      <i
+        className="bi bi-list toggle-sidebar-btn"
+        onClick={toggleSidebar}
+        title="Toggle Sidebar"
+      />
 
       {/* Sidebar */}
-      <aside id="sidebar" className="sidebar">
-        <ul className="sidebar-nav" id="sidebar-nav">
+      <aside id="sidebar" className={sidebarClassName}>
+        <ul className="sidebar-nav">
           <li className="nav-item">
-            <Link to="/" className="nav-link">
-              <i className="bi bi-grid" />
+            <Link to="/" className="nav-link" title="Dashboard">
+              <i className="bi bi-speedometer2" />
+              <span className="menu-title">Dashboard</span>
             </Link>
           </li>
-          
+
           {/* Plan Management Nav */}
-          <li className="nav-item">
-            <a className="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
-              <i className="bi bi-menu-button-wide" />
-              <span>Plan Management</span>
-              <i className="bi bi-chevron-down ms-auto" />
-            </a>
-            <ul id="components-nav" className="nav-content collapse" data-bs-parent="#sidebar-nav">
-              <li>
-                <Link to='/plan/view' className="nav-link">
-                  <i className="bi bi-circle" />
-                  <span>Submitted Plan</span>
-                </Link>
-              </li>
+          <li
+            className="nav-item"
+            onMouseEnter={() => handleMouseEnter('plan')}
+            onMouseLeave={handleMouseLeave}
+          >
+            <div className="nav-link" title="Plan Management">
+              <i className="bi bi-list-check" />
+              <span className="menu-title">Plan Management</span>
+            </div>
+            {activeDropdown === 'plan' && (
+              <ul className="dropdown-menu">
+                <li>
+                  <Link to="/plan/view" className="nav-link" title="Submitted Plan">
+                    <i className="bi bi-check2-circle" />
+                    <span className="menu-title">Submitted Plan</span>
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/plan/View_myplan" className="nav-link" title="View My Plan">
+                    <i className="bi bi-file-earmark-text" />
+                    <span className="menu-title">View My Plan</span>
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/plan/PlanSteps/Add" className="nav-link" title="Add Plan">
+                    <i className="bi bi-plus-circle" />
+                    <span className="menu-title">Add Plan</span>
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/plan/TeamleaderViewDeclinedPlan" className="nav-link" title="Declined Plan">
+                    <i className="bi bi-eye" />
+                    <span className="menu-title">Declined Plan</span>
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/plan/ViewOrgPlan" className="nav-link" title="Organization Plans">
+                    <i className="bi bi-building" />
+                    <span className="menu-title">Organization Plans</span>
+                  </Link>
+                </li>
+              </ul>
+            )}
+          </li>
 
-              <li>
-                <Link to='/plan/View_myplan' className="nav-link">
-                  <i className="bi bi-circle" />
-                  <span>View My Plan</span>
-                </Link>
-              </li>
-              <li>
-                <Link to='/plan/PlanSteps/Add' className="nav-link">
-                  <i className="bi bi-circle" />
-                  <span>Add Plan</span>
-                </Link>
-              </li>
+          {/* Report Management Nav */}
+          <li
+            className="nav-item"
+            onMouseEnter={() => handleMouseEnter('report')}
+            onMouseLeave={handleMouseLeave}
+          >
+            <div className="nav-link" title="Report Management">
+              <i className="bi bi-file-earmark-bar-graph" />
+              <span className="menu-title">Report Management</span>
+            </div>
+            {activeDropdown === 'report' && (
+              <ul className="dropdown-menu">
+                <li>
+                  <Link to="/report/Viewapprovedreport" className="nav-link" title="Submitted Report">
+                    <i className="bi bi-check2-circle" />
+                    <span className="menu-title">Submitted Report</span>
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/report/View_myreport" className="nav-link" title="View My Report">
+                    <i className="bi bi-file-earmark-text" />
+                    <span className="menu-title">View My Report</span>
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/report/ViewOrgReport" className="nav-link" title="Organization Report">
+                    <i className="bi bi-building" />
+                    <span className="menu-title">Organization Report</span>
+                  </Link>
+                </li>
+              </ul>
+            )}
+          </li>
 
-    <li>
-                <Link to='/plan/TeamleaderViewDeclinedPlan' className="nav-link">
-                  <i className="bi bi-eye" />
-                  <span>Declined Plan</span>
-                </Link>
-              </li>
+          {/* Chat Nav */}
+          <li
+            className="nav-item"
+            onMouseEnter={() => handleMouseEnter('chat')}
+            onMouseLeave={handleMouseLeave}
+          >
+            <div className="nav-link" title="Chat">
+              <i className="bi bi-chat-dots" />
+              <span className="menu-title">Chat</span>
+            </div>
+            {activeDropdown === 'chat' && (
+              <ul className="dropdown-menu">
+                <li>
+                  <Link to="/UserForm" className="nav-link" title="Inbox">
+                    <i className="bi bi-chat-right-text" />
+                    <span className="menu-title">Inbox</span>
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/UserTable" className="nav-link" title="Staff Groups">
+                    <i className="bi bi-people" />
+                    <span className="menu-title">Staff Groups</span>
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/UserForm" className="nav-link" title="Department Groups">
+                    <i className="bi bi-diagram-3" />
+                    <span className="menu-title">Department Groups</span>
+                  </Link>
+                </li>
+              </ul>
+            )}
+          </li>
 
-
-              <li>
-                <Link to='/plan/ViewOrgPlan' className="nav-link">
-                  <i className="bi bi-circle" />
-                  <span>Orginazation Plans</span>
-                </Link>
-              </li>
-            </ul>
+          {/* Letter Management Nav */}
+          <li
+            className="nav-item"
+            onMouseEnter={() => handleMouseEnter('letter')}
+            onMouseLeave={handleMouseLeave}
+          >
+            <div className="nav-link" title="Letter Management">
+              <i className="bi bi-envelope" />
+              <span className="menu-title">Letter Management</span>
+            </div>
+            {activeDropdown === 'letter' && (
+              <ul className="dropdown-menu">
+                <li>
+                  <Link to="/letter/compose" className="nav-link" title="Compose Letter">
+                    <i className="bi bi-pencil-square" />
+                    <span className="menu-title">Compose Letter</span>
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/letter/inbox" className="nav-link" title="Inbox">
+                    <i className="bi bi-envelope-open" />
+                    <span className="menu-title">Inbox</span>
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/letter/drafts" className="nav-link" title="Drafts">
+                    <i className="bi bi-file-earmark" />
+                    <span className="menu-title">Drafts</span>
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/letter/sent" className="nav-link" title="Sent Letters">
+                    <i className="bi bi-send-check" />
+                    <span className="menu-title">Sent Letters</span>
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/letter/archive" className="nav-link" title="Archived Letters">
+                    <i className="bi bi-archive" />
+                    <span className="menu-title">Archived Letters</span>
+                  </Link>
+                </li>
+              </ul>
+            )}
           </li>
         </ul>
-
-
-
-        <ul className="sidebar-nav" id="sidebar-nav">
-          <li className="nav-item">
-            {/* <Link to="/" className="nav-link">
-             
-            </Link> */}
-          </li>
-          
-          {/* report Management Nav */}
-          <li className="nav-item">
-            <a className="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
-              <i className="bi bi-menu-button-wide" />
-              <span>report Management</span>
-              <i className="bi bi-chevron-down ms-auto" />
-            </a>
-            <ul id="components-nav" className="nav-content collapse" data-bs-parent="#sidebar-nav">
-              <li>
-                <Link to='/report/Viewapprovedreport' className="nav-link">
-                  <i className="bi bi-circle" />
-                  <span>Submitted Report</span>
-                </Link>
-              </li>
-              <li>
-                <Link to='/report/View_myreport' className="nav-link">
-                  <i className="bi bi-circle" />
-                  <span>View My Report</span>
-                </Link>
-              </li>
-
-   
-
-
-
-              <li>
-                <Link to='/report/ViewOrgReport' className="nav-link">
-                  <i className="bi bi-circle" />
-                  <span>Orginazation Report</span>
-                </Link>
-              </li>
-            </ul>
-          </li>
-
-        </ul>
-
-
-        <ul className="sidebar-nav" id="sidebar-nav">
-          <li className="nav-item">
-            {/* <Link to="/" className="nav-link">
-             
-            </Link> */}
-          </li>
-          
-          {/* Chat */}
-          <li className="nav-item">
-            <a className="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
-              <i className="bi bi-menu-button-wide" />
-              <span>Chat</span>
-              <i className="bi bi-chevron-down ms-auto" />
-            </a>
-            <ul id="components-nav" className="nav-content collapse" data-bs-parent="#sidebar-nav">
-              <li>
-                <Link to='/UserForm' className="nav-link">
-                  <i className="bi bi-circle" />
-                  <span>inbox</span>
-                </Link>
-              </li>
-              <li>
-                <Link to='/UserTable' className="nav-link">
-                  <i className="bi bi-circle" />
-                  <span>Staf groups</span>
-                </Link>
-              </li>
-              <li>
-                <Link to='/UserForm' className="nav-link">
-                  <i className="bi bi-circle" />
-                  <span>Department groups</span>
-                </Link>
-              </li>
-            </ul>
-          </li>
-
-        </ul>
-
-        
       </aside>
 
       {/* Main content */}
-      <div className="main-content">
+      <div className={mainContentClassName}>
         {/* Content for main app goes here */}
       </div>
     </>

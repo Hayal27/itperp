@@ -46,7 +46,7 @@ const [reportDetail,setReportDetail] = useState(null);  // This was missing
 
     try {
       setLoading(true);
-      const response = await Axios.get("http://192.168.100.134:5000/api/reportorg", {
+      const response = await Axios.get("http://192.168.56.1:5000/api/reportorg", {
         headers: { Authorization: `Bearer ${token}` },
         params: { ...validFilters, page: currentPage, limit: itemsPerPage },
       });
@@ -109,7 +109,7 @@ const [reportDetail,setReportDetail] = useState(null);  // This was missing
 
     if (window.confirm("Are you sure you want to delete this plan?")) {
       try {
-        await Axios.delete(`http://192.168.100.134:5000/api/plandelete/${reportId}`, {
+        await Axios.delete(`http://192.168.56.1:5000/api/plandelete/${reportId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
        setReports((prevPlans) => prevPlans.filter((plan) => plan.ID !== reportId));
@@ -151,9 +151,9 @@ const [reportDetail,setReportDetail] = useState(null);  // This was missing
       setLoading(true);
   
       console.log("Token is being sent with the request.");
-      console.log("Request URL:", `http://192.168.100.134:5000/api/reportorgd/${reportId}`);
+      console.log("Request URL:", `http://192.168.56.1:5000/api/reportorgd/${reportId}`);
   
-      const response = await Axios.get(`http://192.168.100.134:5000/api/reportorgd/${reportId}`, {
+      const response = await Axios.get(`http://192.168.56.1:5000/api/reportorgd/${reportId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
   

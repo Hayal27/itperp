@@ -48,7 +48,7 @@ const [planDetail, setPlanDetail] = useState(null);  // This was missing
 
     try {
       setLoading(true);
-      const response = await Axios.get("http://192.168.100.134:5000/api/reportorg", {
+      const response = await Axios.get("http://192.168.56.1:5000/api/reportorg", {
         headers: { Authorization: `Bearer ${token}` },
         params: { ...validFilters, page: currentPage, limit: itemsPerPage },
       });
@@ -111,7 +111,7 @@ const [planDetail, setPlanDetail] = useState(null);  // This was missing
 
     if (window.confirm("Are you sure you want to delete this plan?")) {
       try {
-        await Axios.delete(`http://192.168.100.134:5000/api/plandelete/${planId}`, {
+        await Axios.delete(`http://192.168.56.1:5000/api/plandelete/${planId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setPlans((prevPlans) => prevPlans.filter((plan) => plan.ID !== planId));
@@ -144,7 +144,7 @@ const [planDetail, setPlanDetail] = useState(null);  // This was missing
 const fetchPlanDetail = async (planId) => {
   try {
     setLoading(true);
-    const response = await Axios.get(`http://192.168.100.134:5000/api/pland/${planId}`, {
+    const response = await Axios.get(`http://192.168.56.1:5000/api/pland/${planId}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

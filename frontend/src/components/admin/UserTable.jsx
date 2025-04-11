@@ -35,7 +35,7 @@ const UserTable = () => {
 
   // Fetch users from backend
   const fetchUsers = () => {
-    Axios.get("http://192.168.100.134:5000/api/users")
+    Axios.get("http://192.168.56.1:5000/api/users")
       .then((res) => {
         console.log("Fetched users data:", res.data);
         setUsers(res.data);
@@ -47,7 +47,7 @@ const UserTable = () => {
 
   // Fetch roles from backend
   const fetchRoles = () => {
-    Axios.get("http://192.168.100.134:5000/api/roles")
+    Axios.get("http://192.168.56.1:5000/api/roles")
       .then((res) => {
         console.log("Fetched roles data:", res.data);
         setRoles(res.data);
@@ -59,7 +59,7 @@ const UserTable = () => {
 
   // Fetch departments from backend
   const fetchDepartments = () => {
-    Axios.get("http://192.168.100.134:5000/api/departments")
+    Axios.get("http://192.168.56.1:5000/api/departments")
       .then((res) => {
         console.log("Fetched departments data:", res.data);
         setDepartments(res.data);
@@ -84,7 +84,7 @@ const UserTable = () => {
   // Change user status and log response/error to console
   const changeStatus = async (status, user_id) => {
     try {
-      const response = await fetch(`http://192.168.100.134:5000/api/users/${user_id}/status`, {
+      const response = await fetch(`http://192.168.56.1:5000/api/users/${user_id}/status`, {
         method: "PUT",
         headers: { "Content-type": "application/json" },
         body: JSON.stringify({ status }),
@@ -132,7 +132,7 @@ const UserTable = () => {
     e.preventDefault();
     if (!selectedUser) return;
     try {
-      const response = await Axios.put(`http://192.168.100.134:5000/api/updateUser/${selectedUser.user_id}`, updateData);
+      const response = await Axios.put(`http://192.168.56.1:5000/api/updateUser/${selectedUser.user_id}`, updateData);
       console.log("Update response:", response.data);
       setModalMessage(response.data.message || "User updated successfully.");
       setShowModal(true);
