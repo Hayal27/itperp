@@ -1,0 +1,281 @@
+/* Admin Sidebar - Unique Classes with "as" prefix */
+
+/* Toggle Button */
+.as-sidebar-toggle-btn {
+  position: fixed !important;
+  top: 75px !important;
+  left: 10px !important;
+  z-index: 1050 !important;
+  background: #ffffff !important;
+  border: 1px solid #e0e0e0 !important;
+  border-radius: 4px !important;
+  width: 36px !important;
+  height: 36px !important;
+  color: #666666 !important;
+  font-size: 14px !important;
+  cursor: pointer !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.as-sidebar-toggle-btn:hover {
+  background: #f5f5f5 !important;
+  border-color: #cccccc !important;
+}
+
+/* Sidebar Container */
+.as-professional-sidebar {
+  position: fixed !important;
+  top: 60px !important;
+  left: 0 !important;
+  height: calc(100vh - 60px) !important;
+  background: #ffffff !important;
+  border-right: 1px solid #e0e0e0 !important;
+  z-index: 1000 !important;
+  transition: width 0.25s ease !important;
+  overflow: hidden !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+.as-professional-sidebar.as-expanded {
+  width: 260px !important;
+}
+
+.as-professional-sidebar.as-collapsed {
+  width: 60px !important;
+}
+
+/* Header */
+.as-sidebar-header {
+  padding: 16px 12px !important;
+  border-bottom: 1px solid #e0e0e0 !important;
+  background: #fafafa !important;
+}
+
+.as-sidebar-brand {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.as-brand-icon {
+  font-size: 20px !important;
+  color: #333333 !important;
+}
+
+.as-brand-text {
+  margin-left: 10px !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  color: #333333 !important;
+  white-space: nowrap !important;
+  opacity: 1 !important;
+  transition: opacity 0.25s ease !important;
+}
+
+.as-professional-sidebar.as-collapsed .as-brand-text {
+  opacity: 0 !important;
+}
+
+/* Navigation */
+.as-sidebar-nav {
+  flex: 1 !important;
+  padding: 8px 0 !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+}
+
+.as-sidebar-nav::-webkit-scrollbar {
+  width: 2px !important;
+}
+
+.as-sidebar-nav::-webkit-scrollbar-track {
+  background: transparent !important;
+}
+
+.as-sidebar-nav::-webkit-scrollbar-thumb {
+  background: #e0e0e0 !important;
+  border-radius: 1px !important;
+}
+
+.as-nav-list {
+  list-style: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.as-nav-item {
+  margin-bottom: 1px !important;
+}
+
+/* Navigation Links */
+.as-nav-link {
+  display: flex !important;
+  align-items: center !important;
+  padding: 10px 16px !important;
+  color: #666666 !important;
+  text-decoration: none !important;
+  cursor: pointer !important;
+  border-radius: 0 !important;
+  margin: 0 !important;
+}
+
+.as-nav-link:hover {
+  color: #333333 !important;
+  background: #f0f0f0 !important;
+  text-decoration: none !important;
+}
+
+.as-nav-link.as-active {
+  color: #000000 !important;
+  background: #e8e8e8 !important;
+  font-weight: 500 !important;
+  border-right: 2px solid #333333 !important;
+}
+
+.as-nav-icon {
+  font-size: 16px !important;
+  min-width: 16px !important;
+  text-align: center !important;
+}
+
+.as-nav-text {
+  margin-left: 12px !important;
+  font-size: 13px !important;
+  font-weight: 400 !important;
+  white-space: nowrap !important;
+  opacity: 1 !important;
+  transition: opacity 0.25s ease !important;
+}
+
+.as-professional-sidebar.as-collapsed .as-nav-text {
+  opacity: 0 !important;
+}
+
+/* Submenu */
+.as-submenu-toggle {
+  position: relative !important;
+}
+
+.as-submenu-arrow {
+  margin-left: auto !important;
+  font-size: 10px !important;
+  opacity: 1 !important;
+  transition: opacity 0.25s ease !important;
+}
+
+.as-professional-sidebar.as-collapsed .as-submenu-arrow {
+  opacity: 0 !important;
+}
+
+.as-submenu {
+  list-style: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  max-height: 0 !important;
+  overflow: hidden !important;
+  transition: max-height 0.25s ease !important;
+  background: #f8f8f8 !important;
+}
+
+.as-submenu.as-show {
+  max-height: 150px !important;
+  padding: 4px 0 !important;
+}
+
+.as-submenu-item {
+  margin-bottom: 0 !important;
+}
+
+.as-submenu-link {
+  display: flex !important;
+  align-items: center !important;
+  padding: 8px 16px 8px 44px !important;
+  color: #777777 !important;
+  text-decoration: none !important;
+  font-size: 12px !important;
+}
+
+.as-submenu-link:hover {
+  color: #333333 !important;
+  background: #eeeeee !important;
+  text-decoration: none !important;
+}
+
+.as-submenu-link.as-active {
+  color: #000000 !important;
+  background: #e0e0e0 !important;
+  font-weight: 500 !important;
+}
+
+.as-submenu-icon {
+  font-size: 12px !important;
+  margin-right: 8px !important;
+  min-width: 12px !important;
+}
+
+/* Footer */
+.as-sidebar-footer {
+  padding: 12px !important;
+  border-top: 1px solid #e0e0e0 !important;
+  background: #fafafa !important;
+}
+
+.as-footer-content {
+  text-align: center !important;
+  font-size: 11px !important;
+  color: #999999 !important;
+}
+
+/* Mobile Overlay */
+.as-sidebar-overlay {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  background: rgba(0, 0, 0, 0.2) !important;
+  z-index: 999 !important;
+  opacity: 0 !important;
+  animation: as-fadeIn 0.2s ease forwards !important;
+}
+
+@keyframes as-fadeIn {
+  to {
+    opacity: 1 !important;
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .as-professional-sidebar.as-expanded {
+    width: 240px !important;
+  }
+
+  .as-professional-sidebar.as-collapsed {
+    width: 0 !important;
+    transform: translateX(-100%) !important;
+  }
+
+  .as-sidebar-toggle-btn {
+    top: 68px !important;
+  }
+}
+
+@media (max-width: 576px) {
+  .as-professional-sidebar.as-expanded {
+    width: 100% !important;
+  }
+
+  .as-nav-link {
+    padding: 12px 16px !important;
+  }
+
+  .as-submenu-link {
+    padding: 10px 16px 10px 40px !important;
+  }
+}
+

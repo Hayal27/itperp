@@ -1,11 +1,26 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import PiChartComponent from "./PiChartComponent";
+import { safeGetValue, safeGetComparisonData, createDataPlaceholder, debugDataStructure } from "./MetricsUtils";
 
 
 const CostMetricsPichart = ({ data, type }) => {
   // Log the entire backend data object for debugging.
   console.log("CostMetricsPichart - received backend data:", data);
+
+  // Early return if data is not available
+  if (!data) {
+    console.warn("CostMetricsPichart - No data provided");
+    return (
+      <div className="chart-placeholder">
+        <div className="text-center p-4">
+          <i className="bi bi-pie-chart text-muted" style={{ fontSize: '3rem' }}></i>
+          <p className="text-muted mt-2">No cost data available</p>
+          <small className="text-muted">Please check your data source or try refreshing the page.</small>
+        </div>
+      </div>
+    );
+  }
 
   // Provide a fallback to avoid warnings if type is undefined.
   const chartType = type || "totalCost";
@@ -15,6 +30,9 @@ const CostMetricsPichart = ({ data, type }) => {
 
   // Utility function to extract the metric value in a flexible way.
   const getValue = (key, nestedKey) => {
+    // Check if data exists first
+    if (!data) return 0;
+
     if (data[key] !== undefined) return data[key];
     if (data.extra && data.extra[key] !== undefined) return data.extra[key];
     if (nestedKey && data.extra && data.extra[nestedKey] !== undefined) return data.extra[nestedKey];
@@ -68,13 +86,13 @@ const CostMetricsPichart = ({ data, type }) => {
       }
       case "compareCostPlanOutcome": {
         let totalCostPlan, totalCostOutcome;
-        if (data.total_cost_plan !== undefined && data.total_cost_outcome !== undefined) {
+        if (data && data.total_cost_plan !== undefined && data.total_cost_outcome !== undefined) {
           totalCostPlan = data.total_cost_plan;
           totalCostOutcome = data.total_cost_outcome;
           console.log("Mapping 'compareCostPlanOutcome' with values:", { total_cost_plan: totalCostPlan, total_cost_outcome: totalCostOutcome });
-        } else if (data.extra && data.extra.compareCostPlanOutcome) {
-          totalCostPlan = data.extra.compareCostPlanOutcome.total_cost_plan;
-          totalCostOutcome = data.extra.compareCostPlanOutcome.total_cost_outcome;
+        } else if (data && data.extra && data.extra.compareCostPlanOutcome) {
+          totalCostPlan = data.extra.compareCostPlanOutcome.total_cost_plan || 0;
+          totalCostOutcome = data.extra.compareCostPlanOutcome.total_cost_outcome || 0;
           console.log("Mapping 'compareCostPlanOutcome' with values from extra:", data.extra.compareCostPlanOutcome);
         } else {
           totalCostPlan = totalCostOutcome = 0;
@@ -88,10 +106,10 @@ const CostMetricsPichart = ({ data, type }) => {
       }
       case "totalCostExcutionPercentage": {
         let value;
-        if (data.averageCostCIExecutionPercentage !== undefined) {
+        if (data && data.averageCostCIExecutionPercentage !== undefined) {
           value = data.averageCostCIExecutionPercentage;
           console.log("Mapping 'totalCostExcutionPercentage' with value:", value);
-        } else if (data.extra && data.extra.displayTotalCostExcutionPercentage && data.extra.displayTotalCostExcutionPercentage.averageCostCIExecutionPercentage !== undefined) {
+        } else if (data && data.extra && data.extra.displayTotalCostExcutionPercentage && data.extra.displayTotalCostExcutionPercentage.averageCostCIExecutionPercentage !== undefined) {
           value = data.extra.displayTotalCostExcutionPercentage.averageCostCIExecutionPercentage;
           console.log("Mapping 'totalCostExcutionPercentage' with value from extra:", value);
         } else {

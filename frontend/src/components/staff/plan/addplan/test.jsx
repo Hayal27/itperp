@@ -144,7 +144,7 @@ const Step4SpecificObjectiveDetails = ({ specificObjectiveId, token, onBack, onN
     });
 
     const response = await axios.post(
-      "http://192.168.56.1:5000/api/addspecificObjectiveDetail",
+      "http://localhost:5000/api/addspecificObjectiveDetail",
       {
         specific_objective: [
           {
@@ -541,7 +541,7 @@ const Step4SpecificObjectiveDetails = ({ specificObjectiveId, token, onBack, onN
   
       // API request to create the new detail
       const response = await axios.post(
-        "http://192.168.56.1:5000/api/addspecificObjectiveDetail",
+        "http://localhost:5000/api/addspecificObjectiveDetail",
         {
           specific_objective: [
             {

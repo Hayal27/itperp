@@ -22,7 +22,7 @@ const handleEmptyResults = (results, res, defaultValues) => {
 const getJoinClause = (req) => {
   let joinClause = BASE_JOIN;
   if (req.query.department) {
-    joinClause += "\nJOIN plans p ON g.plan_id = p.plan_id";
+    joinClause += "\nJOIN plans p ON g.goal_id = p.goal_id";
   }
   return joinClause;
 };
@@ -83,8 +83,9 @@ const BASE_JOIN = `
       conditions.push(`g.quarter = '${req.query.quarter}'`);
     }
   
+    // Modify the department filter to use sod.department_id rather than a column from the departments table.
     if (req.query.department) {
-      conditions.push(`d.department = '${req.query.department}'`);
+      conditions.push(`sod.department_id = '${req.query.department}'`);
     }
   
     if (req.query.created_by) {
@@ -97,7 +98,6 @@ const BASE_JOIN = `
   
     return conditions.length > 0 ? " AND " + conditions.join(" AND ") : "";
   };
-  
 
 // Display Total Cost (summing CIoutcome) with additional filters
 const displayTotalCost = async (req, res) => {
@@ -142,23 +142,38 @@ const displayTotalCostPlan = async (req, res) => {
 };
 
 // Updated function: Compare Total Cost Plan (CIplan) and CI Outcome (CIoutcome) with additional filters
+
 const compareCostPlanOutcome = async (req, res) => {
   try {
     const joinClause = getJoinClause(req);
     const extraFilters = getFilterConditions(req);
     const query = `
       SELECT 
+        sod.department_id,
+        sod.description,
         COALESCE(SUM(CASE WHEN sod.plan_type = 'cost' THEN sod.CIplan END), 0) as total_cost_plan,
-        COALESCE(SUM(CASE WHEN sod.plan_type = 'cost' THEN sod.CIoutcome END), 0) as total_cost_outcome
+        COALESCE(SUM(CASE WHEN sod.plan_type = 'cost' THEN sod.CIoutcome END), 0) as total_cost_outcome,
+        COALESCE(SUM(CASE WHEN sod.plan_type = 'cost' THEN sod.CIplan END), 0) - COALESCE(SUM(CASE WHEN sod.plan_type = 'cost' THEN sod.CIoutcome END), 0) as difference,
+        CASE 
+          WHEN COALESCE(SUM(CASE WHEN sod.plan_type = 'cost' THEN sod.CIplan END), 0) = 0 THEN 0
+          ELSE (COALESCE(SUM(CASE WHEN sod.plan_type = 'cost' THEN sod.CIoutcome END), 0) / COALESCE(SUM(CASE WHEN sod.plan_type = 'cost' THEN sod.CIplan END), 0)) * 100
+        END as excution_persentage
       ${joinClause}
       WHERE sod.plan_type = 'cost' ${extraFilters}
+      GROUP BY sod.department_id, sod.description
     `;
+    
     con.query(query, (err, results) => {
       if (err) return handleDatabaseError(err, res, 'comparing cost plan and outcome');
-      if (handleEmptyResults(results, res, { total_cost_plan: 0, total_cost_outcome: 0 })) return;
-      const { total_cost_plan, total_cost_outcome } = results[0];
-      const difference = total_cost_plan - total_cost_outcome;
-      res.json({ total_cost_plan, total_cost_outcome, difference });
+      
+      if (handleEmptyResults(results, res, {
+          total_cost_plan: 0, 
+          total_cost_outcome: 0,
+          difference: 0,
+          excution_persentage: 0
+      })) return;
+      
+      res.json(results);
     });
   } catch (error) {
     console.error('Unexpected error in compareCostPlanOutcome:', error);
@@ -169,12 +184,9 @@ const compareCostPlanOutcome = async (req, res) => {
 
 
 
-// compareIncomePlanOutcomeTotal_capital
-
 
 
 // costPlan_Outcome_difference_regular_budget
-
 const costPlanOutcomeDifferenceRegularBudget = async (req, res) => {
   try {
     // Retrieve joinClause and extraFilters from the request.
@@ -327,12 +339,6 @@ const costPlanOutcomeDifferenceCapitalBudget = async (req, res) => {
     res.status(500).json({ message: "Internal server error", error: error.message });
   }
 };
-
-
-
-
-
-
 
 
 
@@ -626,34 +632,6 @@ const displayTotalHR = async (req, res) => {
   }
 };
 
-// // Compare Total HR CIplan and CIoutcome with proper relationships
-// const compareTotalHRCIplanAndCIoutcome = async (req, res) => {
-//   try {
-//     if (!validatePeriodParams(req, res)) return;
-//     const { year, quarter } = req.query;
-
-//     const query = `
-//       SELECT 
-//         COALESCE(SUM(CASE WHEN sod.cost_type = 'CIplan' THEN sod.hr_count ELSE 0 END), 0) as total_CIplan,
-//         COALESCE(SUM(CASE WHEN sod.cost_type = 'CIoutcome' THEN sod.hr_count ELSE 0 END), 0) as total_CIoutcome
-//       ${BASE_JOIN}
-//       WHERE g.year = ? AND g.quarter = ?`;
-
-//     con.query(query, [year, quarter], (err, results) => {
-//       if (err) return handleDatabaseError(err, res, 'comparing HR data');
-//       if (handleEmptyResults(results, res, { total_CIplan: 0, total_CIoutcome: 0 })) return;
-//       res.json(results[0]);
-//     });
-//   } catch (error) {
-//     console.error('Unexpected error in compareTotalHRCIplanAndCIoutcome:', error);
-//     res.status(500).json({ message: "Internal server error", error: error.message });
-//   }
-// };
-
-  
-
-
-// HRPlanOutcomeDifference
 
 
 
@@ -737,6 +715,90 @@ const HRPlanOutcomeDifferenceFulltime = async (req, res) => {
 };
 
 
+const DefaultPlanOutcomeDifferenceFulltime = async (req, res) => {
+  try {
+    // Retrieve joinClause and extraFilters from the request.
+    let joinClause = getJoinClause(req);
+    const extraFilters = getFilterConditions(req) || "";
+
+    // Fallback to BASE_JOIN if joinClause is missing the FROM clause.
+    if (!joinClause || !/FROM\s+/i.test(joinClause)) {
+      joinClause = BASE_JOIN;
+      console.warn("joinClause not provided or missing FROM clause; using default BASE_JOIN");
+    }
+    
+    // Append a LEFT JOIN to fetch department name from the departments table
+    const joinDepartment = " LEFT JOIN departments d ON sod.department_id = d.department_id";
+
+    // Build the SQL query string.
+    // Fetching department name (d.name), and calculating difference (plan - outcome) along with execution_percentage.
+    const query = `
+      SELECT 
+        sod.specific_objective_detailname,
+        sod.department_id,
+        d.name AS department,
+        sod.details,
+        COALESCE(SUM(CASE WHEN sod.plan_type = 'default_plan' THEN sod.plan END), 0) AS plan,
+        COALESCE(SUM(CASE WHEN sod.plan_type = 'default_plan' THEN sod.outcome END), 0) AS outcome,
+        COALESCE(SUM(CASE WHEN sod.plan_type = 'default_plan' THEN sod.plan END), 0) - COALESCE(SUM(CASE WHEN sod.plan_type = 'default_plan' THEN sod.outcome END), 0) AS difference,
+        CASE 
+          WHEN COALESCE(SUM(CASE WHEN sod.plan_type = 'default_plan' THEN sod.plan END), 0) = 0 THEN 0
+          ELSE (COALESCE(SUM(CASE WHEN sod.plan_type = 'default_plan' THEN sod.outcome END), 0) / COALESCE(SUM(CASE WHEN sod.plan_type = 'default_plan' THEN sod.plan END), 0)) * 100
+        END AS execution_percentage
+      ${joinClause}
+      ${joinDepartment}
+      WHERE 
+        sod.plan_type = 'default_plan' ${extraFilters}
+      GROUP BY sod.specific_objective_detailname, sod.department_id, d.name, sod.details
+    `;
+
+    console.log("Constructed Query:", query);
+
+    con.query(query, (err, results) => {
+      if (err) {
+        console.error("Database error occurred:", err);
+        return handleDatabaseError(err, res, " plan and outcome ");
+      }
+
+      // Check for empty results; if so, return a default response.
+      if (handleEmptyResults(results, res, { data: [], totals: { plan: 0, outcome: 0, difference: 0, execution_percentage: 0 } })) {
+        return;
+      }
+
+      console.log("SQL Query Results:", results);
+
+      // Compute overall totals.
+      let totalPlan = 0;
+      let totalOutcome = 0;
+      results.forEach(row => {
+        totalPlan += Number(row.plan);
+        totalOutcome += Number(row.outcome);
+      });
+      const overallDifference = totalPlan - totalOutcome;
+      const overallExecutionPercentage = totalPlan === 0 ? 0 : (totalOutcome / totalPlan) * 100;
+
+      console.log("Computed Totals - Total Plan:", totalPlan, "Total Outcome:", totalOutcome, "Overall Difference:", overallDifference, "Overall Execution Percentage:", overallExecutionPercentage);
+
+      // Build the final response object.
+      const responseData = {
+        data: results, // Each row includes specific_objective_detailname, department_id, department name, details, plan, outcome, difference, and execution_percentage.
+        totals: {
+          plan: totalPlan,
+          outcome: totalOutcome,
+          difference: overallDifference,
+          execution_percentage: overallExecutionPercentage
+        }
+      };
+
+      res.json(responseData);
+    });
+    
+  } catch (error) {
+    console.error("Unexpected error in DefaultPlanOutcomeDifferenceFulltime:", error);
+    res.status(500).json({ message: "Internal server error", error: error.message });
+  }
+};
+
 
 
 
@@ -764,7 +826,7 @@ module.exports = {
   costPlanOutcomeDifferenceCapitalBudget,
 
   HRPlanOutcomeDifferenceFulltime,
-  
+  DefaultPlanOutcomeDifferenceFulltime
 //   compareCostCIplanAndCIoutcome,
 //   compareCostCIexecutionPercentage,
 //   displayTotalIncome,

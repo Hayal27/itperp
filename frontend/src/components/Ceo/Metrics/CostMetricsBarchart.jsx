@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import BarChartComponent from "./BarChartComponent";
+import { safeGetValue, safeGetComparisonData, createDataPlaceholder, debugDataStructure } from "./MetricsUtils";
 
 /**
  * CostMetricsBarchart component configures and renders a bar chart
@@ -20,11 +21,28 @@ const CostMetricsBarchart = ({ data, type }) => {
   // Log the entire backend data object.
   console.log("CostMetricsBarchart - received backend data:", data);
 
+  // Early return if data is not available
+  if (!data) {
+    console.warn("CostMetricsBarchart - No data provided");
+    return (
+      <div className="chart-placeholder">
+        <div className="text-center p-4">
+          <i className="bi bi-bar-chart text-muted" style={{ fontSize: '3rem' }}></i>
+          <p className="text-muted mt-2">No cost data available</p>
+          <small className="text-muted">Please check your data source or try refreshing the page.</small>
+        </div>
+      </div>
+    );
+  }
+
   // Provide a fallback to avoid warnings if type is undefined.
   const chartType = type || "totalCost";
 
   // Function to extract the metric value based on the type.
   const getValue = (key, nestedKey) => {
+    // Check if data exists first
+    if (!data) return 0;
+
     // Try directly on data first, then check data.extra.
     if (data[key] !== undefined) return data[key];
     if (data.extra && data.extra[key] !== undefined) return data.extra[key];
@@ -42,21 +60,21 @@ const CostMetricsBarchart = ({ data, type }) => {
       break;
     case "compareCostPlanOutcome":
       // For compare, try direct properties or the whole object under extra.
-      if (data.total_cost_plan !== undefined && data.total_cost_outcome !== undefined) {
+      if (data && data.total_cost_plan !== undefined && data.total_cost_outcome !== undefined) {
         console.log("Mapping 'compareCostPlanOutcome' with values:", {
           total_cost_plan: data.total_cost_plan,
           total_cost_outcome: data.total_cost_outcome
         });
-      } else if (data.extra && data.extra.compareCostPlanOutcome) {
+      } else if (data && data.extra && data.extra.compareCostPlanOutcome) {
         console.log("Mapping 'compareCostPlanOutcome' with values from extra:", data.extra.compareCostPlanOutcome);
       } else {
         console.log("Mapping 'compareCostPlanOutcome' defaulting to zeros");
       }
       break;
     case "totalCostExcutionPercentage":
-      if (data.averageCostCIExecutionPercentage !== undefined) {
+      if (data && data.averageCostCIExecutionPercentage !== undefined) {
         console.log("Mapping 'totalCostExcutionPercentage' with value:", data.averageCostCIExecutionPercentage);
-      } else if (data.extra && data.extra.displayTotalCostExcutionPercentage) {
+      } else if (data && data.extra && data.extra.displayTotalCostExcutionPercentage) {
         console.log("Mapping 'totalCostExcutionPercentage' with value from extra:", data.extra.displayTotalCostExcutionPercentage);
       } else {
         console.log("Mapping 'totalCostExcutionPercentage' defaulting to zero");
@@ -118,12 +136,12 @@ const CostMetricsBarchart = ({ data, type }) => {
     case "compareCostPlanOutcome": {
       // Expects: either top-level values or in extra.compareCostPlanOutcome
       let totalCostPlan, totalCostOutcome;
-      if (data.total_cost_plan !== undefined && data.total_cost_outcome !== undefined) {
+      if (data && data.total_cost_plan !== undefined && data.total_cost_outcome !== undefined) {
         totalCostPlan = data.total_cost_plan;
         totalCostOutcome = data.total_cost_outcome;
-      } else if (data.extra && data.extra.compareCostPlanOutcome) {
-        totalCostPlan = data.extra.compareCostPlanOutcome.total_cost_plan;
-        totalCostOutcome = data.extra.compareCostPlanOutcome.total_cost_outcome;
+      } else if (data && data.extra && data.extra.compareCostPlanOutcome) {
+        totalCostPlan = data.extra.compareCostPlanOutcome.total_cost_plan || 0;
+        totalCostOutcome = data.extra.compareCostPlanOutcome.total_cost_outcome || 0;
       } else {
         totalCostPlan = totalCostOutcome = 0;
       }
@@ -144,9 +162,9 @@ const CostMetricsBarchart = ({ data, type }) => {
     case "totalCostExcutionPercentage": {
       // Expects: { averageCostCIExecutionPercentage: number } or extra.displayTotalCostExcutionPercentage as an object
       let value;
-      if (data.averageCostCIExecutionPercentage !== undefined) {
+      if (data && data.averageCostCIExecutionPercentage !== undefined) {
         value = data.averageCostCIExecutionPercentage;
-      } else if (data.extra && data.extra.displayTotalCostExcutionPercentage && data.extra.displayTotalCostExcutionPercentage.averageCostCIExecutionPercentage !== undefined) {
+      } else if (data && data.extra && data.extra.displayTotalCostExcutionPercentage && data.extra.displayTotalCostExcutionPercentage.averageCostCIExecutionPercentage !== undefined) {
         value = data.extra.displayTotalCostExcutionPercentage.averageCostCIExecutionPercentage;
       } else {
         value = 0;

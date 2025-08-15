@@ -75,7 +75,7 @@ const DeputiymanagerAddReport = () => {
       return;
     }
     const token = localStorage.getItem("token");
-    Axios.get(`http://192.168.56.1:5000/api/pland/${planId}`, {
+    Axios.get(`http://localhost:5000/api/pland/${planId}`, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then((res) => {
@@ -181,7 +181,7 @@ const DeputiymanagerAddReport = () => {
           };
 
     const token = localStorage.getItem("token");
-    Axios.put(`http://192.168.56.1:5000/api/addReport/${planId}`, updatedData, {
+    Axios.put(`http://localhost:5000/api/addReport/${planId}`, updatedData, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(() => {

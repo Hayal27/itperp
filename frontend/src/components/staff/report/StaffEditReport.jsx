@@ -37,7 +37,7 @@ const StaffEditReport = ({ reportId }) => {
     }
 
     try {
-      const response = await Axios.get(`http://192.168.56.1:5000/api/plans/${reportId}`, {
+      const response = await Axios.get(`http://localhost:5000/api/plans/${reportId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -71,7 +71,7 @@ const StaffEditReport = ({ reportId }) => {
 
     try {
       const response = await Axios.put(
-        `http://192.168.56.1:5000/api/plans/${reportId}`,
+        `http://localhost:5000/api/plans/${reportId}`,
         formData,
         {
           headers: {
@@ -100,7 +100,7 @@ const StaffEditReport = ({ reportId }) => {
     }
 
     try {
-      await Axios.delete(`http://192.168.56.1:5000/api/plans/${reportId}`, {
+      await Axios.delete(`http://localhost:5000/api/plans/${reportId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

@@ -208,7 +208,7 @@ const Step4SpecificObjectiveDetails = ({ specificObjectiveId, token, onBack, onN
       console.log("Payload:", payload);
   
       const response = await axios.post(
-        "http://192.168.56.1:5000/api/addspecificObjectiveDetail",
+        "http://localhost:5000/api/addspecificObjectiveDetail",
         payload,
         { headers: { Authorization: `Bearer ${token}` } }
       );

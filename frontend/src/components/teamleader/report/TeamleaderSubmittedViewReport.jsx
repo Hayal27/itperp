@@ -17,7 +17,7 @@ const TeamleaderSubmittedViewPlan = () => {
 
   const fetchPlans = async () => {
     try {
-      const response = await axios.get("http://192.168.56.1:5000/api/submitted_reports", {
+      const response = await axios.get("http://localhost:5000/api/submitted_reports", {
         headers: { Authorization: `Bearer ${token}` }
       });
       if (response.data.success && response.data.plans) {
@@ -34,7 +34,7 @@ const TeamleaderSubmittedViewPlan = () => {
   const handleApproveDecline = async (planId, action) => {
     try {
       const response = await axios.put(
-        "http://192.168.56.1:5000/api/supervisor/plans/approve",
+        "http://localhost:5000/api/supervisor/plans/approve",
         { plan_id: planId, status: action, comment },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -284,7 +284,7 @@ const TeamleaderSubmittedViewPlan = () => {
       </div>
 
       {selectedPlan && (
-        <div className="modal">
+        <div className="modal model-h">
           <h3>Review Report</h3>
           <div className="plan-details">{renderPlanDetails(selectedPlan)}</div>
           {/* Render uploaded files if they exist */}

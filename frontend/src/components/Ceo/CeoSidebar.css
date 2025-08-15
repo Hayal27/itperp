@@ -1,0 +1,625 @@
+/* ============================================================================
+   CEO SIDEBAR STYLES - Professional Executive Interface
+   Integrated with Admin Sidebar patterns for consistency
+   Includes body component expansion/shrinking functionality
+   Prefix: ceo- (to avoid class name conflicts)
+   ============================================================================ */
+
+/* CSS Custom Properties for Dynamic Body Component Sizing */
+:root {
+  --ceo-sidebar-width: 260px;
+  --ceo-main-content-margin: 260px;
+  --ceo-content-width: calc(100vw - 260px);
+  --ceo-transition-duration: 0.3s;
+  --ceo-header-height: 60px;
+}
+
+/* CEO Sidebar Container - Based on Admin Sidebar Structure */
+.ceo-professional-sidebar {
+  position: fixed;
+  top: 60px;
+  left: 0;
+  height: calc(100vh - 60px);
+  background: linear-gradient(180deg, #2a3753 0%, #0c7c92 100%);
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  z-index: 1000;
+  transition: width 0.3s ease;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
+  width: 260px;
+}
+
+.ceo-professional-sidebar.ceo-collapsed {
+  width: 60px;
+}
+
+.ceo-professional-sidebar.ceo-expanded {
+  width: 260px;
+}
+
+/* CEO Sidebar Header */
+.ceo-sidebar-header {
+  padding: 1.5rem 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(90deg, #16284f 10%, #0c7c92 50%);
+  min-height: 70px;
+}
+
+.ceo-sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: white;
+}
+
+.ceo-brand-icon {
+  font-size: 1.8rem;
+  color: #ffc107;
+  flex-shrink: 0;
+}
+
+.ceo-brand-text {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: white;
+  white-space: nowrap;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* CEO User Info Section */
+.ceo-sidebar-user {
+  padding: 1.5rem 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.ceo-user-avatar {
+  font-size: 2.5rem;
+  color: #ffc107;
+  flex-shrink: 0;
+}
+
+.ceo-user-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.ceo-user-name {
+  font-weight: 700;
+  color: white;
+  font-size: 1rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.ceo-user-role {
+  font-size: 0.8rem;
+  color: #ffc107;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* CEO Navigation */
+.ceo-sidebar-nav {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0.5rem 0;
+}
+
+.ceo-nav-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.ceo-nav-item {
+  margin-bottom: 0.25rem;
+}
+
+.ceo-nav-link {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: none;
+  transition: all 0.3s ease;
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  position: relative;
+  border-radius: 0;
+}
+
+.ceo-nav-link:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  transform: translateX(5px);
+  box-shadow: inset 4px 0 0 #ffc107;
+}
+
+.ceo-nav-link.ceo-active {
+  background: linear-gradient(90deg, rgba(255, 193, 7, 0.2) 0%, rgba(255, 193, 7, 0.1) 100%);
+  color: white;
+  box-shadow: inset 4px 0 0 #ffc107;
+  font-weight: 600;
+}
+
+.ceo-nav-link.ceo-active::before {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: #ffc107;
+}
+
+.ceo-nav-icon {
+  font-size: 1.2rem;
+  width: 24px;
+  text-align: center;
+  margin-right: 0.75rem;
+  flex-shrink: 0;
+  color: #ffc107;
+}
+
+.ceo-nav-text {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 500;
+}
+
+/* CEO Submenu Styles */
+.ceo-submenu-toggle {
+  justify-content: space-between;
+}
+
+.ceo-submenu-toggle.ceo-expanded {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.ceo-submenu-arrow {
+  font-size: 0.9rem;
+  transition: transform 0.3s ease;
+  color: #ffc107;
+}
+
+.ceo-submenu-toggle.ceo-expanded .ceo-submenu-arrow {
+  transform: rotate(180deg);
+}
+
+.ceo-submenu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  background: rgba(0, 0, 0, 0.2);
+  border-left: 3px solid #ffc107;
+  margin-left: 1rem;
+  margin-right: 0.5rem;
+  border-radius: 0 0 8px 8px;
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.3s ease;
+}
+
+.ceo-submenu.ceo-show {
+  max-height: 500px;
+}
+
+.ceo-submenu-item {
+  margin: 0;
+}
+
+.ceo-submenu-link {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  color: rgba(255, 255, 255, 0.7);
+  text-decoration: none;
+  transition: all 0.2s ease;
+  font-size: 0.9rem;
+  font-weight: 400;
+}
+
+.ceo-submenu-link:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  padding-left: 1.5rem;
+  transform: translateX(5px);
+}
+
+.ceo-submenu-link.ceo-active {
+  background: rgba(255, 193, 7, 0.3);
+  color: white;
+  font-weight: 600;
+  border-radius: 4px;
+  margin: 0.125rem 0.5rem;
+}
+
+.ceo-submenu-icon {
+  font-size: 1rem;
+  width: 18px;
+  text-align: center;
+  margin-right: 0.5rem;
+  flex-shrink: 0;
+  color: #ffc107;
+}
+
+.ceo-submenu-text {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* CEO Sidebar Footer */
+.ceo-sidebar-footer {
+  padding: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.2);
+  text-align: center;
+}
+
+.ceo-footer-text {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+/* CEO Sidebar Toggle Button */
+.ceo-sidebar-toggle-btn {
+  position: fixed;
+  top: 50%;
+  left: 220px;
+  transform: translateY(-50%);
+  background: linear-gradient(90deg, #16284f 10%, #0c7c92 50%);
+  border: 2px solid #ffc107;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  z-index: 1001;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.ceo-sidebar-toggle-btn:hover {
+  background: linear-gradient(90deg, #1a3f65 10%, #104b8a 50%);
+  transform: translateY(-50%) scale(1.1);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+}
+
+/* Collapsed State Adjustments */
+.ceo-professional-sidebar.ceo-collapsed .ceo-nav-text,
+.ceo-professional-sidebar.ceo-collapsed .ceo-brand-text,
+.ceo-professional-sidebar.ceo-collapsed .ceo-user-info,
+.ceo-professional-sidebar.ceo-collapsed .ceo-submenu-arrow,
+.ceo-professional-sidebar.ceo-collapsed .ceo-footer-text {
+  display: none;
+}
+
+.ceo-professional-sidebar.ceo-collapsed .ceo-nav-link {
+  justify-content: center;
+  padding: 1rem 0.5rem;
+}
+
+.ceo-professional-sidebar.ceo-collapsed .ceo-nav-icon {
+  margin-right: 0;
+}
+
+.ceo-professional-sidebar.ceo-collapsed .ceo-user-avatar {
+  margin: 0 auto;
+}
+
+.ceo-professional-sidebar.ceo-collapsed .ceo-sidebar-user {
+  justify-content: center;
+}
+
+.ceo-professional-sidebar.ceo-collapsed .ceo-sidebar-toggle-btn {
+  left: 20px;
+}
+
+/* Mobile Overlay */
+.ceo-sidebar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  display: none;
+}
+
+/* Global Body Classes for CEO Sidebar */
+body.ceo-sidebar-collapsed {
+  --ceo-sidebar-width: 60px;
+  --ceo-main-content-margin: 60px;
+}
+
+body:not(.ceo-sidebar-collapsed) {
+  --ceo-sidebar-width: 260px;
+  --ceo-main-content-margin: 260px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .ceo-professional-sidebar {
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+  }
+  
+  .ceo-professional-sidebar:not(.ceo-collapsed) {
+    transform: translateX(0);
+  }
+  
+  .ceo-sidebar-overlay {
+    display: block;
+  }
+  
+  .ceo-sidebar-toggle-btn {
+    left: 15px;
+    top: 15px;
+    transform: none;
+  }
+  
+  body.ceo-sidebar-collapsed,
+  body:not(.ceo-sidebar-collapsed) {
+    --ceo-main-content-margin: 0px;
+  }
+}
+
+/* Scrollbar Styling for CEO Sidebar */
+.ceo-sidebar-nav::-webkit-scrollbar {
+  width: 4px;
+}
+
+.ceo-sidebar-nav::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.ceo-sidebar-nav::-webkit-scrollbar-thumb {
+  background: rgba(255, 193, 7, 0.5);
+  border-radius: 2px;
+}
+
+.ceo-sidebar-nav::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 193, 7, 0.8);
+}
+
+/* Animation Classes */
+.ceo-nav-item-enter {
+  opacity: 0;
+  transform: translateX(-10px);
+}
+
+.ceo-nav-item-enter-active {
+  opacity: 1;
+  transform: translateX(0);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* ============================================================================
+   BODY COMPONENT EXPANSION/SHRINKING INTEGRATION
+   Handles automatic expansion and shrinking of body components when sidebar toggles
+   ============================================================================ */
+
+/* Global Body Classes for CEO Sidebar State */
+body.ceo-sidebar-expanded {
+  --ceo-sidebar-width: 260px;
+  --ceo-main-content-margin: 260px;
+  --ceo-content-width: calc(100vw - 260px);
+}
+
+body.ceo-sidebar-collapsed {
+  --ceo-sidebar-width: 60px;
+  --ceo-main-content-margin: 60px;
+  --ceo-content-width: calc(100vw - 60px);
+}
+
+/* Main Content Areas - Auto Expansion/Shrinking */
+.ceo-main-content,
+.main-content,
+[data-ceo-content] {
+  margin-left: var(--ceo-main-content-margin) !important;
+  width: var(--ceo-content-width) !important;
+  transition: margin-left var(--ceo-transition-duration) ease,
+              width var(--ceo-transition-duration) ease !important;
+  min-height: calc(100vh - var(--ceo-header-height));
+  position: relative;
+  z-index: 1;
+}
+
+/* Dashboard and Content Wrappers */
+.ceo-dashboard-container,
+.dashboard-container,
+.content-wrapper,
+.page-content,
+.main-wrapper {
+  margin-left: var(--ceo-main-content-margin) !important;
+  width: var(--ceo-content-width) !important;
+  transition: margin-left var(--ceo-transition-duration) ease,
+              width var(--ceo-transition-duration) ease !important;
+  box-sizing: border-box;
+}
+
+/* Cards and Panels - Responsive to Sidebar State */
+.ceo-dashboard-container .card,
+.ceo-dashboard-container .panel,
+.dashboard-container .card,
+.dashboard-container .panel,
+.content-wrapper .card,
+.content-wrapper .panel {
+  transition: width var(--ceo-transition-duration) ease !important;
+}
+
+/* Charts and Data Visualizations - Auto Resize */
+.ceo-chart-container,
+.chart-container,
+.chart-wrapper,
+.recharts-wrapper,
+.apexcharts-canvas {
+  transition: width var(--ceo-transition-duration) ease !important;
+}
+
+/* Tables - Responsive Width */
+.ceo-table-container,
+.table-responsive,
+.datatable-wrapper {
+  transition: width var(--ceo-transition-duration) ease !important;
+}
+
+/* Grid Systems - Auto Adjustment */
+.row,
+.grid-container,
+.flex-container {
+  transition: width var(--ceo-transition-duration) ease !important;
+}
+
+/* Form Containers */
+.form-container,
+.form-wrapper,
+.ceo-form-container {
+  transition: width var(--ceo-transition-duration) ease !important;
+}
+
+/* Header and Navigation Bars */
+.top-header,
+.navbar-main,
+.breadcrumb-container {
+  margin-left: var(--ceo-main-content-margin) !important;
+  width: var(--ceo-content-width) !important;
+  transition: margin-left var(--ceo-transition-duration) ease,
+              width var(--ceo-transition-duration) ease !important;
+}
+
+/* Footer Adjustment */
+.main-footer,
+.page-footer,
+.ceo-footer {
+  margin-left: var(--ceo-main-content-margin) !important;
+  width: var(--ceo-content-width) !important;
+  transition: margin-left var(--ceo-transition-duration) ease,
+              width var(--ceo-transition-duration) ease !important;
+}
+
+/* Mobile Responsive Overrides */
+@media (max-width: 768px) {
+  body.ceo-sidebar-expanded,
+  body.ceo-sidebar-collapsed {
+    --ceo-main-content-margin: 0px;
+    --ceo-content-width: 100vw;
+  }
+
+  .ceo-main-content,
+  .main-content,
+  [data-ceo-content],
+  .ceo-dashboard-container,
+  .dashboard-container,
+  .content-wrapper,
+  .page-content,
+  .main-wrapper,
+  .top-header,
+  .navbar-main,
+  .breadcrumb-container,
+  .main-footer,
+  .page-footer,
+  .ceo-footer {
+    margin-left: 0 !important;
+    width: 100vw !important;
+  }
+}
+
+/* Tablet Responsive */
+@media (max-width: 1024px) and (min-width: 769px) {
+  body.ceo-sidebar-expanded {
+    --ceo-sidebar-width: 240px;
+    --ceo-main-content-margin: 240px;
+    --ceo-content-width: calc(100vw - 240px);
+  }
+}
+
+/* Large Screen Optimization */
+@media (min-width: 1400px) {
+  body.ceo-sidebar-expanded {
+    --ceo-sidebar-width: 280px;
+    --ceo-main-content-margin: 280px;
+    --ceo-content-width: calc(100vw - 280px);
+  }
+}
+
+/* Smooth Transitions for All Interactive Elements */
+.ceo-main-content *,
+.main-content *,
+[data-ceo-content] *,
+.ceo-dashboard-container *,
+.dashboard-container *,
+.content-wrapper * {
+  transition: inherit;
+}
+
+/* Performance Optimization - Hardware Acceleration */
+.ceo-main-content,
+.main-content,
+[data-ceo-content],
+.ceo-dashboard-container,
+.dashboard-container,
+.content-wrapper {
+  transform: translateZ(0);
+  will-change: margin-left, width;
+}
+
+/* Print Styles - Full Width */
+@media print {
+  body.ceo-sidebar-expanded,
+  body.ceo-sidebar-collapsed {
+    --ceo-main-content-margin: 0px;
+    --ceo-content-width: 100%;
+  }
+
+  .ceo-main-content,
+  .main-content,
+  [data-ceo-content],
+  .ceo-dashboard-container,
+  .dashboard-container,
+  .content-wrapper {
+    margin-left: 0 !important;
+    width: 100% !important;
+  }
+}
+
+/* Accessibility - Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .ceo-main-content,
+  .main-content,
+  [data-ceo-content],
+  .ceo-dashboard-container,
+  .dashboard-container,
+  .content-wrapper {
+    transition: none !important;
+  }
+}

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Step1Goal from "./Step1Goal"; // Goal selection step
 import Step2Objective from "./Step2Objective"; // Objective selection step
@@ -18,6 +18,80 @@ const StafPlanSteps = () => {
   const [error, setError] = useState(null); // Error state
   const [successMessage, setSuccessMessage] = useState(""); // Success message after submission
   const token = localStorage.getItem("token"); // Get token from local storage
+
+  // Sidebar state management
+  const [sidebarState, setSidebarState] = useState({
+    isCollapsed: false,
+    sidebarWidth: 260,
+    mainContentMargin: 260
+  });
+
+  // Listen for sidebar state changes from different sidebar types
+  useEffect(() => {
+    const handleSidebarStateChange = (event) => {
+      const { isCollapsed, sidebarWidth, mainContentMargin } = event.detail;
+
+      // Debug logging
+      console.log('🔄 StafPlanSteps: Sidebar state changed:', {
+        isCollapsed,
+        sidebarWidth,
+        mainContentMargin,
+        eventType: event.type
+      });
+
+      // Handle mobile responsiveness
+      const isMobile = window.innerWidth <= 768;
+      const adjustedMargin = isMobile ? 0 : mainContentMargin;
+
+      setSidebarState({
+        isCollapsed,
+        sidebarWidth,
+        mainContentMargin: adjustedMargin
+      });
+    };
+
+    // Handle window resize for responsive behavior
+    const handleResize = () => {
+      const isMobile = window.innerWidth <= 768;
+      if (isMobile) {
+        setSidebarState(prev => ({
+          ...prev,
+          mainContentMargin: 0
+        }));
+      } else {
+        // Restore sidebar margin on desktop
+        setSidebarState(prev => ({
+          ...prev,
+          mainContentMargin: prev.isCollapsed ?
+            (prev.sidebarWidth === 70 ? 70 : 60) :
+            (prev.sidebarWidth === 280 ? 280 : 260)
+        }));
+      }
+    };
+
+    // Listen for admin sidebar changes
+    window.addEventListener('sidebarStateChange', handleSidebarStateChange);
+
+    // Listen for staff sidebar changes
+    window.addEventListener('staffSidebarStateChange', handleSidebarStateChange);
+
+    // Listen for CEO sidebar changes
+    window.addEventListener('ceoSidebarStateChange', handleSidebarStateChange);
+
+    // Listen for window resize
+    window.addEventListener('resize', handleResize);
+
+    // Initial check for mobile
+    handleResize();
+
+    // Cleanup event listeners
+    return () => {
+      window.removeEventListener('sidebarStateChange', handleSidebarStateChange);
+      window.removeEventListener('staffSidebarStateChange', handleSidebarStateChange);
+      window.removeEventListener('ceoSidebarStateChange', handleSidebarStateChange);
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   // Handle moving to the next step
   const goToNextStep = () => setStep((prev) => prev + 1);
@@ -94,7 +168,7 @@ const StafPlanSteps = () => {
   
       console.log("Payload for submission:", payload); // Debugging payload
   
-      const response = await axios.post("http://192.168.56.1:5000/api/addplan", payload, {
+      const response = await axios.post("http://localhost:5000/api/addplan", payload, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
@@ -191,10 +265,61 @@ const StafPlanSteps = () => {
     }
   };
 
+  // Calculate dynamic styles and classes based on sidebar state
+  const containerStyle = {
+    '--sidebar-margin': `${sidebarState.mainContentMargin}px`,
+    '--sidebar-width': `${sidebarState.sidebarWidth}px`
+  };
+
+  // Determine CSS classes based on sidebar state
+  const getContainerClasses = () => {
+    let classes = "container mt-46";
+
+    if (sidebarState.isCollapsed) {
+      if (sidebarState.sidebarWidth === 70) {
+        classes += " admin-sidebar-collapsed";
+      } else {
+        classes += " sidebar-collapsed";
+      }
+    } else {
+      if (sidebarState.sidebarWidth === 280) {
+        classes += " admin-sidebar-expanded";
+      } else {
+        classes += " sidebar-expanded";
+      }
+    }
+
+    return classes;
+  };
+
   return (
-    <div className="container mt-46">
-      <h3>እቅድ ማስተዳደሪያ</h3>
-      <div className="step-content">{renderStepContent()}</div>
+    <div
+      className={getContainerClasses()}
+      style={containerStyle}
+    >
+      {/* Professional Header */}
+      <div className="plan-header">
+        <div className="d-flex justify-content-between align-items-center">
+          <h3>እቅድ ማስተዳደሪያ</h3>
+          {/* Debug info - remove in production */}
+          <small className="debug-info">
+            Sidebar: {sidebarState.isCollapsed ? 'Collapsed' : 'Expanded'}
+            ({sidebarState.sidebarWidth}px)
+          </small>
+        </div>
+      </div>
+
+      {/* Main Content Area - Scrollable */}
+      <div className="step-content">
+        <div className="content-wrapper">
+          {renderStepContent()}
+
+          {/* Debug: Add some content to test scrolling */}
+        
+
+
+        </div>
+      </div>
     </div>
   );
 };

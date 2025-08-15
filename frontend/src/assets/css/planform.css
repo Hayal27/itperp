@@ -1,30 +1,88 @@
-.container-report{
-  position: absolute;
-  left: 30%;
-  width: 40%;
-  top: 0%;
-}
-
-.toggle-btn{
-  position: relative;
-  left: 0%;
-  /* width: 30%; */
-  top: -1%;
-}
-
-.toggle-container{
-  position: fixed;
-  left: 110%;
+/* New unique classes for StafAddReport (prefixed with stp-) */
+.stp-wrapper{ /* container for the component */
   width: 100%;
-  top: 20%;
+  max-width: 1100px;
+  margin: 40px auto;
+  padding: 24px;
+  box-sizing: border-box;
+  transition: margin-left 320ms cubic-bezier(.2,.9,.2,1), max-width 320ms cubic-bezier(.2,.9,.2,1);
 }
 
-.popup{
-  background-color: rgb(230, 230, 230);
-
-  width: 500px;
-  /* height: 200px; */
-  position: absolute;
-
-  top: 80%;
+.stp-card{
+  background: linear-gradient(180deg,var(--card), #fbfdff);
+  border-radius: var(--radius);
+  border: 1px solid rgba(20,30,60,0.04);
+  box-shadow: var(--shadow);
+  overflow:hidden;
 }
+
+.stp-card-body{ padding: 28px; }
+
+.stp-title{ font-size: 1.6rem; font-weight:600; color: #0f1724; margin-bottom: 12px; }
+
+.stp-form-group{ margin-bottom: 14px; }
+.stp-label{ display:block; font-size:0.9rem; color:var(--muted); margin-bottom:6px; font-weight:600; }
+.stp-input{ width:100%; padding:10px 12px; border-radius:8px; border:1px solid rgba(16,24,40,0.06); background:linear-gradient(180deg,#fff,#fbfdff); font-size:0.95rem; color:#0b1220; }
+.stp-input:focus{ outline:none; border-color:var(--accent); box-shadow:0 6px 18px rgba(74,144,226,0.08); transform: translateY(-1px); }
+
+/* File area */
+.stp-file-section{ padding: 8px 0; display:flex; align-items:center; gap:12px; }
+.stp-file-add-btn{ background:transparent; border:1px dashed rgba(16,24,40,0.08); color:var(--muted); padding:8px 10px; border-radius:8px; }
+
+.stp-selected-files{ margin-top:8px; }
+.stp-attachment-list{ list-style:none; padding-left:0; margin:0; display:flex; flex-direction:column; gap:8px; }
+.stp-attachment-item{ display:flex; align-items:center; gap:10px; background: rgba(16,24,40,0.02); padding:8px 10px; border-radius:8px; border:1px solid rgba(16,24,40,0.02); font-size:0.95rem; }
+
+.stp-submit-btn{ background: linear-gradient(180deg,var(--primary), #2779b5); border:none; color:#fff; padding:10px 14px; font-weight:600; border-radius:10px; }
+
+.stp-toggle-btn{ background: #f3f4f6; border:1px solid rgba(16,24,40,0.04); padding:8px 12px; border-radius:8px; }
+
+/* Preview */
+.stp-preview{ margin-top:20px; border-radius:10px; overflow:hidden; border:1px solid rgba(18,24,40,0.06); background: linear-gradient(180deg,#ffffff,#fbfdff); }
+.stp-preview-header{ background: linear-gradient(90deg,var(--accent), #357ab8); color:#fff; padding:14px 18px; font-weight:700; }
+.stp-preview-body{ padding:18px; color:#14213d; line-height:1.5; }
+
+/* Modal */
+.stp-modal{ background: rgba(6,12,32,0.48); position: fixed; inset: 0; display:flex; align-items:center; justify-content:center; z-index: 1080; }
+.stp-modal-dialog{ max-width:420px; margin:0; }
+.stp-modal-content{ border-radius:12px; overflow:hidden; box-shadow:0 18px 48px rgba(2,6,23,0.32); }
+.stp-modal-header{ padding:12px 16px; border-bottom:none; }
+.stp-modal-body{ padding:18px; text-align:center; }
+.stp-modal-footer{ padding:12px 16px; border-top:none; justify-content:center; }
+
+/* Map font-awesome icon sizing inside stp classes */
+.stp-attachment-item .file-attachment-icon{ font-size:1.2rem; }
+
+/* Sidebar interaction: adapt layout when admin sidebar expands or collapses.
+   Expected classes applied on the body element: 'sidebar-expanded' and 'sidebar-collapsed'.
+   These classes are commonly toggled by the admin layout script. */
+
+body.sidebar-expanded .stp-wrapper{
+  margin-left: 260px; /* width of expanded sidebar */
+  max-width: calc(100% - 260px);
+}
+
+body.sidebar-collapsed .stp-wrapper{
+  margin-left: 80px; /* width when collapsed */
+  max-width: calc(100% - 80px);
+}
+
+/* Also support a parent .app layout wrapper toggling */
+.app.sidebar-open .stp-wrapper{ margin-left:260px; max-width: calc(100% - 260px); }
+.app.sidebar-closed .stp-wrapper{ margin-left:80px; max-width: calc(100% - 80px); }
+
+/* Smooth transitions for elements affected by sidebar changes */
+.stp-wrapper, .stp-card{ transition: all 320ms cubic-bezier(.2,.9,.2,1); }
+
+/* Responsive tweaks */
+@media (max-width:899px){
+  .stp-wrapper{ padding:16px; margin:20px auto; max-width: calc(100% - 32px); }
+  body.sidebar-expanded .stp-wrapper, body.sidebar-collapsed .stp-wrapper, .app.sidebar-open .stp-wrapper, .app.sidebar-closed .stp-wrapper{
+    margin-left: 0; max-width: 100%;
+  }
+}
+
+/* Accessibility */
+.stp-label, .stp-input{ -webkit-font-smoothing:antialiased; }
+
+/* End of stp-specific additions */

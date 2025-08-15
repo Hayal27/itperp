@@ -122,7 +122,10 @@ const addPlan = (req, res) => {
 
   const getAllPlans = async (req, res) => {
     try {
+      console.log("📋 getAllPlans called - Request received");
       const user_id = req.user_id; // Access the user_id added by verifyToken
+      console.log("👤 User ID from token:", user_id);
+
       const {
         year,
         quarter,
@@ -134,6 +137,8 @@ const addPlan = (req, res) => {
         page = 1,
         limit = 10,
       } = req.query;
+
+      console.log("🔍 Query parameters:", req.query);
   
       let filterConditions = ["p.user_id = ?"];
       let filterValues = [user_id];
@@ -214,26 +219,33 @@ const addPlan = (req, res) => {
       `;
   
       filterValues.push(parseInt(limit), parseInt(offset));
-  
+
+      console.log("🔍 Final SQL Query:", getPlansQuery);
+      console.log("📊 Filter Values:", filterValues);
+
       con.query(getPlansQuery, filterValues, (err, results) => {
         if (err) {
-          console.error("Error fetching plans:", err);
-          return res.status(500).json({ message: "Error fetching plans", error: err });
+          console.error("❌ Database error fetching plans:", err);
+          return res.status(500).json({ success: false, message: "Error fetching plans", error: err.message });
         }
-  
-        if (results.length === 0) {
-          return res.status(404).json({ message: "No plans found" });
-        }
-  
-        res.status(200).json({ success: true, plans: results });
+
+        console.log("✅ Query executed successfully");
+        console.log("📈 Results count:", results.length);
+
+        // Return empty array instead of 404 when no plans found
+        res.status(200).json({
+          success: true,
+          plans: results || [],
+          total: results.length,
+          page: parseInt(page),
+          limit: parseInt(limit)
+        });
       });
     } catch (error) {
       console.error("Error in getAllPlans:", error.message);
       res.status(500).json({ success: false, message: error.message });
     }
   };
-  
-  module.exports = { getAllPlans };
   
 
 
@@ -653,8 +665,6 @@ const getPlanDetail = async (req, res) => {
     });
   }
 };
-
-module.exports = { getPlanDetail };
 
 
 

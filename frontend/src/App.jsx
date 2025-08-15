@@ -1,432 +1,377 @@
-// import 'mdb-react-ui-kit/dist/css/mdb.min.css';
+import React, { useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useAuth } from "./components/Auths/AuthContex";
 import Login from "./components/login/Login";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import ProfilePictureUpload from "./components/header/profile/ProfilePictureUpload.jsx";
 
+// Import professional admin styles
+import './components/admin/AdminComponents.css';
+import './components/admin/Sidebar.css';
+import './components/header/Header.css';
+import { initializeSidebar } from './components/admin/sidebarUtils';
+import ProtectedRoute from './components/ProtectedRoute';
 
-
-
-
-
-//admin
+// Core Components
 import Sidebar from "./components/admin/Sidebar";
-import  Header from "./components/header/Header";
+import Header from "./components/header/Header";
+import Footer from "./components/footer/Footer";
+
+// Admin Components
 import Dashboard from "./components/admin/Dashboard";
 import UserRegistration from "./components/admin/UserRegistration";
 import UserTable from "./components/admin/UserTable";
-import Footer from "./components/footer/Footer";
-// import EmployeeRegistration 
 import EmployeeRegistration from './components/admin/employeeRegistration';
+import ReportsAnalytics from "./components/admin/reports/ReportsAnalytics";
+import ExportData from "./components/admin/reports/ExportData";
+import Settings from "./components/admin/Settings";
+import MenuPermissions from "./components/admin/MenuPermissions";
 
-
-// Ceo
+// CEO Components
 import CeoDashboard from "./components/Ceo/CeoDashboard";
-import CeoSidebar from "./components/Ceo/CeoSidebar";
-
-//                        // Ceo plan 
-
-
-
 import CeoSubmittedViewPlan from "./components/Ceo/addplan/CeoSubmittedViewPlan";
-import CeoViewPlan from "./components/Ceo/addplan/CeoViewPlan";
 import CeoViewOrgPlan from "./components/Ceo/addplan/CeoViewOrgPlan";
 import CeoUpdatePlan from "./components/Ceo/addplan/view/CeoUpdatePlan";
 import CeoViewDeclinedPlan from "./components/Ceo/addplan/CeoViewDeclinedPlan";
-
-
-                     // report
-
 import CeoViewReport from "./components/Ceo/report/CeoViewReport";
-import CeoUpdateReport from "./components/Ceo/report/view/CeoUpdateReport";
 import CeoViewOrgReport from "./components/Ceo/report/CeoViewOrgReport";
-import CeoSubmittedViewReport from "./components/Ceo/report/CeoSubmittedViewReport";
-import CeoAddReport from "./components/Ceo/addplan/view/CeoAddReport";
-// import CeoUpdateReport from "./components/Ceo/report/view/CeoUpdateReport";
 import CeoViewDeclinedReport from "./components/Ceo/report/CeoViewDeclinedReport";
 
+// Planreport Components
+import PPlanSteps from "./components/planreport/addplan/PPlanSteps";
 
-
-
-// Planreport
-import PlanreportDashboard from "./components/planreport/PlanreportDashboard";
-import PlanreportSidebar from "./components/planreport/PlanreportSidebar";
-
-//                        // Planreport plan 
-
-
-
-
-import PlanreportViewOrgPlan from "./components/planreport/addplan/PlanreportViewOrgPlan";
-import PlanreportUpdatePlan from "./components/planreport/addplan/view/PlanreportUpdatePlan";
-import PlanreportViewDeclinedPlan from "./components/planreport/addplan/PlanreportViewDeclinedPlan";
-import PPlanSteps from "./components/planreport/addplan/PPlanSteps.jsx";
-
-                     // report
-
-import PlanreportViewReport from "./components/planreport/report/PlanreportViewReport";
-import PlanreportUpdateReport from "./components/planreport/report/view/PlanreportUpdateReport";
-import PlanreportViewOrgReport from "./components/planreport/report/PlanreportViewOrgReport";
-import PlanreportSubmittedViewReport from "./components/planreport/report/PlanreportSubmittedViewReport";
-import PlanreportAddReport from "./components/planreport/addplan/view/PlanreportAddReport";
-// import PlanreportUpdateReport from "./components/planreport/report/view/PlanreportUpdateReport";
-import PlanreportViewDeclinedReport from "./components/planreport/report/PlanreportViewDeclinedReport";
-
-
-
-// Generalmanager
-import GeneralmanagerDashboard from "./components/generalmanager/GeneralmanagerDashboard";
-import GeneralmanagerSidebar from "./components/generalmanager/GeneralmanagerSidebar";
-
-//                        // Generalmanager plan 
-
-
-
-
-
-// team leader
+// Team Leader Components
 import TeamleaderDashboard from "./components/teamleader/TeamleaderDashboard";
-import TeamleaderSidebar from "./components/teamleader/TeamleaderSidebar";
-
-//                        // Teamleader plan 
-
-
-
 import TeamleaderSubmittedViewPlan from "./components/teamleader/addplan/TeamleaderSubmittedViewPlan";
-import TeamleaderViewPlan from "./components/teamleader/addplan/TeamleaderViewPlan";
 import TeamleaderViewOrgPlan from "./components/teamleader/addplan/TeamleaderViewOrgPlan";
 import TeamleaderUpdatePlan from "./components/teamleader/addplan/view/TeamleaderUpdatePlan";
 import TeamleaderViewDeclinedPlan from "./components/teamleader/addplan/TeamleaderViewDeclinedPlan";
-
-
-                     // report
-
-import TeamleaderViewReport from "./components/teamleader/report/TeamleaderViewReport";
-import TeamleaderUpdateReport from "./components/teamleader/report/view/TeamleaderUpdateReport";
 import TeamleaderViewOrgReport from "./components/teamleader/report/TeamleaderViewOrgReport";
 import TeamleaderSubmittedViewReport from "./components/teamleader/report/TeamleaderSubmittedViewReport";
-import TeamleaderAddReport from "./components/teamleader/addplan/view/TeamleaderAddReport";
-// import TeamleaderUpdateReport from "./components/teamleader/report/view/TeamleaderUpdateReport";
 import TeamleaderViewDeclinedReport from "./components/teamleader/report/TeamleaderViewDeclinedReport";
 
+// ============================================================================
+// STAFF COMPONENTS - Professional Module Organization
+// ============================================================================
 
-
-// staff
-import StaffDashboard from './components/staff/StaffDashboard';
-import StaffSidebar from './components/staff/StaffSidebar';
+// Staff Planning Module - Core Components
 import StaffViewPlan from "./components/staff/plan/StaffViewPlan";
 import StaffViewDeclinedPlan from "./components/staff/plan/StaffViewDeclinedPlan";
-
-
-
-// import StaffAddPlan from "./components/staff/plan/StaffAddPlan";
-
-
 import UpdatePlan from "./components/staff/plan/view/UpdatePlan";
-import StafAddReport from "./components/staff/plan/view/StafAddReport.jsx";
 import PlanDetail from "./components/staff/plan/view/PlanDetail";
-import StaffViewOrgPlan from "./components/staff/plan/StaffViewOrgPlan";
-import StafPlanSteps from "./components/staff/plan/addplan/StafPlanSteps.jsx";
-// import Step1Objective from "./components/staff/plan/addplan/Step1Objective";
+import StafPlanSteps from "./components/staff/plan/addplan/StafPlanSteps";
 
-
-
-//                       //  Staff report
+// Staff Reporting Module - Core Components
 import StaffViewReport from "./components/staff/report/StaffViewReport";
 import StaffAddReport from "./components/staff/report/StaffAddReport";
 import StaffEditReport from "./components/staff/report/StaffEditReport";
 import UpdateReport from "./components/staff/report/view/UpdateReport";
-import StaffViewOrgReport from "./components/staff/report/StaffViewOrgReport";
-import StaffViewDeclinedReport from "./components/staff/report/StaffViewDeclinedReport";
 
-
-
+// Legacy Import (to be refactored)
+import StafAddReport from "./components/staff/plan/view/StafAddReport";
 
 
 
 function App() {
-  const { state, dispatch } = useAuth();
+  const { state } = useAuth();
+
+  // Initialize sidebar functionality when component mounts
+  useEffect(() => {
+    initializeSidebar();
+  }, []);
+
+  console.log('🚀 App: Rendering with auth state:', state.isAuthenticated);
+  console.log('🚀 App: User role:', state.role_id);
 
   return (
     <>
       <BrowserRouter>
-        {state.isAuthenticated ? 
-        
-           
+        {state.isAuthenticated ? (
           <>
-          <Header />
+            <Header />
 
-          {state.role_id==1?
-          <Sidebar/>         
-           :
-          
-          state.role_id==2?
-          <CeoSidebar/>
+            <Sidebar />
 
-          :
-          state.role_id==9?
-          <PlanreportSidebar/>
-          :
+            <Routes>
+              {/* Profile Route - Available to all authenticated users */}
+              <Route path="/ProfilePictureUpload" element={
+                <ProtectedRoute path="/ProfilePictureUpload">
+                  <ProfilePictureUpload />
+                </ProtectedRoute>
+              } />
 
-          state.role_id==3?
-          <GeneralmanagerSidebar/>
-          :
+              {/* Dashboard Routes */}
+              <Route path="/" element={
+                <ProtectedRoute path="/">
+                  <Dashboard />
+                </ProtectedRoute>
+              } />
 
-          state.role_id==5?
-          <TeamleaderSidebar/>
-          :
-          state.role_id==6?
-          <TeamleaderSidebar/>
-          :
-          state.role_id==7?
-          <TeamleaderSidebar/>
+              {/* Admin Routes */}
+              <Route path="/UserForm" element={
+                <ProtectedRoute path="/UserForm">
+                  <UserRegistration />
+                </ProtectedRoute>
+              } />
 
-          :
+              <Route path="/UserTable" element={
+                <ProtectedRoute path="/UserTable">
+                  <UserTable />
+                </ProtectedRoute>
+              } />
 
-          state.role_id==8?
-          <StaffSidebar/>
-          :
+              <Route path="/EmployeeForm" element={
+                <ProtectedRoute path="/EmployeeForm">
+                  <EmployeeRegistration />
+                </ProtectedRoute>
+              } />
 
+              {/* Reports Routes */}
+              <Route path="/reports/analytics" element={
+                <ProtectedRoute path="/reports/analytics">
+                  <ReportsAnalytics />
+                </ProtectedRoute>
+              } />
 
-       <></>
+              <Route path="/reports/export" element={
+                <ProtectedRoute path="/reports/export">
+                  <ExportData />
+                </ProtectedRoute>
+              } />
 
+              {/* Settings Routes */}
+              <Route path="/settings" element={
+                <ProtectedRoute path="/settings">
+                  <Settings />
+                </ProtectedRoute>
+              } />
 
-          }
+              <Route path="/menu-permissions" element={
+                <ProtectedRoute path="/menu-permissions">
+                  <MenuPermissions />
+                </ProtectedRoute>
+              } />
 
+              {/* CEO Routes */}
+              <Route path="/ceo/dashboard" element={
+                <ProtectedRoute path="/ceo/dashboard">
+                  <CeoDashboard />
+                </ProtectedRoute>
+              } />
 
+              {/* Plan Routes */}
+              <Route path="/plan/View" element={
+                <ProtectedRoute path="/plan/View">
+                  <CeoSubmittedViewPlan />
+                </ProtectedRoute>
+              } />
 
-                <Routes>
-              {/* admin */}
+              <Route path="/plan/View_myplan" element={
+                <ProtectedRoute path="/plan/View_myplan">
+                  <StaffViewPlan />
+                </ProtectedRoute>
+              } />
 
-            {state.role_id==1?<>
-                  <Route path="/ProfilePictureUpload" element={<ProfilePictureUpload />} />
-            <Route path="/" element ={<Dashboard/>}/>
-            <Route path="/" element ={<UserTable/>}/>
-            <Route path="/UserForm" element ={<UserRegistration/>}/>
-            <Route path="/UserTable" element ={<UserTable/>}/>
-            <Route path="/EmployeeForm" element={<EmployeeRegistration/>} />
-            
+              <Route path="/plan/PlanSteps/Add" element={
+                <ProtectedRoute path="/plan/PlanSteps/Add">
+                  <StafPlanSteps />
+                </ProtectedRoute>
+              } />
 
-            {/* CEO */}
+              <Route path="/plan/ViewOrgPlan" element={
+                <ProtectedRoute path="/plan/ViewOrgPlan">
+                  <CeoViewOrgPlan />
+                </ProtectedRoute>
+              } />
 
-            </>:state.role_id==2?
-            <>
-                    <Route path="/ProfilePictureUpload" element={<ProfilePictureUpload />} />
+              <Route path="/plan/CeoViewDeclinedPlan" element={
+                <ProtectedRoute path="/plan/CeoViewDeclinedPlan">
+                  <CeoViewDeclinedPlan />
+                </ProtectedRoute>
+              } />
 
-<Route path="/" element={<TeamleaderDashboard />} />
-<Route path="/plan/View" element={<CeoSubmittedViewPlan />} />
-<Route path="/report/Viewapprovedreport" element={<TeamleaderSubmittedViewReport />} />
-<Route path="/plan/PlanSteps/Add" element={<StafPlanSteps/>} />
-<Route path="/plan/View_myplan" element={<StaffViewPlan />} />
-<Route path="/report/View_myreport" element={<CeoViewReport />} />
-<Route path="/report/view/update/:reportId" element={<UpdateReport />} />
-<Route path="/plan/view/add-report/:planId" element={<StaffAddReport />} />
-<Route path="/plan/ViewOrgPlan" element={<CeoViewOrgPlan />} />
-<Route path="/report/ViewOrgReport" element={<CeoViewOrgReport />} />
-<Route path="/report/CeoViewDeclinedReport" element={<CeoViewDeclinedReport />} />
-<Route path="/plan/CeoViewDeclinedPlan" element={<CeoViewDeclinedPlan/>} />
-<Route path="/plan/CeoViewDeclinedPlan/view/update/:planId" element={<CeoUpdatePlan />} />
-<Route path="/plan/View_myplan/add-report/:planId" element={<StafAddReport />} />
+              <Route path="/plan/StaffViewDeclinedPlan" element={
+                <ProtectedRoute path="/plan/StaffViewDeclinedPlan">
+                  <StaffViewDeclinedPlan />
+                </ProtectedRoute>
+              } />
 
-      {/* update the plan */}
-<Route path="/plan/View_myplan/update/:planId" element={<CeoUpdatePlan />} />
+              {/* Report Routes */}
+              <Route path="/report/Viewapprovedreport" element={
+                <ProtectedRoute path="/report/Viewapprovedreport">
+                  <TeamleaderSubmittedViewReport />
+                </ProtectedRoute>
+              } />
 
-      {/* 
+              <Route path="/report/View_myreport" element={
+                <ProtectedRoute path="/report/View_myreport">
+                  <CeoViewReport />
+                </ProtectedRoute>
+              } />
 
+              <Route path="/report/ViewOrgReport" element={
+                <ProtectedRoute path="/report/ViewOrgReport">
+                  <CeoViewOrgReport />
+                </ProtectedRoute>
+              } />
 
-            {/* Plan And report manager */}
+              <Route path="/report/CeoViewDeclinedReport" element={
+                <ProtectedRoute path="/report/CeoViewDeclinedReport">
+                  <CeoViewDeclinedReport />
+                </ProtectedRoute>
+              } />
 
-            </>:state.role_id==9?
-            <>
+              <Route path="/report/Add" element={
+                <ProtectedRoute path="/report/Add">
+                  <StaffAddReport />
+                </ProtectedRoute>
+              } />
 
-<Route path="/ProfilePictureUpload" element={<ProfilePictureUpload />} />
-<Route path="/" element={<TeamleaderDashboard />} />
-<Route path="/plan/View" element={<TeamleaderSubmittedViewPlan />} />
-<Route path="/report/Viewapprovedreport" element={<TeamleaderSubmittedViewReport />} />
-{/* <Route path="/addplan/addPlanSteps" element={<addPlanSteps/>} />
- */}
-{/* <Route path="/addplan/PPlanSteps" element={<PPlanSteps/>} /> */}
-<Route path="/plan/PlanSteps/Add" element={<PPlanSteps/>} />
+              <Route path="/report/Edit" element={
+                <ProtectedRoute path="/report/Edit">
+                  <StaffEditReport />
+                </ProtectedRoute>
+              } />
 
+              <Route path="/report/View" element={
+                <ProtectedRoute path="/report/View">
+                  <StaffViewReport />
+                </ProtectedRoute>
+              } />
 
+              {/* Dynamic Routes with Parameters */}
+              <Route path="/report/view/update/:reportId" element={
+                <ProtectedRoute path="/report/view/update">
+                  <UpdateReport />
+                </ProtectedRoute>
+              } />
 
-<Route path="/plan/View_myplan" element={<StaffViewPlan />} />
-<Route path="/report/View_myreport" element={<StaffViewReport />} />
-<Route path="/report/view/update/:reportId" element={<UpdateReport />} />
-<Route path="/plan/view/add-report/:planId" element={<AddReport />} />
-<Route path="/plan/ViewOrgPlan" element={<PlanreportViewOrgPlan />} />
-<Route path="/report/ViewOrgReport" element={<PlanreportViewOrgReport />} />
-<Route path="/report/PlanreportViewDeclinedReport" element={<PlanreportViewDeclinedReport />} />
-<Route path="/plan/PlanreportViewDeclinedPlan" element={<PlanreportViewDeclinedPlan/>} />
-<Route path="/plan/PlanreportViewDeclinedPlan/view/update/:planId" element={<PlanreportUpdatePlan />} />
-<Route path="/plan/View_myplan/add-report/:planId" element={<StafAddReport />} />
+              <Route path="/plan/view/add-report/:planId" element={
+                <ProtectedRoute path="/plan/view/add-report">
+                  <StafAddReport />
+                </ProtectedRoute>
+              } />
 
-      {/* update the plan */}
-<Route path="/plan/View_myplan/update/:planId" element={<TeamleaderUpdatePlan />} />
+              <Route path="/plan/view/update/:planId" element={
+                <ProtectedRoute path="/plan/view/update">
+                  <UpdatePlan />
+                </ProtectedRoute>
+              } />
 
-      {/* 
+              <Route path="/plan/view/detail/:planId" element={
+                <ProtectedRoute path="/plan/view/detail">
+                  <PlanDetail />
+                </ProtectedRoute>
+              } />
 
+              {/* Team Leader Routes */}
+              <Route path="/team/dashboard" element={
+                <ProtectedRoute path="/team/dashboard">
+                  <TeamleaderDashboard />
+                </ProtectedRoute>
+              } />
 
+              {/* Messages and Communication */}
+              <Route path="/messages" element={
+                <ProtectedRoute path="/messages">
+                  <div className="container mt-4">
+                    <h2>Messages</h2>
+                    <p>Messages functionality coming soon...</p>
+                  </div>
+                </ProtectedRoute>
+              } />
 
+              <Route path="/notifications" element={
+                <ProtectedRoute path="/notifications">
+                  <div className="container mt-4">
+                    <h2>Notifications</h2>
+                    <p>Notifications functionality coming soon...</p>
+                  </div>
+                </ProtectedRoute>
+              } />
 
-            {/* General manager */}
+              {/* Finance Routes */}
+              <Route path="/finance/budget" element={
+                <ProtectedRoute path="/finance/budget">
+                  <div className="container mt-4">
+                    <h2>Budget Planning</h2>
+                    <p>Budget planning functionality coming soon...</p>
+                  </div>
+                </ProtectedRoute>
+              } />
 
-            </>:state.role_id==3?
-            <>
-<Route path="/ProfilePictureUpload" element={<ProfilePictureUpload />} />
+              <Route path="/finance/resources" element={
+                <ProtectedRoute path="/finance/resources">
+                  <div className="container mt-4">
+                    <h2>Resource Allocation</h2>
+                    <p>Resource allocation functionality coming soon...</p>
+                  </div>
+                </ProtectedRoute>
+              } />
 
-<Route path="/" element={<TeamleaderDashboard />} />
-<Route path="/plan/View" element={<TeamleaderSubmittedViewPlan />} />
-<Route path="/report/Viewapprovedreport" element={<TeamleaderSubmittedViewReport />} />
-<Route path="/plan/View" element={<CeoSubmittedViewPlan />} />
-<Route path="/plan/View_myplan" element={<StaffViewPlan />} />
-<Route path="/report/View_myreport" element={<StaffViewReport />} />
-<Route path="/report/view/update/:reportId" element={<UpdateReport />} />
-<Route path="/plan/view/add-report/:planId" element={<StafAddReport />} />
-<Route path="/plan/ViewOrgPlan" element={<TeamleaderViewOrgPlan />} />
-<Route path="/report/ViewOrgReport" element={<TeamleaderViewOrgReport />} />
-<Route path="/report/TeamleaderViewDeclinedReport" element={<TeamleaderViewDeclinedReport />} />
-<Route path="/plan/TeamleaderViewDeclinedPlan" element={<TeamleaderViewDeclinedPlan/>} />
-<Route path="/plan/TeamleaderViewDeclinedPlan/view/update/:planId" element={<TeamleaderUpdatePlan />} />
-<Route path="/plan/View_myplan/add-report/:planId" element={<StafAddReport />} />
+              {/* Help Routes */}
+              <Route path="/help/docs" element={
+                <ProtectedRoute path="/help/docs">
+                  <div className="container mt-4">
+                    <h2>Documentation</h2>
+                    <p>Documentation coming soon...</p>
+                  </div>
+                </ProtectedRoute>
+              } />
 
-{/* update the plan */}
-<Route path="/plan/View_myplan/update/:planId" element={<TeamleaderUpdatePlan />} />
+              <Route path="/help/tickets" element={
+                <ProtectedRoute path="/help/tickets">
+                  <div className="container mt-4">
+                    <h2>Support Tickets</h2>
+                    <p>Support ticket system coming soon...</p>
+                  </div>
+                </ProtectedRoute>
+              } />
 
-{/* 
+              {/* System Administration Routes */}
+              <Route path="/admin/logs" element={
+                <ProtectedRoute path="/admin/logs">
+                  <div className="container mt-4">
+                    <h2>System Logs</h2>
+                    <p>System logs functionality coming soon...</p>
+                  </div>
+                </ProtectedRoute>
+              } />
 
+              <Route path="/admin/backup" element={
+                <ProtectedRoute path="/admin/backup">
+                  <div className="container mt-4">
+                    <h2>Backup & Restore</h2>
+                    <p>Backup and restore functionality coming soon...</p>
+                  </div>
+                </ProtectedRoute>
+              } />
 
-            {/* deputy manager */}
+              {/* Catch-all route for undefined paths */}
+              <Route path="*" element={
+                <div className="container mt-4">
+                  <div className="alert alert-warning">
+                    <h4>Page Not Found</h4>
+                    <p>The page you're looking for doesn't exist or you don't have permission to access it.</p>
+                    <button
+                      className="btn btn-primary"
+                      onClick={() => window.history.back()}
+                    >
+                      Go Back
+                    </button>
+                  </div>
+                </div>
+              } />
+            </Routes>
 
-            </>:state.role_id==5?
-            <>
-<Route path="/ProfilePictureUpload" element={<ProfilePictureUpload />} />
-
-<Route path="/" element={<TeamleaderDashboard />} />
-<Route path="/plan/View" element={<TeamleaderSubmittedViewPlan />} />
-<Route path="/report/Viewapprovedreport" element={<TeamleaderSubmittedViewReport />} />
-<Route path="/plan/PlanSteps/Add" element={<StafPlanSteps/>} />
-<Route path="/plan/View_myplan" element={<StaffViewPlan />} />
-<Route path="/report/View_myreport" element={<StaffViewReport />} />
-<Route path="/report/view/update/:reportId" element={<UpdateReport />} />
-<Route path="/plan/view/add-report/:planId" element={<StafAddReport />} />
-<Route path="/plan/ViewOrgPlan" element={<TeamleaderViewOrgPlan />} />
-<Route path="/report/ViewOrgReport" element={<TeamleaderViewOrgReport />} />
-<Route path="/report/TeamleaderViewDeclinedReport" element={<TeamleaderViewDeclinedReport />} />
-<Route path="/plan/TeamleaderViewDeclinedPlan" element={<TeamleaderViewDeclinedPlan/>} />
-<Route path="/plan/TeamleaderViewDeclinedPlan/view/update/:planId" element={<TeamleaderUpdatePlan />} />
-<Route path="/plan/View_myplan/add-report/:planId" element={<StafAddReport />} />
-
-
-<Route path="/plan/View_myplan/update/:planId" element={<TeamleaderUpdatePlan />} />
-
-
-
-
-
-            </>:state.role_id==6?
-            <>
-
-<Route path="/ProfilePictureUpload" element={<ProfilePictureUpload />} />
-
-            <Route path="/" element={<TeamleaderDashboard />} />
-    <Route path="/plan/View" element={<TeamleaderSubmittedViewPlan />} />
-    <Route path="/report/Viewapprovedreport" element={<TeamleaderSubmittedViewReport />} />
-    <Route path="/plan/PlanSteps/Add" element={<StafPlanSteps/>} />
-    <Route path="/plan/View_myplan" element={<StaffViewPlan />} />
-    <Route path="/report/View_myreport" element={<StaffViewReport />} />
-    <Route path="/report/view/update/:reportId" element={<UpdateReport />} />
-    <Route path="/plan/view/add-report/:planId" element={<StafAddReport />} />
-    <Route path="/plan/ViewOrgPlan" element={<TeamleaderViewOrgPlan />} />
-    <Route path="/report/ViewOrgReport" element={<TeamleaderViewOrgReport />} />
-    <Route path="/report/TeamleaderViewDeclinedReport" element={<TeamleaderViewDeclinedReport />} />
-    <Route path="/plan/TeamleaderViewDeclinedPlan" element={<TeamleaderViewDeclinedPlan/>} />
-    <Route path="/plan/TeamleaderViewDeclinedPlan/view/update/:planId" element={<TeamleaderUpdatePlan />} />
-    <Route path="/plan/View_myplan/add-report/:planId" element={<StafAddReport />} />
-
-          {/* update the plan */}
-    <Route path="/plan/View_myplan/update/:planId" element={<TeamleaderUpdatePlan />} />
-
-          
-
-
-             {/* team leader */}
-            </>:state.role_id==7?
-            <>
-<Route path="/ProfilePictureUpload" element={<ProfilePictureUpload />} />
-
-            <Route path="/" element={<TeamleaderDashboard />} />
-    <Route path="/plan/View" element={<TeamleaderSubmittedViewPlan />} />
-    <Route path="/report/Viewapprovedreport" element={<TeamleaderSubmittedViewReport />} />
-    <Route path="/plan/PlanSteps/Add" element={<StafPlanSteps/>} />
-    <Route path="/plan/View_myplan" element={<StaffViewPlan />} />
-    <Route path="/report/View_myreport" element={<StaffViewReport />} />
-    <Route path="/report/view/update/:reportId" element={<UpdateReport />} />
-    <Route path="/plan/view/add-report/:planId" element={<StafAddReport />} />
-    <Route path="/plan/ViewOrgPlan" element={<TeamleaderViewOrgPlan />} />
-    <Route path="/report/ViewOrgReport" element={<TeamleaderViewOrgReport />} />
-    <Route path="/report/TeamleaderViewDeclinedReport" element={<TeamleaderViewDeclinedReport />} />
-    <Route path="/plan/TeamleaderViewDeclinedPlan" element={<TeamleaderViewDeclinedPlan/>} />
-    <Route path="/plan/TeamleaderViewDeclinedPlan/view/update/:planId" element={<TeamleaderUpdatePlan />} />
-    <Route path="/plan/View_myplan/add-report/:planId" element={<StafAddReport />} />
-
-          {/* update the plan */}
-    <Route path="/plan/View_myplan/update/:planId" element={<TeamleaderUpdatePlan />} />
-
-          {/* 
-
-
-           
-               {/* staff */}
-
-               </>:state.role_id==8?<>
-
-               <Route path="/ProfilePictureUpload" element={<ProfilePictureUpload />} />
-
-     <Route path="/" element={<TeamleaderDashboard />} />
-     <Route path="/plan/PlanSteps/Add" element={<StafPlanSteps/>} />
-    
-    <Route path="/plan/StaffViewDeclinedPlan" element={<StaffViewDeclinedPlan/>} />
-    <Route path="/plan/View" element={<StaffViewPlan />} />
-    <Route path="/report/Add" element={<StaffAddReport />} />
-    <Route path="/report/Edit" element={<StaffEditReport />} />
-    <Route path="/report/View" element={<StaffViewReport />} />
-    <Route path="/plan/StaffViewDeclinedPlan/update/:planId" element={<UpdatePlan />} />
-               
-    <Route path="/plan/view/update/:planId" element={<UpdatePlan />} />
-
-    
-    <Route path="/report/view/update/:reportId" element={<UpdateReport />} />
-    <Route path="/plan/view/add-report/:planId" element={<StafAddReport />} />
-    <Route path="/plan/view/detail/:planId" element={<PlanDetail />} />
-    <Route path="/plan/ViewOrgPlan" element={<TeamleaderViewOrgPlan />} />
-    <Route path="/report/ViewOrgReport" element={<TeamleaderViewOrgReport />} />
-  
-            </>:
-            <>
-            
-          
-           
-            
-            </>
-            }
-           
-          </Routes>
-          <Footer/>
-
-          
+            <Footer />
           </>
-              
-              
-             
-          : 
+        ) : (
           <Login />
-        }
+        )}
       </BrowserRouter>
     </>
   );
 }
 
 export default App;
-

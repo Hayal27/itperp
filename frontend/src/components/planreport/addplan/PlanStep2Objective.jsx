@@ -19,7 +19,7 @@ const PlanStep2Objective = ({ goalId, onNext, onBack }) => {
   useEffect(() => {
     const fetchObjectives = async () => {
       try {
-        const response = await axios.get(`http://192.168.56.1:5000/api/objectivesg?goal_id=${goalId}`, {
+        const response = await axios.get(`http://localhost:5000/api/objectivesg?goal_id=${goalId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setObjectives(response.data);
@@ -82,7 +82,7 @@ const handleCreateObjective = async () => {
 
   try {
     const response = await axios.post(
-      "http://192.168.56.1:5000/api/addobjective",
+      "http://localhost:5000/api/addobjective",
       { name: newObjective.name, description: newObjective.description, goal: goalId },
       { headers: { Authorization: `Bearer ${token}` } }
     );
@@ -116,7 +116,7 @@ const fetchObjectives = async () => {
   setIsLoading(true); // Show loading spinner while fetching
   try {
     const response = await axios.get(
-      `http://192.168.56.1:5000/api/objectivesg?goal_id=${goalId}`,
+      `http://localhost:5000/api/objectivesg?goal_id=${goalId}`,
       { headers: { Authorization: `Bearer ${token}` } }
     );
     setObjectives(response.data);

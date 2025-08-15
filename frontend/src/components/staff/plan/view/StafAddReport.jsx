@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Axios from "axios";
@@ -6,23 +5,42 @@ import Swal from "sweetalert2";
 import sad from "../../../../assets/img/sad.gif";
 import happy from "../../../../assets/img/happy.gif";
 import "../../../../assets/css/planform.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { 
+  faFilePdf, 
+  faFileWord, 
+  faFileImage, 
+  faFileAlt, 
+  faPaperclip 
+} from "@fortawesome/free-solid-svg-icons";
 
 // Utility function to calculate execution percentage.
+// Updated to return the real floating point value, even if negative or decimal.
 const calculateExecutionPercentage = (baseline, plan, outcome) => {
   const base = parseFloat(baseline);
   const p = parseFloat(plan);
   const o = parseFloat(outcome);
   if (isNaN(base) || isNaN(p) || isNaN(o) || (p - base) === 0) return 0;
-  return Math.round(((o - base) / (p - base)) * 100);
+  return ((o - base) / (p - base)) * 100;
 };
 
 // Utility function for CI execution percentage.
+// Updated similarly to return the real value.
 const CIcalculateExecutionPercentage = (CIbaseline, CIplan, CIoutcome) => {
   const cibase = parseFloat(CIbaseline);
   const cip = parseFloat(CIplan);
   const cio = parseFloat(CIoutcome);
   if (isNaN(cibase) || isNaN(cip) || isNaN(cio) || (cip - cibase) === 0) return 0;
-  return Math.round(((cio - cibase) / (cip - cibase)) * 100);
+  return ((cio - cibase) / (cip - cibase)) * 100;
+};
+
+// Helper function to render an icon based on file extension.
+const renderFileIcon = (fileName) => {
+  const ext = fileName.split('.').pop().toLowerCase();
+  if(ext === 'pdf') return <FontAwesomeIcon icon={faFilePdf} className="file-attachment-icon pdf-icon" />;
+  if(ext === 'doc' || ext === 'docx') return <FontAwesomeIcon icon={faFileWord} className="file-attachment-icon word-icon" />;
+  if(ext === 'jpg' || ext === 'jpeg' || ext === 'png') return <FontAwesomeIcon icon={faFileImage} className="file-attachment-icon image-icon" />;
+  return <FontAwesomeIcon icon={faFileAlt} className="file-attachment-icon generic-icon" />;
 };
 
 const StafAddReport = () => {
@@ -54,7 +72,7 @@ const StafAddReport = () => {
     CIplan: null,
     outcome: "",
     execution_percentage: "",
-    CIoutcome: null, 
+    CIoutcome: null,
     CIexecution_percentage: ""
   });
   const [responseMessage, setResponseMessage] = useState("");
@@ -74,7 +92,7 @@ const StafAddReport = () => {
       return;
     }
     const token = localStorage.getItem("token");
-    Axios.get(`http://192.168.56.1:5000/api/pland/${planId}`, {
+    Axios.get(`http://localhost:5000/api/pland/${planId}`, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then((res) => {
@@ -190,7 +208,7 @@ const StafAddReport = () => {
       formPayload.append("files", file);
     });
     
-    Axios.put(`http://192.168.56.1:5000/api/StafaddReport/${planId}`, formPayload, {
+    Axios.put(`http://localhost:5000/api/addReport/${planId}`, formPayload, {
       headers: { 
         "Authorization": `Bearer ${token}`,
         "Content-Type": "multipart/form-data"
@@ -220,65 +238,65 @@ const StafAddReport = () => {
   };
 
   return (
-    <div className="container d-flex justify-content-center mt-5 container-report">
-      <div className="card shadow w-100" style={{ maxWidth: "900px" }}>
-        <div className="card-body">
-          <h2 className="card-title text-center mb-4">የ እቅዶን ሩፖርት ያስገቡ</h2>
+    <div className="stp-wrapper container d-flex justify-content-center mt-5 stp-container">
+      <div className="card stp-card shadow w-100" style={{ maxWidth: "900px" }}>
+        <div className="card-body stp-card-body">
+          <h2 className="card-title stp-title text-center mb-4">የ እቅዶን ሩፖርት ያስገቡ</h2>
           {plan ? (
             <>
               <form onSubmit={handleSubmit} encType="multipart/form-data">
                 {/* Read-only Fields */}
                 {formData.goal !== null && (
-                  <div className="form-group mb-3">
-                    <label className="form-label">ግብ</label>
-                    <input type="text" name="goal" value={formData.goal} readOnly className="form-control" />
+                  <div className="form-group stp-form-group mb-3">
+                    <label className="form-label stp-label">ግብ</label>
+                    <input type="text" name="goal" value={formData.goal} readOnly className="form-control stp-input" />
                   </div>
                 )}
                 {formData.objective !== null && (
-                  <div className="form-group mb-3">
-                    <label className="form-label">አላማ</label>
-                    <input type="text" name="objective" value={formData.objective} readOnly className="form-control" />
+                  <div className="form-group stp-form-group mb-3">
+                    <label className="form-label stp-label">አላማ</label>
+                    <input type="text" name="objective" value={formData.objective} readOnly className="form-control stp-input" />
                   </div>
                 )}
                 {formData.specObjective !== null && (
-                  <div className="form-group mb-3">
-                    <label className="form-label">ውጤት</label>
-                    <input type="text" name="specObjective" value={formData.specObjective} readOnly className="form-control" />
+                  <div className="form-group stp-form-group mb-3">
+                    <label className="form-label stp-label">ውጤት</label>
+                    <input type="text" name="specObjective" value={formData.specObjective} readOnly className="form-control stp-input" />
                   </div>
                 )}
                 {formData.specific_objective_detailname !== null && (
-                  <div className="form-group mb-3">
-                    <label className="form-label">የ ውጤቱ ሚከናወን ዝርዝር ሥራ</label>
-                    <input type="text" name="specific_objective_detailname" value={formData.specific_objective_detailname} readOnly className="form-control" />
+                  <div className="form-group stp-form-group mb-3">
+                    <label className="form-label stp-label">የ ውጤቱ ሚከናወን ዝርዝር ሥራ</label>
+                    <input type="text" name="specific_objective_detailname" value={formData.specific_objective_detailname} readOnly className="form-control stp-input" />
                   </div>
                 )}
                 {formData.measurement !== null && (
-                  <div className="form-group mb-3">
-                    <label className="form-label">መለኪያ</label>
-                    <input type="text" name="measurement" value={formData.measurement} readOnly className="form-control" />
+                  <div className="form-group stp-form-group mb-3">
+                    <label className="form-label stp-label">መለኪያ</label>
+                    <input type="text" name="measurement" value={formData.measurement} readOnly className="form-control stp-input" />
                   </div>
                 )}
                 {formData.baseline !== null && (
-                  <div className="form-group mb-3">
-                    <label className="form-label">መነሻ</label>
-                    <input type="text" name="baseline" value={formData.baseline} readOnly className="form-control" />
+                  <div className="form-group stp-form-group mb-3">
+                    <label className="form-label stp-label">መነሻ</label>
+                    <input type="text" name="baseline" value={formData.baseline} readOnly className="form-control stp-input" />
                   </div>
                 )}
                 {formData.plan !== null && (
-                  <div className="form-group mb-3">
-                    <label className="form-label">እቅድ</label>
-                    <input type="text" name="plan" value={formData.plan} readOnly className="form-control" />
+                  <div className="form-group stp-form-group mb-3">
+                    <label className="form-label stp-label">እቅድ</label>
+                    <input type="text" name="plan" value={formData.plan} readOnly className="form-control stp-input" />
                   </div>
                 )}
                 {/* Editable Outcome Field */}
-                <div className="form-group mb-3">
-                  <label className="form-label">ክንውን</label>
+                <div className="form-group stp-form-group mb-3">
+                  <label className="form-label stp-label">ክንውን</label>
                   <input
                     type="number"
                     name="outcome"
                     value={formData.outcome}
                     onChange={handleOutcomeChange}
-                    className="form-control"
+                    className="form-control stp-input"
                     placeholder="Enter outcome"
                   />
                   {errors.outcome && (<small className="text-danger">{errors.outcome}</small>)}
@@ -287,27 +305,31 @@ const StafAddReport = () => {
                   <label className="form-label">ክንውን በ%</label>
                   <input type="text" name="execution_percentage" value={formData.execution_percentage} readOnly className="form-control" placeholder="Auto-calculated" />
                 </div>
-                {/* File attachment with + icon */}
-                <div className="form-group mb-3">
-                  <label className="form-label">Attach Files</label>
-                  <div className="d-flex align-items-center">
-                    <button type="button" className="btn btn-outline-secondary me-2" onClick={handleAddFileClick}>
-                      +
+                {/* File attachment with professional icon styling */}
+                <div className="form-group stp-form-group mb-3">
+                  <label className="form-label stp-label">Attach Files</label>
+                  <div className="d-flex align-items-center stp-file-section">
+                    <button type="button" className="btn btn-outline-secondary me-2 stp-file-add-btn" onClick={handleAddFileClick}>
+                      <FontAwesomeIcon icon={faPaperclip} />
                     </button>
                     {/* Hidden file input */}
                     <input 
                       type="file" 
-                      id="fileInputHidden" 
                       ref={hiddenFileInput}
                       style={{ display: "none" }}
                       onChange={handleFileChange}
                     />
                   </div>
                   {selectedFiles.length > 0 && (
-                    <div className="mt-2">
+                    <div className="stp-selected-files mt-2">
                       <strong>Selected Files:</strong>
-                      <ul>
-                        {selectedFiles.map((file, index) => (<li key={index}>{file.name}</li>))}
+                      <ul className="stp-attachment-list">
+                        {selectedFiles.map((file, index) => (
+                          <li key={index} className="stp-attachment-item">
+                            {renderFileIcon(file.name)}
+                            <span className="ms-2">{file.name}</span>
+                          </li>
+                        ))}
                       </ul>
                     </div>
                   )}
@@ -322,12 +344,6 @@ const StafAddReport = () => {
                   <div className="form-group mb-3">
                     <label className="form-label">የትግበራ አመት</label>
                     <input type="text" name="year" value={formData.year} readOnly className="form-control" />
-                  </div>
-                )}
-                {formData.Quarter !== null && (
-                  <div className="form-group mb-3">
-                    <label className="form-label">ሩብ አመት</label>
-                    <input type="text" name="Quarter" value={formData.Quarter} readOnly className="form-control" />
                   </div>
                 )}
                 {formData.progress !== null && (
@@ -404,7 +420,7 @@ const StafAddReport = () => {
                       <div>
                         {formData.employment_type !== null && (
                           <div className="form-group mb-3">
-                            <label className="form-label">Employment Type</label>
+                            <label className="form-label">የቅጥር አይነት</label>
                             <input type="text" name="employment_type" value={formData.employment_type} readOnly className="form-control" />
                           </div>
                         )}
@@ -451,24 +467,26 @@ const StafAddReport = () => {
                     </div>
                   </>
                 )}
-                <button type="submit" className="btn btn-primary w-100 mt-3">
+                <button type="submit" className="btn btn-primary w-100 mt-3 stp-submit-btn">
                   ያዘምኑ
                 </button>
               </form>
               {/* Toggle Preview Section */}
               <div className="toggle-btn text-center mt-4">
-                <button className="btn btn-secondary" onClick={togglePreview}>
+                <button className="btn btn-secondary stp-toggle-btn" onClick={togglePreview}>
                   {showPreview ? "ክለሳውን አንሳ" : "ክለሳውን አሳይ"}
                 </button>
               </div>
               {showPreview && (
-                <div className="toggle-container card mt-4">
-                  <div className="card-body">
-                    <h3 className="card-title mb-3">የእቅዶ ክለሳ</h3>
+                <div className="stp-preview card mt-4 shadow-lg">
+                  <div className="card-header stp-preview-header bg-gradient-primary text-white">
+                    <h3 className="card-title mb-0">የእቅዶ ክለሳ</h3>
+                  </div>
+                  <div className="card-body stp-preview-body">
                     {formData.goal !== null && <p><strong>ግብ:</strong> {formData.goal}</p>}
                     {formData.objective !== null && <p><strong>አላማ:</strong> {formData.objective}</p>}
                     {formData.specObjective !== null && <p><strong>ውጤት:</strong> {formData.specObjective}</p>}
-                    {formData.specific_objective_detailname !== null && <p><strong>የ ውጤቱ ሚከናወን ዝርዝር ሥራ:</strong> {formData.specific_objective_detailname}</p>}
+                    {formData.specific_objective_detailname !== null && <p><strong>የውጤቱ ሥራ:</strong> {formData.specific_objective_detailname}</p>}
                     {formData.measurement !== null && <p><strong>መለኪያ:</strong> {formData.measurement}</p>}
                     {formData.baseline !== null && <p><strong>መነሻ:</strong> {formData.baseline}</p>}
                     {formData.plan !== null && <p><strong>እቅድ:</strong> {formData.plan}</p>}
@@ -478,8 +496,8 @@ const StafAddReport = () => {
                     {formData.year !== null && <p><strong>አመት:</strong> {formData.year}</p>}
                     {formData.Quarter !== null && <p><strong>ሩብ አመት:</strong> {formData.Quarter}</p>}
                     {formData.progress !== null && <p><strong>ሂደት:</strong> {formData.progress}</p>}
-                    <hr />
-                    {formData.plan_type !== null && <p><strong>የ እቅዱ አይነት:</strong> {formData.plan_type}</p>}
+                    <hr className="my-3" />
+                    {formData.plan_type !== null && <p><strong>የእቅዱ አይነት:</strong> {formData.plan_type}</p>}
                     {formData.plan_type === "cost" && (
                       <>
                         {formData.cost_type !== null && <p><strong>የወጪው አይነት:</strong> {formData.cost_type}</p>}
@@ -512,10 +530,15 @@ const StafAddReport = () => {
                     {/* Display uploaded files if any */}
                     {uploadedFiles.length > 0 && (
                       <>
-                        <hr />
-                        <h5>Uploaded Files:</h5>
-                        <ul>
-                          {uploadedFiles.map((file, index) => (<li key={index}>{file.name}</li>))}
+                        <hr className="my-3" />
+                        <h5 className="mb-2">Uploaded Files:</h5>
+                        <ul className="stp-attachment-list">
+                          {uploadedFiles.map((file, index) => (
+                            <li key={index} className="stp-attachment-item">
+                              {renderFileIcon(file.name)}
+                              <span className="ms-2">{file.name}</span>
+                            </li>
+                          ))}
                         </ul>
                       </>
                     )}
@@ -528,12 +551,16 @@ const StafAddReport = () => {
           )}
         </div>
       </div>
-      {/* Popup Message using Bootstrap modal styling */}
+      {/* Professional Bootstrap Modal Popup (without animation) */}
       {showPopup && (
-        <div className="popup">
-          <div className="popup modal-dialog modal-dialog-centered" role="document">
-            <div className="modal-content">
-              <div className="modal-body text-center">
+        <div className="modal d-block stp-modal" tabIndex="-1">
+          <div className="modal-dialog modal-dialog-centered stp-modal-dialog" role="document">
+            <div className="modal-content stp-modal-content">
+              <div className="modal-header stp-modal-header">
+                <h5 className="modal-title">{popupType === "success" ? "Success" : "Error"}</h5>
+                <button type="button" className="btn-close" aria-label="Close" onClick={closePopup}></button>
+              </div>
+              <div className="modal-body text-center stp-modal-body">
                 <img
                   src={popupType === "success" ? happy : sad}
                   alt={popupType === "success" ? "Success" : "Error"}
@@ -542,7 +569,7 @@ const StafAddReport = () => {
                 />
                 <p>{responseMessage}</p>
               </div>
-              <div className="modal-footer justify-content-center">
+              <div className="modal-footer justify-content-center stp-modal-footer">
                 <button className="btn btn-primary" onClick={closePopup}>
                   Close
                 </button>

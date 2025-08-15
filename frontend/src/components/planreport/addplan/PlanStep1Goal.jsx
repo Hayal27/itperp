@@ -35,7 +35,7 @@ const PlanStep1Goal = ({ onNext }) => {
   useEffect(() => {
     const fetchgoals = async () => {
       try {
-        const response = await axios.get("http://192.168.56.1:5000/api/goalsg", {
+        const response = await axios.get("http://localhost:5000/api/goalsg", {
           headers: { 
             Authorization: `Bearer ${token}`,
           },
@@ -138,7 +138,7 @@ const PlanStep1Goal = ({ onNext }) => {
   
     try {
       const response = await axios.post(
-        "http://192.168.56.1:5000/api/addgoal",
+        "http://localhost:5000/api/addgoal",
         {
           name: newgoal.name,
           description: newgoal.description,

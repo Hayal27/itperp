@@ -14,7 +14,7 @@ const CeoViewPlan = () => {
 
   const fetchPlans = async () => {
     try {
-      const response = await axios.get("http://192.168.56.1:5000/api/supervisor/plans", {
+      const response = await axios.get("http://localhost:5000/api/supervisor/plans", {
         headers: { Authorization: `Bearer ${token}` }
       });
 
@@ -37,7 +37,7 @@ const CeoViewPlan = () => {
 
     try {
       const response = await axios.put(
-        "http://192.168.56.1:5000/api/supervisor/plans/approvesp",
+        "http://localhost:5000/api/supervisor/plans/approvesp",
         { plan_id: planId, status: action, comment },
         { headers: { Authorization: `Bearer ${token}` } }
       );

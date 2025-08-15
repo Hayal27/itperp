@@ -94,7 +94,7 @@ const PlanSteps = () => {
   
       console.log("Payload for submission:", payload); // Debugging payload
   
-      const response = await axios.post("http://192.168.56.1:5000/api/addplan", payload, {
+      const response = await axios.post("http://localhost:5000/api/addplan", payload, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,

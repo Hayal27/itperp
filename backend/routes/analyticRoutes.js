@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const verifyToken = require('../middleware/verifyToken');
 const { 
+    DefaultPlanOutcomeDifferenceFulltime,
     HRPlanOutcomeDifferenceFulltime,
     displayTotalCost,
     displayTotalCostPlan,
@@ -54,7 +55,8 @@ router.get("/compareIncomePlanOutcomeTotal", verifyToken, compareIncomePlanOutco
 router.get("/costPlanOutcomeDifferenceRegularBudget", verifyToken, costPlanOutcomeDifferenceRegularBudget);
 router.get("/costPlanOutcomeDifferenceCapitalBudget", verifyToken, costPlanOutcomeDifferenceCapitalBudget);
 
-
+// default plan 
+router.get("/defaultPlanOutcomeDifferenceFulltime", verifyToken, DefaultPlanOutcomeDifferenceFulltime);
 
 
 

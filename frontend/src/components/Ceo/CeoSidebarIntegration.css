@@ -1,0 +1,353 @@
+/* ============================================================================
+   CEO SIDEBAR INTEGRATION STYLES
+   Handles main content layout and responsive behavior with CEO Sidebar
+   ============================================================================ */
+
+/* CSS Custom Properties for Dynamic Sidebar Integration */
+:root {
+  --ceo-sidebar-width: 260px;
+  --ceo-main-content-margin: 260px;
+  --ceo-header-height: 60px;
+  --ceo-transition-duration: 0.3s;
+}
+
+/* Layout Container */
+.ceo-layout-container {
+  position: relative;
+  min-height: 100vh;
+  background: #f8f9fa;
+}
+
+/* Main Content Area */
+.ceo-main-content {
+  min-height: 100vh;
+  padding-top: var(--ceo-header-height);
+  margin-left: var(--ceo-main-content-margin);
+  transition: margin-left var(--ceo-transition-duration) ease;
+  background: #f8f9fa;
+  position: relative;
+}
+
+.ceo-main-content.ceo-sidebar-collapsed {
+  margin-left: 60px;
+}
+
+.ceo-main-content.ceo-sidebar-expanded {
+  margin-left: 260px;
+}
+
+/* Content Header */
+.ceo-content-header {
+  background: white;
+  padding: 2rem;
+  margin: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e9ecef;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.ceo-header-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.ceo-page-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #2c3e50;
+  margin: 0 0 0.5rem 0;
+  background: linear-gradient(90deg, #16284f 10%, #0c7c92 50%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.ceo-page-subtitle {
+  color: #6c757d;
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.ceo-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.ceo-sidebar-status {
+  display: flex;
+  align-items: center;
+}
+
+.ceo-status-indicator {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.ceo-status-indicator.collapsed {
+  background: linear-gradient(90deg, #ffc107 0%, #ffb300 100%);
+  color: #000;
+}
+
+.ceo-status-indicator.expanded {
+  background: linear-gradient(90deg, #28a745 0%, #20c997 100%);
+  color: white;
+}
+
+/* Content Body */
+.ceo-content-body {
+  padding: 0 1.5rem 2rem;
+}
+
+/* Demo Content Styles */
+.ceo-demo-content {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.ceo-demo-card {
+  background: white;
+  padding: 2.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e9ecef;
+}
+
+.ceo-demo-card h2 {
+  color: #2c3e50;
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  background: linear-gradient(90deg, #16284f 10%, #0c7c92 50%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.ceo-demo-card h3 {
+  color: #495057;
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin: 2rem 0 1rem 0;
+  border-bottom: 2px solid #e9ecef;
+  padding-bottom: 0.5rem;
+}
+
+.ceo-demo-card p {
+  color: #6c757d;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+/* Feature List */
+.ceo-feature-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1rem;
+  margin: 2rem 0;
+}
+
+.ceo-feature-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border-left: 4px solid #28a745;
+  transition: all 0.3s ease;
+}
+
+.ceo-feature-item:hover {
+  background: #e8f5e8;
+  transform: translateX(5px);
+}
+
+.ceo-feature-item i {
+  color: #28a745;
+  font-size: 1.2rem;
+}
+
+.ceo-feature-item span {
+  color: #495057;
+  font-weight: 500;
+}
+
+/* Integration Info */
+.ceo-integration-info {
+  background: #f8f9fa;
+  padding: 2rem;
+  border-radius: 8px;
+  margin: 2rem 0;
+  border: 1px solid #e9ecef;
+}
+
+.ceo-info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.ceo-info-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem;
+  background: white;
+  border-radius: 6px;
+  border: 1px solid #e9ecef;
+}
+
+.ceo-info-item strong {
+  color: #495057;
+  font-weight: 600;
+}
+
+.ceo-info-item span {
+  color: #0c7c92;
+  font-weight: 700;
+  font-family: 'Courier New', monospace;
+}
+
+/* Usage Example */
+.ceo-usage-example {
+  margin: 2rem 0;
+}
+
+.ceo-code-block {
+  background: #2d3748;
+  color: #e2e8f0;
+  padding: 1.5rem;
+  border-radius: 8px;
+  overflow-x: auto;
+  font-family: 'Courier New', monospace;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  border: 1px solid #4a5568;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .ceo-content-header {
+    margin: 1rem;
+    padding: 1.5rem;
+  }
+  
+  .ceo-content-body {
+    padding: 0 1rem 2rem;
+  }
+  
+  .ceo-demo-card {
+    padding: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .ceo-main-content {
+    margin-left: 0 !important;
+  }
+  
+  .ceo-main-content.ceo-sidebar-collapsed,
+  .ceo-main-content.ceo-sidebar-expanded {
+    margin-left: 0 !important;
+  }
+  
+  .ceo-content-header {
+    flex-direction: column;
+    align-items: flex-start;
+    margin: 0.5rem;
+    padding: 1rem;
+  }
+  
+  .ceo-page-title {
+    font-size: 1.5rem;
+  }
+  
+  .ceo-content-body {
+    padding: 0 0.5rem 1rem;
+  }
+  
+  .ceo-demo-card {
+    padding: 1.5rem;
+  }
+  
+  .ceo-feature-list {
+    grid-template-columns: 1fr;
+  }
+  
+  .ceo-info-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .ceo-code-block {
+    font-size: 0.8rem;
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .ceo-content-header {
+    margin: 0.25rem;
+    padding: 0.75rem;
+  }
+  
+  .ceo-page-title {
+    font-size: 1.3rem;
+  }
+  
+  .ceo-page-subtitle {
+    font-size: 0.9rem;
+  }
+  
+  .ceo-demo-card {
+    padding: 1rem;
+  }
+  
+  .ceo-feature-item {
+    padding: 0.75rem;
+  }
+  
+  .ceo-integration-info {
+    padding: 1rem;
+  }
+}
+
+/* Animation Classes */
+.ceo-content-fade-in {
+  animation: ceoContentFadeIn 0.5s ease-out;
+}
+
+@keyframes ceoContentFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Print Styles */
+@media print {
+  .ceo-main-content {
+    margin-left: 0 !important;
+  }
+  
+  .ceo-sidebar-status {
+    display: none;
+  }
+}

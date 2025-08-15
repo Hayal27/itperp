@@ -27,7 +27,7 @@ const AddReport = () => {
 
     try {
       const response = await Axios.post(
-        `http://192.168.56.1:5000/api/reports/${planId}`,
+        `http://localhost:5000/api/reports/${planId}`,
         reportData,
         { headers: { Authorization: `Bearer ${token}` } }
       );

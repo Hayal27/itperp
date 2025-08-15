@@ -1,0 +1,59 @@
+/* AdminLayout Component Styles */
+
+.admin-layout {
+  display: flex;
+  min-height: 100vh;
+  position: relative;
+  background-color: #f8f9fa;
+}
+
+.admin-content-wrapper {
+  flex: 1;
+  position: relative;
+  overflow-x: hidden;
+  transition: margin-left 0.3s ease;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .admin-layout {
+    flex-direction: column;
+  }
+  
+  .admin-content-wrapper {
+    margin-left: 0 !important;
+    width: 100%;
+  }
+}
+
+/* Global CSS variables for sidebar integration */
+:root {
+  --sidebar-width: 280px;
+  --sidebar-collapsed-width: 70px;
+  --current-sidebar-width: var(--sidebar-width);
+  --main-content-margin: var(--sidebar-width);
+}
+
+/* Body classes for sidebar state */
+body.sidebar-collapsed {
+  --current-sidebar-width: var(--sidebar-collapsed-width);
+  --main-content-margin: var(--sidebar-collapsed-width);
+}
+
+/* Smooth transitions for all sidebar-responsive elements */
+.sidebar-responsive {
+  transition: margin-left 0.3s ease, width 0.3s ease, padding 0.3s ease;
+}
+
+/* Utility classes for sidebar-aware components */
+.sidebar-aware-margin {
+  margin-left: var(--main-content-margin);
+}
+
+.sidebar-aware-width {
+  width: calc(100% - var(--main-content-margin));
+}
+
+.sidebar-aware-padding {
+  padding-left: calc(var(--main-content-margin) + 1rem);
+}

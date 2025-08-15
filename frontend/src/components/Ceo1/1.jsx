@@ -25,34 +25,34 @@ const departmentsDetail = () => {
 
   // Fetch plan with applicants
   useEffect(() => {
-    Axios.get(`http://192.168.56.1:5000/api/plan/plan-applicant`)
+    Axios.get(`http://localhost:5000/api/plan/plan-applicant`)
       .then((res) => setplansWithApplicant(res.data))
       .catch((err) => console.log(err));
   }, []);
 
   // Fetch applicants
   useEffect(() => {
-    Axios.get("http://192.168.56.1:5000/getApplicant")
+    Axios.get("http://localhost:5000/getApplicant")
       .then((res) => setApplicant(res.data))
       .catch((err) => console.log(err));
   }, []);
 
   // Fetch letters
   useEffect(() => {
-    Axios.get("http://192.168.56.1:5000/api/letters/getLetters")
+    Axios.get("http://localhost:5000/api/letters/getLetters")
       .then((res) => setLetters(res.data))
       .catch((err) => console.log(err));
   }, []);
 
   // Fetch roles
   useEffect(() => {
-    Axios.get("http://192.168.56.1:5000/getRole")
+    Axios.get("http://localhost:5000/getRole")
       .then((res) => setRole(res.data))
       .catch((err) => console.log(err));
   }, []);
 
   const [departments, setdepartments] = useState([]);
-     Axios.get("http://192.168.56.1:5000/getdepartment")
+     Axios.get("http://localhost:5000/getdepartment")
       .then((res) => setdepartments(res.data))
       .catch((err) => console.log(err));
 

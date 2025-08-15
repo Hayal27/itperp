@@ -90,10 +90,194 @@ const getAllSupervisors = (req, res) => {
     });
 };
 
+// Function to fetch all employees with detailed information
+const getAllEmployees = (req, res) => {
+    const query = `
+        SELECT
+            e.*,
+            r.role_name,
+            d.name as department_name,
+            supervisor.fname as supervisor_fname,
+            supervisor.lname as supervisor_lname,
+            u.status as user_status,
+            u.created_at as user_created_at
+        FROM employees e
+        LEFT JOIN roles r ON e.role_id = r.role_id
+        LEFT JOIN departments d ON e.department_id = d.department_id
+        LEFT JOIN employees supervisor ON e.supervisor_id = supervisor.employee_id
+        LEFT JOIN users u ON e.employee_id = u.employee_id
+        ORDER BY e.employee_id DESC
+    `;
+
+    con.query(query, (err, results) => {
+        if (err) {
+            console.error('Error fetching employees:', err);
+            return res.status(500).json({ message: 'Error fetching employees' });
+        }
+        res.json(results);
+    });
+};
+
+// Function to get employee statistics for dashboard
+const getEmployeeStatistics = async (req, res) => {
+    try {
+        const query = util.promisify(con.query).bind(con);
+
+        // Get total employees
+        const totalEmployeesResult = await query('SELECT COUNT(*) as total FROM employees');
+        const totalEmployees = totalEmployeesResult[0].total;
+
+        // Get active users (employees with active user accounts)
+        const activeUsersResult = await query(`
+            SELECT COUNT(*) as active
+            FROM employees e
+            INNER JOIN users u ON e.employee_id = u.employee_id
+            WHERE u.status = '1'
+        `);
+        const activeUsers = activeUsersResult[0].active;
+
+        // Get employees by department
+        const departmentStatsResult = await query(`
+            SELECT
+                d.name as department_name,
+                COUNT(e.employee_id) as employee_count
+            FROM departments d
+            LEFT JOIN employees e ON d.department_id = e.department_id
+            GROUP BY d.department_id, d.name
+            ORDER BY employee_count DESC
+        `);
+
+        // Get employees by role
+        const roleStatsResult = await query(`
+            SELECT
+                r.role_name,
+                COUNT(e.employee_id) as employee_count
+            FROM roles r
+            LEFT JOIN employees e ON r.role_id = e.role_id
+            GROUP BY r.role_id, r.role_name
+            ORDER BY employee_count DESC
+        `);
+
+        // Get recent registrations (last 30 days)
+        const recentRegistrationsResult = await query(`
+            SELECT COUNT(*) as recent
+            FROM users
+            WHERE created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)
+        `);
+        const recentRegistrations = recentRegistrationsResult[0].recent;
+
+        // Get gender distribution
+        const genderStatsResult = await query(`
+            SELECT
+                sex,
+                COUNT(*) as count
+            FROM employees
+            WHERE sex IS NOT NULL
+            GROUP BY sex
+        `);
+
+        res.json({
+            totalEmployees,
+            activeUsers,
+            inactiveUsers: totalEmployees - activeUsers,
+            recentRegistrations,
+            departmentStats: departmentStatsResult,
+            roleStats: roleStatsResult,
+            genderStats: genderStatsResult
+        });
+
+    } catch (error) {
+        console.error('Error fetching employee statistics:', error);
+        res.status(500).json({ message: 'Error fetching employee statistics' });
+    }
+};
+
+// Function to get recent employee activities
+const getRecentActivities = async (req, res) => {
+    try {
+        const query = util.promisify(con.query).bind(con);
+
+        const recentActivitiesResult = await query(`
+            SELECT
+                e.fname,
+                e.lname,
+                e.email,
+                u.created_at,
+                u.status,
+                'registration' as activity_type
+            FROM employees e
+            INNER JOIN users u ON e.employee_id = u.employee_id
+            ORDER BY u.created_at DESC
+            LIMIT 10
+        `);
+
+        res.json(recentActivitiesResult);
+
+    } catch (error) {
+        console.error('Error fetching recent activities:', error);
+        res.status(500).json({ message: 'Error fetching recent activities' });
+    }
+};
+
+// Function to update employee information
+const updateEmployee = async (req, res) => {
+    const { employee_id } = req.params;
+    const { name, role_id, department_id, supervisor_id, fname, lname, email, phone, sex } = req.body;
+
+    try {
+        const query = util.promisify(con.query).bind(con);
+
+        const updateResult = await query(
+            'UPDATE employees SET name = ?, role_id = ?, department_id = ?, supervisor_id = ?, fname = ?, lname = ?, email = ?, phone = ?, sex = ? WHERE employee_id = ?',
+            [name, role_id, department_id || null, supervisor_id || null, fname, lname, email, phone, sex, employee_id]
+        );
+
+        if (updateResult.affectedRows === 0) {
+            return res.status(404).json({ message: 'Employee not found' });
+        }
+
+        res.json({ message: 'Employee updated successfully' });
+
+    } catch (error) {
+        console.error('Error updating employee:', error);
+        res.status(500).json({ message: 'Error updating employee' });
+    }
+};
+
+// Function to delete employee
+const deleteEmployee = async (req, res) => {
+    const { employee_id } = req.params;
+
+    try {
+        const query = util.promisify(con.query).bind(con);
+
+        // First delete the user account
+        await query('DELETE FROM users WHERE employee_id = ?', [employee_id]);
+
+        // Then delete the employee
+        const deleteResult = await query('DELETE FROM employees WHERE employee_id = ?', [employee_id]);
+
+        if (deleteResult.affectedRows === 0) {
+            return res.status(404).json({ message: 'Employee not found' });
+        }
+
+        res.json({ message: 'Employee deleted successfully' });
+
+    } catch (error) {
+        console.error('Error deleting employee:', error);
+        res.status(500).json({ message: 'Error deleting employee' });
+    }
+};
+
 // Exporting the functions for use in routes
 module.exports = {
     getAllDepartments,
     getAllRoles,
     getAllSupervisors,
-    addEmployee
+    addEmployee,
+    getAllEmployees,
+    getEmployeeStatistics,
+    getRecentActivities,
+    updateEmployee,
+    deleteEmployee
 };

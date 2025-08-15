@@ -23,7 +23,7 @@ const FilterForm = ({ filters, onSubmit }) => {
       }
       setLoading(true);
       try {
-        const response = await axios.get("http://192.168.56.1:5000/api/getSpesificObjectives", {
+        const response = await axios.get("http://localhost:5000/api/getSpesificObjectives", {
           headers: { Authorization: `Bearer ${token}` },
         });
         setObjectives(response.data);

@@ -5,7 +5,7 @@ import Step2Objective from "./Step2Objective"; // Objective selection step
 import Step3SpecificObjective from "./Step3SpecificObjective"; // Specific objective selection
 import Step4SpecificObjectiveDetails from "./Step4SpecificObjectiveDetails"; // Specific objective details
 import Step5Review from "./Step5Review"; // Review and submission step
-import "../../../../assets/css/objective.css";
+import "./PlanSteps.css"; // Professional styling
 import Swal from "sweetalert2"; // SweetAlert2 for popups
 
 const PlanSteps = () => {
@@ -94,7 +94,7 @@ const PlanSteps = () => {
   
       console.log("Payload for submission:", payload); // Debugging payload
   
-      const response = await axios.post("http://192.168.56.1:5000/api/addplan", payload, {
+      const response = await axios.post("http://localhost:5000/api/addplan", payload, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
@@ -127,13 +127,51 @@ const PlanSteps = () => {
       setIsLoading(false);
     }
   };
-  
-  
-  
-  
-  
-  
-  
+
+  // Helper functions for professional UI
+  const getStepLabel = (stepNumber) => {
+    const labels = {
+      1: "Goal Selection",
+      2: "Objective",
+      3: "Specific Objective",
+      4: "Details",
+      5: "Review & Submit"
+    };
+    return labels[stepNumber];
+  };
+
+  const getStepIcon = (stepNumber) => {
+    const icons = {
+      1: "bi-bullseye",
+      2: "bi-target",
+      3: "bi-list-check",
+      4: "bi-file-text",
+      5: "bi-check-circle"
+    };
+    return icons[stepNumber];
+  };
+
+  const getStepTitle = (stepNumber) => {
+    const titles = {
+      1: "Select Your Goal",
+      2: "Choose Objective",
+      3: "Define Specific Objective",
+      4: "Add Objective Details",
+      5: "Review and Submit Plan"
+    };
+    return titles[stepNumber];
+  };
+
+  const getStepDescription = (stepNumber) => {
+    const descriptions = {
+      1: "Choose the primary goal for your plan from available options",
+      2: "Select the objective that aligns with your chosen goal",
+      3: "Pick a specific objective to focus your planning efforts",
+      4: "Provide detailed information for your specific objective",
+      5: "Review all your selections and submit the complete plan"
+    };
+    return descriptions[stepNumber];
+  };
 
   // Render the correct step component
   const renderStepContent = () => {
@@ -192,10 +230,111 @@ const PlanSteps = () => {
   };
 
   return (
-    <div className="container mt-46">
-      <h3>እቅድ ማስተዳደሪያ</h3>
-      <div className="step-content">{renderStepContent()}</div>
-    </div>
+    <main className="admin-main-content">
+      <div className="plan-steps-container">
+        {/* Professional Header */}
+        <div className="plan-steps-header">
+          <div className="header-content">
+            <div className="page-title">
+              <h1 className="main-title">
+                <i className="bi bi-clipboard-check me-3"></i>
+                እቅድ ማስተዳደሪያ
+              </h1>
+              <p className="subtitle">Professional Plan Management System</p>
+            </div>
+            <div className="header-actions">
+              <div className="step-indicator">
+                <span className="current-step">Step {step}</span>
+                <span className="total-steps">of 5</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Professional Progress Bar */}
+        <div className="progress-section">
+          <div className="progress-container">
+            <div className="progress-bar">
+              <div
+                className="progress-fill"
+                style={{ width: `${(step / 5) * 100}%` }}
+              ></div>
+            </div>
+            <div className="progress-steps">
+              {[1, 2, 3, 4, 5].map((stepNumber) => (
+                <div
+                  key={stepNumber}
+                  className={`progress-step ${step >= stepNumber ? 'completed' : ''} ${step === stepNumber ? 'active' : ''}`}
+                >
+                  <div className="step-circle">
+                    {step > stepNumber ? (
+                      <i className="bi bi-check-lg"></i>
+                    ) : (
+                      <span>{stepNumber}</span>
+                    )}
+                  </div>
+                  <div className="step-label">
+                    {getStepLabel(stepNumber)}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Professional Content Area */}
+        <div className="plan-steps-content">
+          <div className="content-card">
+            <div className="card-header">
+              <h3 className="card-title">
+                <i className={`bi ${getStepIcon(step)} me-2`}></i>
+                {getStepTitle(step)}
+              </h3>
+              <div className="card-subtitle">
+                {getStepDescription(step)}
+              </div>
+            </div>
+            <div className="card-body">
+              {renderStepContent()}
+            </div>
+          </div>
+        </div>
+
+        {/* Professional Footer */}
+        <div className="plan-steps-footer">
+          <div className="footer-content">
+            <div className="footer-info">
+              <small className="text-muted">
+                <i className="bi bi-info-circle me-1"></i>
+                Complete all steps to submit your plan
+              </small>
+            </div>
+            <div className="footer-actions">
+              {step > 1 && (
+                <button
+                  className="btn btn-outline-secondary me-2"
+                  onClick={goToPreviousStep}
+                  disabled={isLoading}
+                >
+                  <i className="bi bi-arrow-left me-2"></i>
+                  Previous
+                </button>
+              )}
+              {step < 5 && (
+                <button
+                  className="btn btn-primary"
+                  onClick={goToNextStep}
+                  disabled={isLoading}
+                >
+                  Next
+                  <i className="bi bi-arrow-right ms-2"></i>
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
   );
 };
 

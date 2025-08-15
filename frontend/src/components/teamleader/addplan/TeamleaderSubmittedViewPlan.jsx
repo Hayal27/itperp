@@ -6,6 +6,7 @@ import "../../../assets/css/viewplan.css";
 const TeamleaderSubmittedViewPlan = () => {
   const [plans, setPlans] = useState([]);
   const [selectedPlan, setSelectedPlan] = useState(null);
+  const [selectedPlanIds, setSelectedPlanIds] = useState([]);
   const [comment, setComment] = useState("");
   const token = localStorage.getItem("token");
 
@@ -15,7 +16,7 @@ const TeamleaderSubmittedViewPlan = () => {
 
   const fetchPlans = async () => {
     try {
-      const response = await axios.get("http://192.168.56.1:5000/api/supervisor/plans", {
+      const response = await axios.get("http://localhost:5000/api/supervisor/plans", {
         headers: { Authorization: `Bearer ${token}` }
       });
       if (response.data.success && response.data.plans) {
@@ -29,30 +30,66 @@ const TeamleaderSubmittedViewPlan = () => {
     }
   };
 
-  const handleApproveDecline = async (planId, action) => {
+  const handleApproveDecline = async (planId, action, actionComment = comment) => {
     try {
       const response = await axios.put(
-        "http://192.168.56.1:5000/api/supervisor/plans/approve",
-        { plan_id: planId, status: action, comment },
+        "http://localhost:5000/api/supervisor/plans/approve",
+        { plan_id: planId, status: action, comment: actionComment },
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
       if (response.data.success) {
-        alert(response.data.message);
-        fetchPlans();  // Refresh the list of plans after the update
-        setSelectedPlan(null);  // Clear selected plan
-        setComment("");  // Clear comment
+        // Show individual alert for feedback if needed
+        console.log(response.data.message);
       } else {
-        alert(response.data.message || "Something went wrong.");
+        console.error(response.data.message || "Something went wrong.");
       }
     } catch (error) {
       console.error("Error updating plan:", error.response?.data || error.message);
-      alert("Failed to update plan. Please try again.");
+    }
+  };
+
+  const handleBulkAction = async (action) => {
+    if (selectedPlanIds.length === 0) {
+      alert("No plans selected.");
+      return;
+    }
+    // Prompt for optional comment for bulk update
+    const bulkComment = prompt("Add a comment (optional)") || "";
+    try {
+      // Execute request concurrently for all selected plans.
+      await Promise.all(
+        selectedPlanIds.map((planId) => handleApproveDecline(planId, action, bulkComment))
+      );
+      alert(`Plans ${action} successfully.`);
+      fetchPlans(); // Refresh the list
+      setSelectedPlanIds([]); // Clear bulk selection
+    } catch (error) {
+      alert("Failed to update one or more plans. Please try again.");
     }
   };
 
   const handleReviewClick = (plan) => {
     setSelectedPlan(plan);
+  };
+
+  // Handle checkbox selection for bulk actions
+  const handleCheckboxChange = (planId, checked) => {
+    if (checked) {
+      setSelectedPlanIds((prev) => [...prev, planId]);
+    } else {
+      setSelectedPlanIds((prev) => prev.filter((id) => id !== planId));
+    }
+  };
+
+  // Handle master checkbox to select/unselect all plans
+  const handleSelectAll = (e) => {
+    if (e.target.checked) {
+      const allIds = plans.map((plan) => plan.plan_id);
+      setSelectedPlanIds(allIds);
+    } else {
+      setSelectedPlanIds([]);
+    }
   };
 
   // Mapping backend attribute keys to display labels.
@@ -63,7 +100,6 @@ const TeamleaderSubmittedViewPlan = () => {
     month: "ወር",
     day: "ቀን",
     deadline: "እስከ",
-    // status: "Status",
     priority: "Priority",
     goal_name: "ግብ",
     objective_name: "አላማ",
@@ -102,11 +138,27 @@ const TeamleaderSubmittedViewPlan = () => {
     <div className="supervisor-dashboard">
       <h2>በ ዲፓርትመንቱ  የታቀዱ እቅዶች</h2>
 
+      <div className="bulk-actions" style={{ marginBottom: "1rem" }}>
+        <button onClick={() => handleBulkAction("Approved")} disabled={selectedPlanIds.length === 0}>
+          Approve Selected
+        </button>
+        <button onClick={() => handleBulkAction("Declined")} disabled={selectedPlanIds.length === 0}>
+          Decline Selected
+        </button>
+      </div>
+
       <div className="plan-list">
         {plans.length > 0 ? (
           <table>
             <thead>
               <tr>
+                <th>
+                  <input
+                    type="checkbox"
+                    onChange={handleSelectAll}
+                    checked={plans.length > 0 && selectedPlanIds.length === plans.length}
+                  />
+                </th>
                 <th>Department</th>
                 <th>Plan By</th>
                 <th>Goal</th>
@@ -120,6 +172,15 @@ const TeamleaderSubmittedViewPlan = () => {
             <tbody>
               {plans.map((plan) => (
                 <tr key={plan.plan_id}>
+                  <td>
+                    <input
+                      type="checkbox"
+                      checked={selectedPlanIds.includes(plan.plan_id)}
+                      onChange={(e) =>
+                        handleCheckboxChange(plan.plan_id, e.target.checked)
+                      }
+                    />
+                  </td>
                   <td>{plan.department_name}</td>
                   <td>{plan.created_by}</td>
                   <td>{plan.goal_name}</td>

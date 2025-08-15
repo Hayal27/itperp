@@ -1,18 +1,16 @@
+
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch, faSort, faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { faArrowUp, faArrowDown } from '@fortawesome/free-solid-svg-icons';
+import Swal from "sweetalert2";
 
-import Swal from "sweetalert2"; // Install SweetAlert2 for popups
 const Step1Goal = ({ onNext }) => {
-
-
-  
-  const [goals, setgoals] = useState([]);
-  const [filteredgoals, setFilteredgoals] = useState([]);
-  const [selectedgoal, setSelectedgoal] = useState(null);
+  const [goals, setGoals] = useState([]);
+  const [filteredGoals, setFilteredGoals] = useState([]);
+  const [selectedGoal, setSelectedGoal] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
@@ -22,7 +20,7 @@ const Step1Goal = ({ onNext }) => {
   const [sortOrder, setSortOrder] = useState("asc");
   const [isFilterVisible, setIsFilterVisible] = useState(true);
   const [isCreateVisible, setIsCreateVisible] = useState(true);
-  const [newgoal, setNewgoal] = useState({
+  const [newGoal, setNewGoal] = useState({
     name: "",
     description: "",
     year: "",
@@ -33,15 +31,13 @@ const Step1Goal = ({ onNext }) => {
 
   // Fetch goals from the API
   useEffect(() => {
-    const fetchgoals = async () => {
+    const fetchGoals = async () => {
       try {
-        const response = await axios.get("http://192.168.56.1:5000/api/goalsg", {
-          headers: { 
-            Authorization: `Bearer ${token}`,
-          },
+        const response = await axios.get("http://localhost:5000/api/goalsg", {
+          headers: { Authorization: `Bearer ${token}` },
         });
-        setgoals(response.data);
-        setFilteredgoals(response.data);
+        setGoals(response.data);
+        setFilteredGoals(response.data);
         setIsLoading(false);
       } catch (err) {
         console.error("Error fetching goals:", err);
@@ -51,7 +47,7 @@ const Step1Goal = ({ onNext }) => {
     };
 
     if (token) {
-      fetchgoals();
+      fetchGoals();
     } else {
       setError("Authentication required. Please log in.");
       setIsLoading(false);
@@ -61,27 +57,22 @@ const Step1Goal = ({ onNext }) => {
   // Handle filter change for year and quarter
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
-
-    setNewgoal((prevState) => ({
+    setNewGoal((prevState) => ({
       ...prevState,
       [name]: value,
     }));
   };
 
-  // Filter goals based on year, quarter, and search query
+  // Filter goals based on year, quarter, and search query, then apply sorting
   useEffect(() => {
     let filtered = goals;
 
-    if (newgoal.year) {
-      filtered = filtered.filter(
-        (goal) => goal.year === parseInt(newgoal.year)
-      );
+    if (newGoal.year) {
+      filtered = filtered.filter((goal) => goal.year === parseInt(newGoal.year));
     }
 
-    if (newgoal.quarter) {
-      filtered = filtered.filter(
-        (goal) => parseInt(goal.quarter) === parseInt(newgoal.quarter)
-      );
+    if (newGoal.quarter) {
+      filtered = filtered.filter((goal) => parseInt(goal.quarter) === parseInt(newGoal.quarter));
     }
 
     if (searchQuery) {
@@ -90,7 +81,6 @@ const Step1Goal = ({ onNext }) => {
       );
     }
 
-    // Apply sorting
     filtered.sort((a, b) => {
       if (sortOrder === "asc") {
         return a[sortField] > b[sortField] ? 1 : -1;
@@ -99,14 +89,13 @@ const Step1Goal = ({ onNext }) => {
       }
     });
 
-    setFilteredgoals(filtered);
-  }, [newgoal.year, newgoal.quarter, searchQuery, goals, sortField, sortOrder]);
+    setFilteredGoals(filtered);
+    setCurrentPage(1);
+  }, [newGoal.year, newGoal.quarter, searchQuery, goals, sortField, sortOrder]);
 
   // Handle goal selection
-  const handlegoalSelect = (goal) => {
-    setSelectedgoal(goal);
-  
-    // Show a Bootstrap alert with feedback
+  const handleGoalSelect = (goal) => {
+    setSelectedGoal(goal);
     Swal.fire({
       icon: 'info',
       title: 'የመረጡት ግብ',
@@ -114,20 +103,19 @@ const Step1Goal = ({ onNext }) => {
       confirmButtonText: 'OK',
     });
   };
-  
 
   // Handle input changes for new goal
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setNewgoal((prev) => ({
+    setNewGoal((prev) => ({
       ...prev,
       [name]: value,
     }));
   };
 
   // Handle creation of a new goal
-  const handleCreategoal = async () => {
-    if (!newgoal.name || !newgoal.year || !newgoal.quarter) {
+  const handleCreateGoal = async () => {
+    if (!newGoal.name || !newGoal.year || !newGoal.quarter) {
       Swal.fire({
         icon: "warning",
         title: "Incomplete Form",
@@ -135,45 +123,36 @@ const Step1Goal = ({ onNext }) => {
       });
       return;
     }
-  
     try {
       const response = await axios.post(
-        "http://192.168.56.1:5000/api/addgoal",
+        "http://localhost:5000/api/addgoal",
         {
-          name: newgoal.name,
-          description: newgoal.description,
-          year: parseInt(newgoal.year),
-          quarter: parseInt(newgoal.quarter),
+          name: newGoal.name,
+          description: newGoal.description,
+          year: parseInt(newGoal.year),
+          quarter: parseInt(newGoal.quarter),
         },
         {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
         }
       );
-  
       // Update goals list
-      setgoals((prev) => [...prev, response.data]);
-      setFilteredgoals((prev) => [...prev, response.data]);
-  
+      setGoals((prev) => [...prev, response.data]);
+      setFilteredGoals((prev) => [...prev, response.data]);
       // Reset new goal form
-      setNewgoal({
+      setNewGoal({
         name: "",
         description: "",
         year: "",
         quarter: "",
       });
-  
-      // Success feedback
       Swal.fire({
         icon: "success",
-        title: "goal Created",
+        title: "Goal Created",
         text: "Your new goal has been successfully created!",
       });
     } catch (err) {
       console.error("Error creating goal:", err);
-  
-      // Check specific error types
       if (err.response && err.response.status === 400) {
         Swal.fire({
           icon: "error",
@@ -204,29 +183,18 @@ const Step1Goal = ({ onNext }) => {
 
   // Handle next step
   const handleNext = () => {
-    if (selectedgoal) {
-      // Log the selected goal to the console
-      console.log("Passed goal:", selectedgoal);
-  
-      // Call the onNext function to pass the selected goal to the next step
-      onNext(selectedgoal);  
-    } 
-    
-    else {
-      alert("Please select an goal or create a new one.");
+    if (selectedGoal) {
+      console.log("Passed goal:", selectedGoal);
+      onNext(selectedGoal);
+    } else {
+      alert("Please select a goal or create a new one.");
     }
-
-    
   };
-  
 
   // Pagination logic
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentgoals = filteredgoals.slice(
-    indexOfFirstItem,
-    indexOfLastItem
-  );
+  const currentGoals = filteredGoals.slice(indexOfFirstItem, indexOfLastItem);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
@@ -239,7 +207,8 @@ const Step1Goal = ({ onNext }) => {
       setSortOrder("asc");
     }
   };
-const toggleFilterVisibility = () => {
+
+  const toggleFilterVisibility = () => {
     setIsFilterVisible(!isFilterVisible);
   };
 
@@ -247,162 +216,160 @@ const toggleFilterVisibility = () => {
     setIsCreateVisible(!isCreateVisible);
   };
 
-
-
-  
   return (
     <div className="container mt-4">
-    <h2 className="text-center mb-4">ግብ ይምረጡ አልያም አዲስ ይፍጠሩ</h2>
-  
-    {/* Toggle Filter Section Button */}
-    <button 
-      className="btn btn-info mb-3" 
-      onClick={toggleFilterVisibility}
-      style={{ width: '17%' }}
-    >
-      <FontAwesomeIcon icon={isFilterVisible ? faArrowUp : faArrowDown} />
-      {isFilterVisible ? ' Hide ' : ' Show '}
-    </button>
-  
-    {/* Filter Section */}
-    <div className={`filter-section ${isFilterVisible ? 'show' : ''}`}>
-      <div className="row mb-4">
-        <div className="col-md-4">
-          <label htmlFor="year">Year:</label>
-          <input
-            type="number"
-            id="year"
-            name="year"
-            value={newgoal.year}
-            onChange={handleFilterChange}
-            placeholder="Enter year"
-            className="form-control"
-          />
-        </div>
-  
-        <div className="col-md-4">
-          <label htmlFor="quarter">Quarter:</label>
-          <select
-            id="quarter"
-            name="quarter"
-            value={newgoal.quarter}
-            onChange={handleFilterChange}
-            className="form-control"
-          >
-            <option value="">Select Quarter</option>
-            <option value={1}>Quarter 1</option>
-            <option value={2}>Quarter 2</option>
-            <option value={3}>Quarter 3</option>
-            <option value={4}>Quarter 4</option>
-          </select>
-        </div>
-  
-        <div className="col-md-4">
-          <label htmlFor="search">Search:</label>
-          <div className="input-group">
-            <input
-              type="text"
-              id="search"
-              placeholder="Search by name"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="form-control"
-            />
-            <span className="input-group-text">
-              <FontAwesomeIcon icon={faSearch} />
-            </span>
-          </div>
-        </div>
-      </div>
-    </div>
-  
-    {/* Display loading or error */}
-    {isLoading && (
-      <div className="text-center">
-        <FontAwesomeIcon icon={faSpinner} spin size="2x" />
-        <p>Loading goals...</p>
-      </div>
-    )}
-    {error && <div className="alert alert-danger">{error}</div>}
-  
-    {/* List of goals */}
-    <div>
-  <h3>ያጣሩት ግብ</h3>
-  {currentgoals.length === 0 ? (
-    <p>No goals found. Try adjusting your filters or create a new goal.</p>
-  ) : (
-    <ul className="list-group">
-      {currentgoals.map((goal) => (
-        <li
-          key={goal.id}
-          className={`list-group-item ${selectedgoal?.id === goal.id ? "text-blue" : ""}`} 
-          onClick={() => handlegoalSelect(goal)}
-          style={{
-            cursor: "arrow",
-            transition: "background-color 0.3s ease, transform 0.3s ease",
-          background: "linear-gradient(to right,rgb(223, 108, 14),rgb(31, 116, 185))"
-          // bg for selected goal
-      
-          
+      <h2 className="text-center mb-4">ግብ ይምረጡ አልያም አዲስ ይፍጠሩ</h2>
 
-        }}
-        >
-          <div className="d-flex justify-content-between">
-            <span>{goal.name}</span>
-            <button
-              className="btn btn-sm btn-light"
-              onClick={(e) => {
-                e.stopPropagation();
-                toggleSortOrder("name");
-              }}
-            >
-              <FontAwesomeIcon icon={faSort} /> Sort
-            </button>
-          </div>
-          <small className="text-muted">
-            {`Year: ${goal.year}, Quarter: ${goal.quarter}`}
-          </small>
-        </li>
-      ))}
-    </ul>
-  )}
+      {/* Toggle Filter Section Button */}
+      <button 
+        className="btn btn-info mb-3" 
+        onClick={toggleFilterVisibility}
+        style={{ width: "17%" }}
+      >
+        <FontAwesomeIcon icon={isFilterVisible ? faArrowUp : faArrowDown} />
+        {isFilterVisible ? " Hide " : " Show "}
+      </button>
 
-  {filteredgoals.length > itemsPerPage && (
-    <nav className="mt-3">
-      <ul className="pagination justify-content-center">
-        {Array.from(
-          { length: Math.ceil(filteredgoals.length / itemsPerPage) },
-          (_, index) => (
-            <li
-              key={index + 1}
-              className={`page-item ${currentPage === index + 1 ? "active" : ""}`}
-            >
-              <button
-                className="page-link"
-                onClick={() => paginate(index + 1)}
+      {/* Filter Section */}
+      {isFilterVisible && (
+        <div className="filter-section mb-4">
+          <div className="row">
+            <div className="col-md-4">
+              <label htmlFor="year">Year:</label>
+              <input
+                type="number"
+                id="year"
+                name="year"
+                value={newGoal.year}
+                onChange={handleFilterChange}
+                placeholder="Enter year"
+                className="form-control"
+              />
+            </div>
+
+            <div className="col-md-4">
+              <label htmlFor="quarter">Quarter:</label>
+              <select
+                id="quarter"
+                name="quarter"
+                value={newGoal.quarter}
+                onChange={handleFilterChange}
+                className="form-control"
               >
-                {index + 1}
-              </button>
-            </li>
-          )
+                <option value="">Select Quarter</option>
+                <option value={1}>Quarter 1</option>
+                <option value={2}>Quarter 2</option>
+                <option value={3}>Quarter 3</option>
+                <option value={4}>Quarter 4</option>
+              </select>
+            </div>
+
+            <div className="col-md-4">
+              <label htmlFor="search">Search:</label>
+              <div className="input-group">
+                <input
+                  type="text"
+                  id="search"
+                  placeholder="Search by name"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="form-control"
+                />
+                <span className="input-group-text">
+                  <FontAwesomeIcon icon={faSearch} />
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Display loading or error */}
+      {isLoading && (
+        <div className="text-center">
+          <FontAwesomeIcon icon={faSpinner} spin size="2x" />
+          <p>Loading goals...</p>
+        </div>
+      )}
+      {error && <div className="alert alert-danger">{error}</div>}
+
+      {/* Goals Table */}
+      <div className="table-responsive">
+        {currentGoals.length === 0 ? (
+          <p>No goals found. Try adjusting your filters or create a new goal.</p>
+        ) : (
+          <table className="table table-striped table-hover table-bordered" style={{ backgroundColor: "#f8f9fa" }}>
+            <thead className="table-dark">
+              <tr>
+                <th>
+                  <button 
+                    className="btn btn-sm btn-outline-light" 
+                    onClick={() => toggleSortOrder("name")}
+                  >
+                    Goal Name <FontAwesomeIcon icon={faSort} />
+                  </button>
+                </th>
+                <th>Year</th>
+                <th>Quarter</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {currentGoals.map((goal) => (
+                <tr 
+                  key={goal.id} 
+                  onClick={() => handleGoalSelect(goal)} 
+                  style={{ cursor: "pointer" }}
+                  className={selectedGoal?.id === goal.id ? "table-primary" : ""}
+                >
+                  <td>{goal.name}</td>
+                  <td>{goal.year}</td>
+                  <td>{goal.quarter}</td>
+                  <td>
+                    <button 
+                      className="btn btn-sm btn-outline-info"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        toggleSortOrder("name");
+                      }}
+                    >
+                      <FontAwesomeIcon icon={faSort} /> Sort
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         )}
-      </ul>
-    </nav>
-  )}
-</div>
+      </div>
+
+      {/* Pagination */}
+      {filteredGoals.length > itemsPerPage && (
+        <nav className="mt-3">
+          <ul className="pagination justify-content-center">
+            {Array.from(
+              { length: Math.ceil(filteredGoals.length / itemsPerPage) },
+              (_, index) => (
+                <li key={index + 1} className={`page-item ${currentPage === index + 1 ? "active" : ""}`}>
+                  <button className="page-link" onClick={() => paginate(index + 1)}>
+                    {index + 1}
+                  </button>
+                </li>
+              )
+            )}
+          </ul>
+        </nav>
+      )}
 
  
-  
-    {/* Navigation buttons */}
-    <div className="next">
-      <button className="btn btn-success" onClick={handleNext}>
-        Next
-      </button>
+      {/* Navigation Button */}
+      <div className="d-grid gap-2 mt-4">
+        <button className="btn btn-success" onClick={handleNext}>
+          Next
+        </button>
+      </div>
     </div>
-  </div>
-  
   );
 };
 
 export default Step1Goal;
-

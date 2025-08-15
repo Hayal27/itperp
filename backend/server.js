@@ -11,6 +11,7 @@ const planRoutes = require("./routes/planRoutes.js");
 const reportRoutes = require("./routes/reportRoutes.js");
 const dashboardRoutes = require("./routes/dashboardRoutes.js");
 const analyticsRoutes = require("./routes/analyticRoutes.js");
+const menuPermissionRoutes = require("./routes/menuPermissions.js");
 const authMiddleware = require("./middleware/authMiddleware.js");
 const loggingMiddleware = require("./middleware/loggingMiddleware.js");
 
@@ -47,6 +48,7 @@ app.use("/api", planRoutes);
 app.use("/api", dashboardRoutes);
 app.use("/api", reportRoutes);
 app.use("/api", analyticsRoutes);
+app.use("/api/menu-permissions", menuPermissionRoutes);
 
 app.post("/login", authMiddleware.login);
 app.put("/logout/:user_id", authMiddleware.logout);

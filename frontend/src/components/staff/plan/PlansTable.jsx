@@ -48,7 +48,7 @@ const PlansTable = ({ plans, handleSorting, sortConfig }) => {
   const fetchPlanDetail = async (planId) => {
     try {
       setLoading(true);
-      const response = await Axios.get(`http://192.168.56.1:5000/api/pland/${planId}`, {
+      const response = await Axios.get(`http://localhost:5000/api/pland/${planId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -87,7 +87,7 @@ const PlansTable = ({ plans, handleSorting, sortConfig }) => {
       if (result.isConfirmed) {
         try {
           setLoading(true);
-          const response = await Axios.delete(`http://192.168.56.1:5000/api/plandelete/${planId}`, {
+          const response = await Axios.delete(`http://localhost:5000/api/plandelete/${planId}`, {
             headers: {
               Authorization: `Bearer ${token}`,
             },
@@ -193,7 +193,7 @@ const PlansTable = ({ plans, handleSorting, sortConfig }) => {
  
     
                   <Link
-                    to={`add-report/${plan.Plan_ID}`}
+                    to={`/plan/view/add-report/${plan.Plan_ID}`}
                     className="btn btn-info btn-sm me-1"
                   >
                     Add Report
